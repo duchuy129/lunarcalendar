@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.ViewModels;
 using LunarCalendar.MobileApp.Views;
+using Refit;
 
 namespace LunarCalendar.MobileApp;
 
@@ -24,9 +25,19 @@ public static class MauiProgram
 
 		// Register Services
 		builder.Services.AddSingleton<IUserModeService, UserModeService>();
+		builder.Services.AddSingleton<ICalendarService, CalendarService>();
+
+		// Register Refit API clients
+		// Android emulator uses 10.0.2.2 to access host machine's localhost
+		var baseUrl = DeviceInfo.Platform == DevicePlatform.Android
+			? "http://10.0.2.2:5090"
+			: "http://localhost:5090";
+		builder.Services.AddRefitClient<ICalendarApiClient>()
+			.ConfigureHttpClient(c => c.BaseAddress = new Uri(baseUrl));
 
 		// Register ViewModels
 		builder.Services.AddTransient<WelcomeViewModel>();
+		builder.Services.AddTransient<CalendarViewModel>();
 
 		// Register Views
 		builder.Services.AddTransient<WelcomePage>();
