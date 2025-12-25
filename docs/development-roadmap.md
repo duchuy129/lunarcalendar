@@ -734,7 +734,229 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 - Project management tools configured (Jira, GitHub, etc.)
 - Design assets and branding finalized
 
-### 8.2 Between Phases
+### 8.2 Cost Estimates
+
+#### Initial Setup Costs (One-Time)
+
+| Item | Description | Estimated Cost |
+|------|-------------|----------------|
+| **Development Tools** | | |
+| Visual Studio Professional | 2-4 licenses for team | $2,100 - $4,200 ($45/mo × 12 × 2-4) or use VS Community (Free) |
+| GitHub Team | Version control & CI/CD | $48/year ($4/user/month × 1 user) or use Free tier |
+| Design Tools | Figma/Adobe XD for UI/UX | $144 - $600/year |
+| **Apple Developer** | | |
+| Apple Developer Program | Required for App Store | $99/year |
+| **Google Developer** | | |
+| Google Play Console | One-time registration | $25 one-time |
+| **Domain & SSL** | | |
+| Domain Registration | lunarcalendar.com | $12 - $50/year |
+| SSL Certificate | Let's Encrypt | $0 (Free) |
+| **Cloud Services Setup** | | |
+| Initial Cloud Credits | Azure/AWS/GCP new account credits | $200 - $300 (Free credits) |
+| **Total Initial Setup** | | **$428 - $5,286/year** |
+
+*Note: Using free tiers and VS Community can reduce initial costs to ~$136/year (Apple Dev $99 + Google Play $25 + Domain $12)*
+
+---
+
+#### Monthly Operating Costs - MVP Phase (100-500 users)
+
+| Service | Configuration | Monthly Cost |
+|---------|--------------|--------------|
+| **Cloud Hosting (Azure - Recommended)** | | |
+| App Service (API) | Basic B1 (1.75 GB RAM, 1 core) | $13 |
+| PostgreSQL Database | Basic tier, 2 vCores, 5 GB storage | $25 |
+| Blob Storage | Standard tier for backups/logs | $1 - $3 |
+| Application Insights | Monitoring & analytics | $0 - $5 |
+| CDN (optional) | Azure CDN Standard | $0 - $10 |
+| **Push Notifications** | | |
+| Azure Notification Hubs | 10M pushes/month (Free tier) | $0 |
+| **Email Service** | | |
+| SendGrid | 100 emails/day (Free tier) | $0 |
+| **Domain & DNS** | | |
+| Azure DNS or Cloudflare | DNS hosting | $1 - $5 |
+| **Backup & Disaster Recovery** | | |
+| Automated Backups | Database backups | $2 - $5 |
+| **Monitoring & Logging** | | |
+| Log Analytics | 5 GB/month included | $0 - $10 |
+| **Total MVP Monthly** | | **$42 - $76/month** |
+
+---
+
+#### Monthly Operating Costs - Growth Phase (1,000-5,000 users)
+
+| Service | Configuration | Monthly Cost |
+|---------|--------------|--------------|
+| **Cloud Hosting (Azure)** | | |
+| App Service (API) | Standard S1 (1.75 GB RAM, 1 core) with auto-scaling | $70 - $140 |
+| PostgreSQL Database | General Purpose, 4 vCores, 32 GB storage | $185 |
+| Blob Storage | Standard tier, increased usage | $5 - $15 |
+| Application Insights | Increased telemetry | $10 - $30 |
+| CDN | Azure CDN with traffic | $20 - $50 |
+| **Push Notifications** | | |
+| Azure Notification Hubs | 100M pushes/month | $10 |
+| **Email Service** | | |
+| SendGrid | Essential plan (50K emails/month) | $20 |
+| **Domain & DNS** | | |
+| DNS with increased queries | DNS hosting | $5 |
+| **Backup & Disaster Recovery** | | |
+| Automated Backups + Geo-redundancy | Enhanced backup strategy | $20 - $40 |
+| **Security** | | |
+| Azure DDoS Protection (optional) | Basic tier included | $0 - $30 |
+| **Monitoring & Logging** | | |
+| Log Analytics & Monitoring | Increased data ingestion | $20 - $50 |
+| **Total Growth Monthly** | | **$365 - $575/month** |
+
+---
+
+#### Monthly Operating Costs - Scale Phase (10,000+ users)
+
+| Service | Configuration | Monthly Cost |
+|---------|--------------|--------------|
+| **Cloud Hosting (Azure)** | | |
+| App Service (API) | Premium P1V2 with auto-scaling (2-4 instances) | $400 - $800 |
+| PostgreSQL Database | General Purpose, 8 vCores, 128 GB storage + read replicas | $600 - $900 |
+| Redis Cache | Standard tier for caching | $75 - $150 |
+| Blob Storage | Standard tier, high usage | $30 - $60 |
+| Application Insights | Enterprise telemetry | $50 - $100 |
+| CDN | Premium CDN with global traffic | $100 - $200 |
+| **Push Notifications** | | |
+| Azure Notification Hubs | 1B+ pushes/month | $200 |
+| **Email Service** | | |
+| SendGrid | Pro plan (1.5M emails/month) | $90 |
+| **Domain & DNS** | | |
+| Premium DNS | High-availability DNS | $10 - $20 |
+| **Backup & Disaster Recovery** | | |
+| Enterprise Backup & DR | Geo-redundant, point-in-time recovery | $100 - $200 |
+| **Security** | | |
+| Azure DDoS Protection Standard | DDoS protection | $30 - $50 |
+| Web Application Firewall | Security layer | $50 - $100 |
+| **Monitoring & Logging** | | |
+| Comprehensive monitoring | Advanced analytics | $100 - $200 |
+| **Total Scale Monthly** | | **$1,835 - $2,980/month** |
+
+---
+
+#### Annual Cost Summary
+
+| Phase | User Range | Monthly Cost | Annual Cost |
+|-------|-----------|--------------|-------------|
+| **Initial Setup** | - | - | $428 - $5,286 |
+| **MVP** | 100-500 users | $42 - $76 | $504 - $912 |
+| **Growth** | 1,000-5,000 users | $365 - $575 | $4,380 - $6,900 |
+| **Scale** | 10,000+ users | $1,835 - $2,980 | $22,020 - $35,760 |
+
+---
+
+#### Alternative Cloud Providers Comparison
+
+**AWS (Amazon Web Services)**
+- MVP: $50-90/month (EC2 + RDS + S3)
+- Growth: $400-650/month
+- Scale: $2,000-3,200/month
+- Pros: Mature ecosystem, excellent documentation
+- Cons: Complex pricing, can get expensive quickly
+
+**Google Cloud Platform (GCP)**
+- MVP: $45-85/month (Cloud Run + Cloud SQL + Cloud Storage)
+- Growth: $380-600/month
+- Scale: $1,900-3,100/month
+- Pros: Strong free tier, good for serverless
+- Cons: Smaller ecosystem than AWS/Azure
+
+**DigitalOcean (Budget Option)**
+- MVP: $30-60/month (Droplets + Managed Database)
+- Growth: $200-350/month
+- Scale: $800-1,500/month
+- Pros: Simple pricing, easy to use, predictable costs
+- Cons: Fewer managed services, manual scaling
+
+---
+
+#### Cost Optimization Strategies
+
+**MVP Phase:**
+1. Use Azure free credits ($200-300)
+2. Start with Basic tier services
+3. Use free tiers for SendGrid, Notification Hubs
+4. Implement caching early to reduce database load
+5. Use VS Community Edition (free)
+6. Consider DigitalOcean for lower costs
+
+**Growth Phase:**
+1. Enable auto-scaling to optimize resource usage
+2. Implement Redis caching to reduce database queries
+3. Use CDN to reduce bandwidth costs
+4. Optimize database queries and add indexes
+5. Monitor and eliminate unused resources
+6. Consider reserved instances for 1-year commitment (30% savings)
+
+**Scale Phase:**
+1. Use reserved instances for 3-year commitment (50% savings)
+2. Implement multi-region deployment strategically
+3. Optimize image and asset delivery
+4. Use database read replicas efficiently
+5. Implement comprehensive caching strategy
+6. Consider Kubernetes for better resource utilization
+
+---
+
+#### Development Team Costs (Not Included Above)
+
+| Role | Quantity | Monthly Cost (Contract/Freelance) | Monthly Cost (Full-Time) |
+|------|----------|-----------------------------------|--------------------------|
+| Senior Backend Developer | 1 | $8,000 - $12,000 | $10,000 - $15,000 |
+| Mobile Developer (.NET MAUI) | 1 | $7,000 - $11,000 | $9,000 - $13,000 |
+| Full-Stack Developer | 1 | $7,000 - $10,000 | $8,500 - $12,000 |
+| QA/Tester (part-time) | 0.5 | $2,500 - $4,000 | $3,000 - $5,000 |
+| **Total Team Cost** | **2-4 people** | **$24,500 - $37,000/month** | **$30,500 - $45,000/month** |
+
+**Note:** Team costs vary significantly by location. Consider offshore development for 40-60% cost reduction.
+
+---
+
+#### Hidden/Miscellaneous Costs
+
+| Item | Frequency | Estimated Cost |
+|------|-----------|----------------|
+| Third-party API integrations | Monthly | $0 - $100 |
+| Marketing & User Acquisition | Monthly | $500 - $5,000 |
+| App Store Optimization (ASO) | One-time | $500 - $2,000 |
+| Legal (Privacy Policy, ToS) | One-time | $500 - $2,000 |
+| Customer Support Tools | Monthly | $50 - $200 |
+| Analytics Tools (Mixpanel, Amplitude) | Monthly | $0 - $300 |
+| Code Quality Tools (SonarCloud) | Monthly | $0 - $100 |
+
+---
+
+#### Total Cost of Ownership (TCO) - First Year
+
+**Minimal Budget Approach:**
+- Initial Setup: $136 (free tools + essential licenses)
+- Infrastructure (MVP): $504/year
+- Development Team (offshore, 9 months): $90,000
+- Miscellaneous: $2,000
+- **Total Year 1: ~$92,640**
+
+**Recommended Budget Approach:**
+- Initial Setup: $2,500
+- Infrastructure (MVP → Growth transition): $3,500/year
+- Development Team (contract, 9 months): $220,000
+- Marketing: $10,000
+- Miscellaneous: $5,000
+- **Total Year 1: ~$241,000**
+
+**Premium Approach:**
+- Initial Setup: $5,000
+- Infrastructure (Growth → Scale): $8,000/year
+- Development Team (full-time, 9 months): $340,000
+- Marketing & UA: $30,000
+- Legal, Support, Tools: $10,000
+- **Total Year 1: ~$393,000**
+
+---
+
+### 8.3 Between Phases
 - MVP user feedback collected and analyzed
 - Analytics data reviewed
 - Priority features for Phase 2 confirmed

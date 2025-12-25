@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LunarCalendar.MobileApp.Views.CalendarPage"
+             Title="Calendar">
+
+    <Grid RowDefinitions="*,Auto"
+          Padding="20">
+
+        <!-- Calendar View (Placeholder for Sprint 3) -->
+        <VerticalStackLayout Grid.Row="0"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center">
+            <Label Text="📅"
+                   FontSize="80"
+                   HorizontalOptions="Center"/>
+            <Label Text="Calendar View"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,0"/>
+            <Label Text="Calendar display will be implemented in Sprint 3"
+                   FontSize="14"
+                   TextColor="{DynamicResource Gray600}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,10,0,0"/>
+        </VerticalStackLayout>
+
+        <!-- Bottom Info -->
+        <Label Grid.Row="1"
+               Text="You are in Guest Mode"
+               FontSize="12"
+               TextColor="{DynamicResource Gray600}"
+               HorizontalOptions="Center"
+               Margin="0,20,0,0"/>
+
+    </Grid>
+</ContentPage>

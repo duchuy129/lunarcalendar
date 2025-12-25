@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BC14B0A6-A7BD-459E-88DF-683667D145D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LunarCalendar.Api", "src\LunarCalendar.Api\LunarCalendar.Api.csproj", "{127434C5-9623-4C47-83A2-9C4CA2B4D2FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LunarCalendar.MobileApp", "src\LunarCalendar.MobileApp\LunarCalendar.MobileApp.csproj", "{1C060DEA-E970-454B-AAD2-106A7C941963}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{127434C5-9623-4C47-83A2-9C4CA2B4D2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127434C5-9623-4C47-83A2-9C4CA2B4D2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127434C5-9623-4C47-83A2-9C4CA2B4D2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127434C5-9623-4C47-83A2-9C4CA2B4D2FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C060DEA-E970-454B-AAD2-106A7C941963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C060DEA-E970-454B-AAD2-106A7C941963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C060DEA-E970-454B-AAD2-106A7C941963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C060DEA-E970-454B-AAD2-106A7C941963}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{127434C5-9623-4C47-83A2-9C4CA2B4D2FB} = {BC14B0A6-A7BD-459E-88DF-683667D145D3}
+		{1C060DEA-E970-454B-AAD2-106A7C941963} = {BC14B0A6-A7BD-459E-88DF-683667D145D3}
+	EndGlobalSection
+EndGlobal
