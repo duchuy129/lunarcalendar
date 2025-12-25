@@ -10,6 +10,7 @@ public partial class CalendarViewModel : BaseViewModel
 {
     private readonly ICalendarService _calendarService;
     private readonly IUserModeService _userModeService;
+    private readonly IHolidayService _holidayService;
 
     [ObservableProperty]
     private DateTime _currentMonth;
@@ -18,15 +19,22 @@ public partial class CalendarViewModel : BaseViewModel
     private string _monthYearDisplay = string.Empty;
 
     [ObservableProperty]
+    private string _todayLunarDisplay = string.Empty;
+
+    [ObservableProperty]
     private ObservableCollection<CalendarDay> _calendarDays = new();
 
     [ObservableProperty]
     private string _userModeText = string.Empty;
 
-    public CalendarViewModel(ICalendarService calendarService, IUserModeService userModeService)
+    public CalendarViewModel(
+        ICalendarService calendarService,
+        IUserModeService userModeService,
+        IHolidayService holidayService)
     {
         _calendarService = calendarService;
         _userModeService = userModeService;
+        _holidayService = holidayService;
 
         Title = "Calendar";
         _currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -76,6 +84,18 @@ public partial class CalendarViewModel : BaseViewModel
                 CurrentMonth.Year,
                 CurrentMonth.Month);
 
+            // Get holidays for the month
+            var holidays = await _holidayService.GetHolidaysForMonthAsync(
+                CurrentMonth.Year,
+                CurrentMonth.Month);
+
+            // Update today's lunar display
+            var todayLunar = lunarDates.FirstOrDefault(ld => ld.GregorianDate.Date == DateTime.Today);
+            if (todayLunar != null)
+            {
+                TodayLunarDisplay = $"Today: {todayLunar.LunarDay}/{todayLunar.LunarMonth}/{todayLunar.LunarYear}";
+            }
+
             // Create calendar days
             var days = new List<CalendarDay>();
 
@@ -94,6 +114,9 @@ public partial class CalendarViewModel : BaseViewModel
                 // Find lunar info for this date
                 var lunarInfo = lunarDates.FirstOrDefault(ld => ld.GregorianDate.Date == date.Date);
 
+                // Find holiday for this date
+                var holidayOccurrence = holidays.FirstOrDefault(h => h.GregorianDate.Date == date.Date);
+
                 days.Add(new CalendarDay
                 {
                     Date = date,
@@ -101,7 +124,8 @@ public partial class CalendarViewModel : BaseViewModel
                     IsCurrentMonth = isCurrentMonth,
                     IsToday = isToday,
                     HasEvents = false, // Will be updated in future sprints
-                    LunarInfo = lunarInfo
+                    LunarInfo = lunarInfo,
+                    Holiday = holidayOccurrence?.Holiday
                 });
             }
 

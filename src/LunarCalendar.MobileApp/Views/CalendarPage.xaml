@@ -5,8 +5,14 @@
              x:Class="LunarCalendar.MobileApp.Views.CalendarPage"
              Title="{Binding Title}">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto"
-          Padding="0">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto"
+          Padding="0"
+          BackgroundColor="#FFF9F0">
+
+        <!-- Cultural Background Pattern (Subtle Gold Overlay) -->
+        <BoxView Grid.RowSpan="6"
+                 Color="#FFD700"
+                 Opacity="0.05"/>
 
         <!-- Month Navigation Header -->
         <Grid Grid.Row="0"
@@ -53,8 +59,18 @@
                     WidthRequest="50"/>
         </Grid>
 
+        <!-- Today's Lunar Date Display -->
+        <Label Grid.Row="1"
+               Text="{Binding TodayLunarDisplay}"
+               FontSize="14"
+               FontAttributes="Bold"
+               TextColor="{DynamicResource Primary}"
+               HorizontalOptions="Center"
+               Padding="8,4"
+               BackgroundColor="{DynamicResource Gray100}"/>
+
         <!-- Day of Week Header -->
-        <Grid Grid.Row="1"
+        <Grid Grid.Row="2"
               Padding="4,8"
               BackgroundColor="{DynamicResource Gray100}">
             <Grid.ColumnDefinitions>
@@ -77,7 +93,7 @@
         </Grid>
 
         <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="3"
+        <ActivityIndicator Grid.Row="4"
                           IsVisible="{Binding IsBusy}"
                           IsRunning="{Binding IsBusy}"
                           Color="{DynamicResource Primary}"
@@ -85,7 +101,7 @@
                           HorizontalOptions="Center"/>
 
         <!-- Calendar Grid -->
-        <CollectionView Grid.Row="3"
+        <CollectionView Grid.Row="4"
                        ItemsSource="{Binding CalendarDays}"
                        IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                        SelectionMode="None">
@@ -96,7 +112,9 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Padding="4"
-                           Margin="2">
+                           Margin="2"
+                           Stroke="{Binding HolidayColor}"
+                           StrokeThickness="2">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8"/>
                         </Border.StrokeShape>
@@ -104,7 +122,7 @@
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding IsToday}"
                                        Value="True">
-                                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}"/>
+                                <Setter Property="BackgroundColor" Value="#E8F5E9"/>
                             </DataTrigger>
                         </Border.Triggers>
 
@@ -153,6 +171,24 @@
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
+
+                            <!-- Holiday Name (if exists) -->
+                            <Label Text="{Binding Holiday.Name}"
+                                  FontSize="8"
+                                  FontAttributes="Bold"
+                                  TextColor="{Binding HolidayColor}"
+                                  HorizontalOptions="Center"
+                                  LineBreakMode="WordWrap"
+                                  MaxLines="2"
+                                  IsVisible="{Binding HasHoliday}">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                               Binding="{Binding IsToday}"
+                                               Value="True">
+                                        <Setter Property="TextColor" Value="White"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
@@ -160,7 +196,7 @@
         </CollectionView>
 
         <!-- Bottom Info -->
-        <Label Grid.Row="4"
+        <Label Grid.Row="5"
                Text="{Binding UserModeText}"
                FontSize="12"
                TextColor="{DynamicResource Gray600}"

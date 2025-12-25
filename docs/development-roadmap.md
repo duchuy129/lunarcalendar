@@ -12,9 +12,9 @@
 This roadmap outlines the phased development approach for the Lunar Calendar mobile application, focusing on delivering a Minimum Viable Product (MVP) followed by feature enhancements.
 
 ### 1.1 Timeline Summary
-- **Phase 1 (MVP)**: 3-4 months
-- **Phase 2 (Enhancements)**: 2-3 months
-- **Total Duration**: 5-7 months
+- **Phase 1 (MVP)**: 16 weeks (4 months) - Sprints 1-8
+- **Phase 2 (Post-MVP Enhancements)**: 26 weeks (6.5 months) - Sprints 9-21
+- **Total Duration**: 42 weeks (~10.5 months)
 
 ### 1.2 Team Structure
 - **1 Backend Developer**: ASP.NET Core API, database, DevOps
@@ -163,7 +163,156 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 2.5 Sprint 5: Event Management - Create & View (2 weeks)
+### 2.5 Sprint 5: Cultural Enhancements - Holidays & Visuals (2 weeks)
+
+#### Backend Tasks
+- [ ] Research and compile Vietnamese lunar holidays database
+- [ ] Research and compile traditional days (Tết, Mid-Autumn Festival, Wandering Souls' Day, etc.)
+- [ ] Create Holiday entity and repository (name, date, type, color, description)
+- [ ] Implement holiday endpoints:
+  - `GET /api/holidays` (get all holidays)
+  - `GET /api/holidays/year/{year}` (get holidays for specific year)
+  - `GET /api/holidays/month/{year}/{month}` (get holidays for specific month)
+- [ ] Add holiday types (public holiday, traditional day, festival)
+- [ ] Implement holiday color coding system
+- [ ] Write tests for holiday service
+- [ ] Document API endpoints in Swagger
+
+#### Mobile Tasks
+- [ ] Create HolidayService for fetching holiday data
+- [ ] Integrate holiday display into calendar view
+- [ ] Implement color-coding for different holiday types:
+  - Red for major holidays (Tết, National Day)
+  - Gold/Yellow for traditional festivals
+  - Green for seasonal celebrations
+- [ ] Add today's lunar date display in calendar header/view
+- [ ] Design and implement app background with cultural imagery:
+  - Dragon, phoenix, or other traditional animals
+  - Ensure background doesn't interfere with readability
+  - Make background optional in settings
+- [ ] Create holiday detail view when date is tapped
+- [ ] Cache holiday data locally in SQLite
+- [ ] Add visual indicators (dots, colors, icons) for holidays on calendar cells
+- [ ] Test holiday display for current and future years
+- [ ] Test cultural background on different screen sizes
+- [ ] Ensure accessibility with background images
+
+#### Deliverables
+- Vietnamese lunar holidays displayed on calendar
+- Traditional days highlighted with distinct colors
+- Cultural background imagery enhances app aesthetic
+- Today's lunar date visible in calendar view
+- Holiday information accessible to both guest and authenticated users
+
+---
+
+### 2.6 Sprint 6: UI Polish & User Experience (2 weeks)
+
+#### Backend Tasks
+- [ ] Optimize calendar and holiday API response times
+- [ ] Add caching for frequently accessed data
+- [ ] Implement API versioning
+- [ ] Review and optimize database queries
+
+#### Mobile Tasks
+- [ ] Polish calendar UI/UX across all screens
+- [ ] Add smooth animations and transitions
+- [ ] Implement pull-to-refresh on calendar
+- [ ] Add loading skeletons for better perceived performance
+- [ ] Improve error messages and user feedback
+- [ ] Add haptic feedback for interactions (iOS)
+- [ ] Implement swipe gestures for month navigation
+- [ ] Add settings page for:
+  - Background image toggle
+  - Color theme preferences
+  - Calendar display options
+  - Lunar calendar system selection
+- [ ] Create onboarding flow for first-time users
+- [ ] Add tooltips and help text for features
+- [ ] Test user flows on both platforms
+- [ ] Optimize app performance and memory usage
+- [ ] Ensure consistent styling across screens
+
+#### Deliverables
+- Polished, intuitive user interface
+- Smooth animations and transitions
+- Comprehensive settings page
+- First-time user onboarding
+- Optimized app performance
+
+---
+
+### 2.7 Sprint 7: Offline Support & Synchronization (2 weeks)
+
+#### Backend Tasks
+- [ ] Optimize API response times
+- [ ] Implement efficient bulk sync endpoint for holiday data
+- [ ] Add last-modified timestamps to holiday entities
+- [ ] Create sync endpoint for incremental updates
+- [ ] Add sync status tracking
+
+#### Mobile Tasks
+- [ ] Implement offline mode detection
+- [ ] Cache holiday data for offline access
+- [ ] Ensure calendar works fully offline with cached data
+- [ ] Implement background synchronization for holiday updates
+- [ ] Add sync status indicators in UI
+- [ ] Test offline calendar viewing
+- [ ] Implement sync retry logic with exponential backoff
+- [ ] Add manual sync trigger for holiday data updates
+
+#### Deliverables
+- App works fully offline with cached data
+- Holiday data syncs automatically when online
+- Calendar remains functional without internet connection
+
+---
+
+### 2.8 Sprint 8: Testing, Bug Fixes & MVP Release (2 weeks)
+
+#### Backend Tasks
+- [ ] Comprehensive security audit
+- [ ] Performance testing and optimization
+- [ ] Load testing with realistic user scenarios
+- [ ] Fix all critical and high-priority bugs
+- [ ] Complete API documentation
+- [ ] Set up production environment
+- [ ] Configure production database with backups
+- [ ] Deploy to production server/cloud
+- [ ] Set up monitoring and alerting
+- [ ] Create admin documentation
+
+#### Mobile Tasks
+- [ ] End-to-end testing on real iOS devices
+- [ ] End-to-end testing on real Android devices
+- [ ] Test guest mode flow thoroughly
+- [ ] Test authenticated user flow thoroughly
+- [ ] Test guest-to-authenticated upgrade flow
+- [ ] Test on various screen sizes and OS versions
+- [ ] Fix all critical and high-priority bugs
+- [ ] Performance optimization (app size, startup time, memory)
+- [ ] Accessibility testing and improvements
+- [ ] Prepare app store assets (screenshots showing both modes, descriptions)
+- [ ] Highlight guest mode as key feature in store listings
+- [ ] Submit to Apple App Store for review
+- [ ] Submit to Google Play Store for review
+- [ ] Create user documentation/help section
+
+#### Deliverables
+- **MVP Release**: Fully functional app with core features
+- Guest mode working seamlessly without barriers
+- Authenticated mode with full event management
+- Apps published to App Store and Google Play
+- Backend API deployed and monitored
+- Documentation complete
+
+---
+
+## 3. Phase 2: Feature Enhancements (Post-MVP)
+
+**Goal**: Add event management and advanced features based on user feedback and roadmap priorities.
+
+### 3.1 Sprint 9: Event Management - Create & View (2 weeks)
 
 #### Backend Tasks
 - [ ] Implement Event entity and repository
@@ -211,7 +360,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 2.6 Sprint 6: Event Management - Edit & Delete (2 weeks)
+### 3.2 Sprint 10: Event Management - Edit & Delete (2 weeks)
 
 #### Backend Tasks
 - [ ] Create update event endpoint (`PUT /api/events/{id}`)
@@ -241,7 +390,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 2.7 Sprint 7: Event Categories & Polish (2 weeks)
+### 3.3 Sprint 11: Event Categories & Organization (2 weeks)
 
 #### Backend Tasks
 - [ ] Create category endpoints:
@@ -252,6 +401,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 - [ ] Implement default categories on user registration
 - [ ] Add category filtering to events endpoint
 - [ ] Write tests for category operations
+- [ ] Implement event-category sync with offline support
 
 #### Mobile Tasks
 - [ ] Create category management UI
@@ -260,97 +410,24 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 - [ ] Implement category list page
 - [ ] Add category creation/editing
 - [ ] Create CategoryService
-- [ ] Polish UI/UX across all screens
-- [ ] Add animations and transitions
-- [ ] Implement pull-to-refresh on calendar
-- [ ] Add loading skeletons
-- [ ] Improve error messages and handling
+- [ ] Ensure event colors don't conflict with holiday colors
+- [ ] Add filter to show/hide event categories
+- [ ] Test category operations offline and online
 
 #### Deliverables
 - Users can create and manage event categories
 - Events can be assigned to categories
-- Calendar displays events with category colors
-- UI is polished and user-friendly
+- Calendar displays events with category colors alongside holidays
+- Event management works seamlessly with existing holiday display
 
 ---
 
-### 2.8 Sprint 8: Offline Support & Synchronization (2 weeks)
-
-#### Backend Tasks
-- [ ] Optimize API response times
-- [ ] Implement efficient bulk sync endpoint
-- [ ] Add last-modified timestamps to all entities
-- [ ] Create sync endpoint for incremental updates
-- [ ] Implement conflict resolution logic (server wins)
-- [ ] Add sync status tracking
-
-#### Mobile Tasks
-- [ ] Implement offline mode detection
-- [ ] Queue API requests when offline
-- [ ] Sync queued requests when online
-- [ ] Implement background synchronization
-- [ ] Add sync status indicators in UI
-- [ ] Handle sync conflicts gracefully
-- [ ] Test offline create/edit/delete operations
-- [ ] Implement sync retry logic with exponential backoff
-- [ ] Add manual sync trigger
-
-#### Deliverables
-- App works fully offline with local data
-- Changes sync automatically when online
-- Sync conflicts are handled appropriately
-
----
-
-### 2.9 Sprint 9: Testing, Bug Fixes & MVP Release (2 weeks)
-
-#### Backend Tasks
-- [ ] Comprehensive security audit
-- [ ] Performance testing and optimization
-- [ ] Load testing with realistic user scenarios
-- [ ] Fix all critical and high-priority bugs
-- [ ] Complete API documentation
-- [ ] Set up production environment
-- [ ] Configure production database with backups
-- [ ] Deploy to production server/cloud
-- [ ] Set up monitoring and alerting
-- [ ] Create admin documentation
-
-#### Mobile Tasks
-- [ ] End-to-end testing on real iOS devices
-- [ ] End-to-end testing on real Android devices
-- [ ] Test guest mode flow thoroughly
-- [ ] Test authenticated user flow thoroughly
-- [ ] Test guest-to-authenticated upgrade flow
-- [ ] Test on various screen sizes and OS versions
-- [ ] Fix all critical and high-priority bugs
-- [ ] Performance optimization (app size, startup time, memory)
-- [ ] Accessibility testing and improvements
-- [ ] Prepare app store assets (screenshots showing both modes, descriptions)
-- [ ] Highlight guest mode as key feature in store listings
-- [ ] Submit to Apple App Store for review
-- [ ] Submit to Google Play Store for review
-- [ ] Create user documentation/help section
-
-#### Deliverables
-- **MVP Release**: Fully functional app with core features
-- Guest mode working seamlessly without barriers
-- Authenticated mode with full event management
-- Apps published to App Store and Google Play
-- Backend API deployed and monitored
-- Documentation complete
-
----
-
-## 3. Phase 2: Feature Enhancements
-
-**Goal**: Add advanced features and improvements based on user feedback and roadmap priorities.
-
-### 3.1 Sprint 10: Search & Filtering (2 weeks)
+### 3.4 Sprint 12: Search & Filtering (2 weeks)
 
 #### Backend Tasks
 - [ ] Create event search endpoint with full-text search
-- [ ] Implement advanced filtering (date range, category, calendar type)
+- [ ] Add holiday search capability
+- [ ] Implement advanced filtering (date range, category, calendar type, holidays)
 - [ ] Optimize search queries with database indexing
 - [ ] Add search result pagination
 - [ ] Implement search suggestions/autocomplete
@@ -359,19 +436,19 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 - [ ] Create search UI with search bar
 - [ ] Implement SearchViewModel
 - [ ] Add filter options (bottom sheet or modal)
-- [ ] Display search results in list view
+- [ ] Display search results in list view (events and holidays)
 - [ ] Add search history
 - [ ] Implement real-time search (debounced)
 - [ ] Test search performance
 
 #### Deliverables
-- Users can search events by title/description
+- Users can search events and holidays by title/description
 - Advanced filtering by multiple criteria
 - Fast and responsive search experience
 
 ---
 
-### 3.2 Sprint 11: Event Reminders & Notifications (2 weeks)
+### 3.5 Sprint 13: Event Reminders & Notifications (2 weeks)
 
 #### Backend Tasks
 - [ ] Implement push notification service integration
@@ -400,7 +477,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 3.3 Sprint 12: Recurring Events (2 weeks)
+### 3.6 Sprint 14: Recurring Events (2 weeks)
 
 #### Backend Tasks
 - [ ] Design recurrence rule schema (iCalendar RRULE format)
@@ -426,7 +503,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 3.4 Sprint 13: Additional Lunar Calendar Systems (2 weeks)
+### 3.7 Sprint 15: Additional Lunar Calendar Systems (2 weeks)
 
 #### Backend Tasks
 - [ ] Research and implement Vietnamese lunar calendar
@@ -451,7 +528,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 3.5 Sprint 14: Localization & Internationalization (2 weeks)
+### 3.8 Sprint 16: Localization & Internationalization (2 weeks)
 
 #### Backend Tasks
 - [ ] Set up localization infrastructure
@@ -479,7 +556,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 3.6 Sprint 15: Home Screen Widgets (2 weeks)
+### 3.9 Sprint 17: Home Screen Widgets (2 weeks)
 
 #### Backend Tasks
 - [ ] Create optimized widget data endpoint
@@ -504,7 +581,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 3.7 Sprint 16: Social Features & Sharing (2 weeks)
+### 3.10 Sprint 18: Social Features & Sharing (2 weeks)
 
 #### Backend Tasks
 - [ ] Design shared calendar schema
@@ -531,35 +608,33 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 3.8 Sprint 17: Advanced Features & Integration (2 weeks)
+### 3.11 Sprint 19: Advanced Features & Integration (2 weeks)
 
 #### Backend Tasks
-- [ ] Implement holiday database for multiple countries
-- [ ] Create holiday API endpoints
+- [ ] Expand holiday database for multiple countries (China, Korea, etc.)
 - [ ] Integrate weather API for event locations
-- [ ] Implement auspicious dates calculation
+- [ ] Implement auspicious dates calculation (Chinese almanac)
 - [ ] Add backup/restore functionality
 - [ ] Create data export endpoint (JSON, CSV)
 
 #### Mobile Tasks
-- [ ] Display holidays on calendar
 - [ ] Add weather information to events
-- [ ] Implement auspicious dates feature
+- [ ] Implement auspicious dates feature (lucky/unlucky days)
 - [ ] Create backup/restore UI
 - [ ] Add data export functionality
 - [ ] Implement account deletion with data purge
 - [ ] Add privacy settings
-- [ ] Create comprehensive settings page
+- [ ] Enhance comprehensive settings page
 
 #### Deliverables
-- Holidays are automatically displayed
 - Weather integration for events
 - Users can backup and restore data
-- Additional cultural/traditional features
+- Additional cultural/traditional features (auspicious dates)
+- Multi-country holiday support
 
 ---
 
-### 3.9 Sprint 18: Performance Optimization & Analytics (2 weeks)
+### 3.12 Sprint 20: Performance Optimization & Analytics (2 weeks)
 
 #### Backend Tasks
 - [ ] Implement Redis caching layer
@@ -588,7 +663,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 3.10 Sprint 19: Final Polish & Phase 2 Release (2 weeks)
+### 3.13 Sprint 21: Final Polish & Phase 2 Release (2 weeks)
 
 #### Backend Tasks
 - [ ] Security audit and penetration testing
@@ -703,23 +778,25 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 | Sprint 2 | 2 weeks | Guest Mode & Welcome Flow | MVP |
 | Sprint 3 | 2 weeks | User Authentication | MVP |
 | Sprint 4 | 2 weeks | Basic Calendar Display | MVP |
-| Sprint 5 | 2 weeks | Event Management - Create & View | MVP |
-| Sprint 6 | 2 weeks | Event Management - Edit & Delete | MVP |
-| Sprint 7 | 2 weeks | Event Categories & Polish | MVP |
-| Sprint 8 | 2 weeks | Offline Support & Synchronization | MVP |
-| Sprint 9 | 2 weeks | Testing, Bug Fixes & MVP Release | MVP |
-| Sprint 10 | 2 weeks | Search & Filtering | Enhancement |
-| Sprint 11 | 2 weeks | Event Reminders & Notifications | Enhancement |
-| Sprint 12 | 2 weeks | Recurring Events | Enhancement |
-| Sprint 13 | 2 weeks | Additional Lunar Calendar Systems | Enhancement |
-| Sprint 14 | 2 weeks | Localization & Internationalization | Enhancement |
-| Sprint 15 | 2 weeks | Home Screen Widgets | Enhancement |
-| Sprint 16 | 2 weeks | Social Features & Sharing | Enhancement |
-| Sprint 17 | 2 weeks | Advanced Features & Integration | Enhancement |
-| Sprint 18 | 2 weeks | Performance Optimization & Analytics | Enhancement |
-| Sprint 19 | 2 weeks | Final Polish & Phase 2 Release | Enhancement |
+| Sprint 5 | 2 weeks | Cultural Enhancements - Holidays & Visuals | MVP |
+| Sprint 6 | 2 weeks | UI Polish & User Experience | MVP |
+| Sprint 7 | 2 weeks | Offline Support & Synchronization | MVP |
+| Sprint 8 | 2 weeks | Testing, Bug Fixes & MVP Release | MVP |
+| Sprint 9 | 2 weeks | Event Management - Create & View | Post-MVP |
+| Sprint 10 | 2 weeks | Event Management - Edit & Delete | Post-MVP |
+| Sprint 11 | 2 weeks | Event Categories & Organization | Post-MVP |
+| Sprint 12 | 2 weeks | Search & Filtering | Post-MVP |
+| Sprint 13 | 2 weeks | Event Reminders & Notifications | Post-MVP |
+| Sprint 14 | 2 weeks | Recurring Events | Post-MVP |
+| Sprint 15 | 2 weeks | Additional Lunar Calendar Systems | Post-MVP |
+| Sprint 16 | 2 weeks | Localization & Internationalization | Post-MVP |
+| Sprint 17 | 2 weeks | Home Screen Widgets | Post-MVP |
+| Sprint 18 | 2 weeks | Social Features & Sharing | Post-MVP |
+| Sprint 19 | 2 weeks | Advanced Features & Integration | Post-MVP |
+| Sprint 20 | 2 weeks | Performance Optimization & Analytics | Post-MVP |
+| Sprint 21 | 2 weeks | Final Polish & Phase 2 Release | Post-MVP |
 
-**Total Duration**: 38 weeks (~9.5 months)
+**Total Duration**: 42 weeks (~10.5 months)
 
 ---
 
@@ -1009,6 +1086,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | 2025-12-11 | Initial | Initial development roadmap |
+| 1.1 | 2025-12-25 | Updated | Reorganized MVP to prioritize cultural features (holidays, visuals) over event management. Moved event management (old Sprints 5-7) to Post-MVP phase. Added Sprint 5: Cultural Enhancements and Sprint 6: UI Polish. |
 
 ---
 

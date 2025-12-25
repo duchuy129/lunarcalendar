@@ -57,6 +57,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<ILunarCalendarService, LunarCalendarService>();
+builder.Services.AddSingleton<IHolidayService, HolidayService>();
 
 var app = builder.Build();
 

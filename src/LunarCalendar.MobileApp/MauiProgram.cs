@@ -27,6 +27,9 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IUserModeService, UserModeService>();
 		builder.Services.AddSingleton<ICalendarService, CalendarService>();
 
+		// Register HTTP client for Holiday Service
+		builder.Services.AddHttpClient<IHolidayService, HolidayService>();
+
 		// Register Refit API clients
 		// Android emulator uses 10.0.2.2 to access host machine's localhost
 		var baseUrl = DeviceInfo.Platform == DevicePlatform.Android
