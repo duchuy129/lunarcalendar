@@ -8,11 +8,6 @@
     Title="Lunar Calendar">
 
     <ShellContent
-        Title="Welcome"
-        ContentTemplate="{DataTemplate views:WelcomePage}"
-        Route="welcome" />
-
-    <ShellContent
         Title="Calendar"
         ContentTemplate="{DataTemplate views:CalendarPage}"
         Route="calendar" />

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LunarCalendar.MobileApp.ViewModels"
+             x:Class="LunarCalendar.MobileApp.Views.HolidayDetailPage"
+             x:DataType="viewmodels:HolidayDetailViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="#FFF9F0">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="24">
+
+            <!-- Holiday Icon/Color Indicator -->
+            <Border HeightRequest="120"
+                    WidthRequest="120"
+                    StrokeThickness="0"
+                    HorizontalOptions="Center"
+                    BackgroundColor="{Binding HolidayOccurrence.Holiday.ColorHex}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="60"/>
+                </Border.StrokeShape>
+
+                <VerticalStackLayout VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Spacing="4">
+                    <Label Text="{Binding HolidayOccurrence.GregorianDate, StringFormat='{0:MMM}'}"
+                          FontSize="18"
+                          TextColor="White"
+                          FontAttributes="Bold"
+                          HorizontalOptions="Center"/>
+                    <Label Text="{Binding HolidayOccurrence.GregorianDate, StringFormat='{0:dd}'}"
+                          FontSize="42"
+                          TextColor="White"
+                          FontAttributes="Bold"
+                          HorizontalOptions="Center"/>
+                    <Label Text="{Binding HolidayOccurrence.GregorianDate, StringFormat='{0:yyyy}'}"
+                          FontSize="16"
+                          TextColor="White"
+                          HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Holiday Name -->
+            <Label Text="{Binding HolidayOccurrence.Holiday.Name}"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="{DynamicResource Gray900}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"/>
+
+            <!-- Holiday Type Badge -->
+            <Border Padding="12,6"
+                    BackgroundColor="{Binding HolidayOccurrence.Holiday.ColorHex}"
+                    HorizontalOptions="Center"
+                    StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16"/>
+                </Border.StrokeShape>
+                <Label Text="{Binding HolidayTypeText}"
+                       TextColor="White"
+                       FontSize="14"
+                       FontAttributes="Bold"/>
+            </Border>
+
+            <!-- Date Information Card -->
+            <Border Padding="20"
+                    BackgroundColor="White"
+                    Stroke="{DynamicResource Gray200}"
+                    StrokeThickness="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12"/>
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="16">
+                    <!-- Gregorian Date -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Gregorian Date"
+                               FontSize="12"
+                               TextColor="{DynamicResource Gray600}"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding GregorianDateFormatted}"
+                               FontSize="18"
+                               TextColor="{DynamicResource Gray900}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Separator -->
+                    <BoxView HeightRequest="1"
+                             BackgroundColor="{DynamicResource Gray200}"/>
+
+                    <!-- Lunar Date -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Lunar Date"
+                               FontSize="12"
+                               TextColor="{DynamicResource Gray600}"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding LunarDateFormatted}"
+                               FontSize="18"
+                               TextColor="#DC143C"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+
+                    <!-- Public Holiday Indicator -->
+                    <HorizontalStackLayout Spacing="8"
+                                          IsVisible="{Binding HolidayOccurrence.Holiday.IsPublicHoliday}">
+                        <Label Text="🏛️"
+                               FontSize="20"/>
+                        <Label Text="Public Holiday"
+                               FontSize="14"
+                               TextColor="{DynamicResource Gray700}"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Description Card -->
+            <Border Padding="20"
+                    BackgroundColor="White"
+                    Stroke="{DynamicResource Gray200}"
+                    StrokeThickness="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12"/>
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="About This Holiday"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource Gray900}"/>
+                    <Label Text="{Binding HolidayOccurrence.Holiday.Description}"
+                           FontSize="15"
+                           TextColor="{DynamicResource Gray700}"
+                           LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Culture Info -->
+            <Border Padding="16"
+                    BackgroundColor="{Binding HolidayOccurrence.Holiday.ColorHex}"
+                    StrokeThickness="0"
+                    Opacity="0.15">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12"/>
+                </Border.StrokeShape>
+                <HorizontalStackLayout Spacing="8"
+                                      HorizontalOptions="Center">
+                    <Label Text="🌏"
+                           FontSize="18"/>
+                    <Label Text="{Binding HolidayOccurrence.Holiday.Culture}"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource Gray800}"
+                           VerticalOptions="Center"/>
+                    <Label Text="Culture"
+                           FontSize="14"
+                           TextColor="{DynamicResource Gray700}"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

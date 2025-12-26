@@ -112,27 +112,19 @@ public class LunarCalendarService : ILunarCalendarService
 
     public DateTime ConvertToGregorian(int year, int month, int day, bool isLeapMonth = false)
     {
-        try
-        {
-            var leapMonth = _chineseCalendar.GetLeapMonth(year);
+        var leapMonth = _chineseCalendar.GetLeapMonth(year);
 
-            var adjustedMonth = month;
-            if (isLeapMonth && leapMonth == month)
-            {
-                adjustedMonth = month;
-            }
-            else if (leapMonth > 0 && month >= leapMonth && !isLeapMonth)
-            {
-                adjustedMonth = month + 1;
-            }
-
-            return _chineseCalendar.ToDateTime(year, adjustedMonth, day, 0, 0, 0, 0);
-        }
-        catch (Exception)
+        var adjustedMonth = month;
+        if (isLeapMonth && leapMonth == month)
         {
-            // Return current date if conversion fails
-            return DateTime.Today;
+            adjustedMonth = month;
         }
+        else if (leapMonth > 0 && month >= leapMonth && !isLeapMonth)
+        {
+            adjustedMonth = month + 1;
+        }
+
+        return _chineseCalendar.ToDateTime(year, adjustedMonth, day, 0, 0, 0, 0);
     }
 
     public LunarCalendarInfo GetLunarInfo(DateTime gregorianDate)

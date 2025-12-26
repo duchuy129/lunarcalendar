@@ -20,10 +20,12 @@
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto"
           BackgroundColor="#FFF9F0">
 
-        <!-- Cultural Background Pattern (Subtle Gold Overlay) -->
-        <BoxView Grid.RowSpan="8"
-                 Color="#FFD700"
-                 Opacity="0.05"/>
+        <!-- Cultural Background Image -->
+        <Image Grid.RowSpan="8"
+               Source="cultural_background.png"
+               Aspect="AspectFill"
+               Opacity="0.15"
+               IsVisible="{Binding ShowCulturalBackground}"/>
 
         <!-- Month Navigation Header -->
         <Grid Grid.Row="0"
@@ -80,6 +82,7 @@
             <Label Grid.Column="0"
                    Text="Jump to:"
                    FontSize="14"
+                   TextColor="{DynamicResource Gray900}"
                    VerticalOptions="Center"
                    FontAttributes="Bold"/>
 
@@ -87,6 +90,7 @@
                     ItemsSource="{Binding AvailableMonths}"
                     SelectedIndex="{Binding SelectedCalendarMonth, Converter={StaticResource MonthIndexConverter}}"
                     FontSize="14"
+                    TextColor="{DynamicResource Gray900}"
                     VerticalOptions="Center"
                     SelectedIndexChanged="OnMonthPickerSelectedIndexChanged"/>
 
@@ -94,6 +98,7 @@
                     ItemsSource="{Binding AvailableCalendarYears}"
                     SelectedItem="{Binding SelectedCalendarYear}"
                     FontSize="14"
+                    TextColor="{DynamicResource Gray900}"
                     VerticalOptions="Center"
                     WidthRequest="90"
                     SelectedIndexChanged="OnYearPickerSelectedIndexChanged"/>
@@ -171,7 +176,7 @@
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding IsToday}"
                                        Value="True">
-                                <Setter Property="BackgroundColor" Value="#E8F5E9"/>
+                                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}"/>
                             </DataTrigger>
                         </Border.Triggers>
 
@@ -181,6 +186,7 @@
                             <Label Text="{Binding Day}"
                                   FontSize="16"
                                   FontAttributes="Bold"
+                                  TextColor="{DynamicResource Gray900}"
                                   HorizontalOptions="Center">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label"
@@ -192,6 +198,7 @@
                                                Binding="{Binding IsToday}"
                                                Value="True">
                                         <Setter Property="TextColor" Value="White"/>
+                                        <Setter Property="FontSize" Value="18"/>
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
@@ -334,6 +341,10 @@
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="8"/>
                                 </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ViewHolidayDetailCommand}"
+                                                         CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
 
                                 <Grid ColumnDefinitions="Auto,*"
                                      ColumnSpacing="12">
@@ -405,14 +416,6 @@
                 </CollectionView>
             </VerticalStackLayout>
         </VerticalStackLayout>
-
-        <!-- Bottom Info -->
-        <Label Grid.Row="7"
-               Text="{Binding UserModeText}"
-               FontSize="12"
-               TextColor="{DynamicResource Gray600}"
-               HorizontalOptions="Center"
-               Padding="0,12"/>
 
     </Grid>
 </ContentPage>

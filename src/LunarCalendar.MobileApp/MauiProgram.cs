@@ -41,10 +41,12 @@ public static class MauiProgram
 		// Register ViewModels
 		builder.Services.AddTransient<WelcomeViewModel>();
 		builder.Services.AddTransient<CalendarViewModel>();
+		builder.Services.AddTransient<HolidayDetailViewModel>();
 
 		// Register Views
 		builder.Services.AddTransient<WelcomePage>();
 		builder.Services.AddTransient<CalendarPage>();
+		builder.Services.AddTransient<HolidayDetailPage>();
 
 		return builder.Build();
 	}

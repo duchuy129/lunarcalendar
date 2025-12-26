@@ -52,6 +52,9 @@ public partial class CalendarViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<string> _availableMonths = new();
 
+    [ObservableProperty]
+    private bool _showCulturalBackground = true;
+
     public CalendarViewModel(
         ICalendarService calendarService,
         IUserModeService userModeService,
@@ -61,7 +64,7 @@ public partial class CalendarViewModel : BaseViewModel
         _userModeService = userModeService;
         _holidayService = holidayService;
 
-        Title = "Calendar";
+        Title = "Vietnamese Calendar";
         _currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         _selectedYear = DateTime.Today.Year;
 
@@ -245,6 +248,19 @@ public partial class CalendarViewModel : BaseViewModel
     void ToggleYearSection()
     {
         IsYearSectionExpanded = !IsYearSectionExpanded;
+    }
+
+    [RelayCommand]
+    async Task ViewHolidayDetailAsync(HolidayOccurrence holidayOccurrence)
+    {
+        if (holidayOccurrence == null) return;
+
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "Holiday", holidayOccurrence }
+        };
+
+        await Shell.Current.GoToAsync("holidaydetail", navigationParameter);
     }
 
     private async Task LoadYearHolidaysAsync()

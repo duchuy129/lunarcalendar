@@ -58,10 +58,47 @@ public class HolidayService : IHolidayService
     {
         try
         {
+            // Special handling for Giao Thừa (New Year's Eve) - lunar 12/30
+            // Some lunar years have only 29 days in month 12
+            // Try day 30 first, if it fails try day 29
+            int dayToTry = holiday.LunarDay;
+
+            if (holiday.Id == 19 && holiday.LunarMonth == 12 && holiday.LunarDay == 30)
+            {
+                // Try day 30 first
+                try
+                {
+                    var gregorianDate30 = _lunarCalendarService.ConvertToGregorian(
+                        lunarYear,
+                        holiday.LunarMonth,
+                        30,
+                        holiday.IsLeapMonth
+                    );
+
+                    if (gregorianDate30.Year == targetGregorianYear)
+                    {
+                        if (!occurrences.Any(o => o.Holiday.Id == holiday.Id && o.GregorianDate.Date == gregorianDate30.Date))
+                        {
+                            occurrences.Add(new HolidayOccurrence
+                            {
+                                Holiday = holiday,
+                                GregorianDate = gregorianDate30
+                            });
+                        }
+                    }
+                    return; // Successfully added day 30
+                }
+                catch
+                {
+                    // Day 30 doesn't exist, try day 29
+                    dayToTry = 29;
+                }
+            }
+
             var gregorianDate = _lunarCalendarService.ConvertToGregorian(
                 lunarYear,
                 holiday.LunarMonth,
-                holiday.LunarDay,
+                dayToTry,
                 holiday.IsLeapMonth
             );
 
