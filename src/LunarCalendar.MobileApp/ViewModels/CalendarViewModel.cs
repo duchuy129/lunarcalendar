@@ -20,7 +20,10 @@ public partial class CalendarViewModel : BaseViewModel
     private string _monthYearDisplay = string.Empty;
 
     [ObservableProperty]
-    private string _todayLunarDisplay = string.Empty;
+    private string _todayLunarDisplay = "Loading...";
+
+    [ObservableProperty]
+    private string _todayGregorianDisplay = "Today";
 
     [ObservableProperty]
     private ObservableCollection<CalendarDay> _calendarDays = new();
@@ -183,11 +186,12 @@ public partial class CalendarViewModel : BaseViewModel
                 CurrentMonth.Year,
                 CurrentMonth.Month);
 
-            // Update today's lunar display
+            // Update today's displays
             var todayLunar = lunarDates.FirstOrDefault(ld => ld.GregorianDate.Date == DateTime.Today);
             if (todayLunar != null)
             {
-                TodayLunarDisplay = $"Today: {todayLunar.LunarDay}/{todayLunar.LunarMonth}/{todayLunar.LunarYear}";
+                TodayGregorianDisplay = DateTime.Today.ToString("MMMM dd, yyyy");
+                TodayLunarDisplay = $"{todayLunar.LunarDay}/{todayLunar.LunarMonth}/{todayLunar.LunarYear}";
             }
 
             // Create calendar days

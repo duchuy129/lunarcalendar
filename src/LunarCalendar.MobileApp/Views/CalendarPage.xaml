@@ -117,15 +117,26 @@
                     CornerRadius="4"/>
         </Grid>
 
-        <!-- Today's Lunar Date Display -->
+        <!-- Today's Date Display -->
         <Label Grid.Row="2"
-               Text="{Binding TodayLunarDisplay}"
-               FontSize="14"
-               FontAttributes="Bold"
-               TextColor="{DynamicResource Primary}"
                HorizontalOptions="Center"
-               Padding="8,4"
-               BackgroundColor="{DynamicResource Gray100}"/>
+               Padding="12,8"
+               BackgroundColor="{DynamicResource Gray100}">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="{Binding TodayGregorianDisplay}"
+                          FontSize="28"
+                          FontAttributes="Bold"
+                          TextColor="{DynamicResource Gray900}"/>
+                    <Span Text=" "
+                          FontSize="28"/>
+                    <Span Text="{Binding TodayLunarDisplay}"
+                          FontSize="28"
+                          FontAttributes="Bold"
+                          TextColor="Red"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
 
         <!-- Day of Week Header -->
         <Grid Grid.Row="3"
