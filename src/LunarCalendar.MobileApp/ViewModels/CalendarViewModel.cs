@@ -12,6 +12,8 @@ public partial class CalendarViewModel : BaseViewModel
     private readonly IUserModeService _userModeService;
     private readonly IHolidayService _holidayService;
     private readonly IHapticService _hapticService;
+    private readonly IConnectivityService _connectivityService;
+    private readonly ISyncService _syncService;
 
     [ObservableProperty]
     private DateTime _currentMonth;
@@ -30,6 +32,15 @@ public partial class CalendarViewModel : BaseViewModel
 
     [ObservableProperty]
     private string _userModeText = string.Empty;
+
+    [ObservableProperty]
+    private bool _isOnline = true;
+
+    [ObservableProperty]
+    private bool _isSyncing = false;
+
+    [ObservableProperty]
+    private string _syncStatus = string.Empty;
 
     [ObservableProperty]
     private int _selectedYear;
@@ -66,12 +77,16 @@ public partial class CalendarViewModel : BaseViewModel
         ICalendarService calendarService,
         IUserModeService userModeService,
         IHolidayService holidayService,
-        IHapticService hapticService)
+        IHapticService hapticService,
+        IConnectivityService connectivityService,
+        ISyncService syncService)
     {
         _calendarService = calendarService;
         _userModeService = userModeService;
         _holidayService = holidayService;
         _hapticService = hapticService;
+        _connectivityService = connectivityService;
+        _syncService = syncService;
 
         Title = "Vietnamese Calendar";
         _currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -96,6 +111,37 @@ public partial class CalendarViewModel : BaseViewModel
         _selectedCalendarMonth = DateTime.Today.Month;
 
         UpdateUserModeText();
+
+        // Monitor connectivity
+        IsOnline = _connectivityService.IsConnected;
+        _connectivityService.ConnectivityChanged += OnConnectivityChanged;
+
+        // Monitor sync status
+        _syncService.SyncStatusChanged += OnSyncStatusChanged;
+    }
+
+    private void OnConnectivityChanged(object? sender, bool isConnected)
+    {
+        IsOnline = isConnected;
+        SyncStatus = isConnected ? string.Empty : "Offline mode";
+    }
+
+    private void OnSyncStatusChanged(object? sender, SyncStatusChangedEventArgs e)
+    {
+        IsSyncing = e.IsSyncing;
+        if (!string.IsNullOrEmpty(e.Status))
+        {
+            SyncStatus = e.Status;
+        }
+
+        if (!e.IsSyncing && !string.IsNullOrEmpty(e.Error))
+        {
+            SyncStatus = $"Sync error: {e.Error}";
+        }
+        else if (!e.IsSyncing && e.Success)
+        {
+            SyncStatus = string.Empty;
+        }
     }
 
     public async Task InitializeAsync()
@@ -152,12 +198,54 @@ public partial class CalendarViewModel : BaseViewModel
         try
         {
             IsRefreshing = true;
+
+            // If online, trigger sync
+            if (_connectivityService.IsConnected)
+            {
+                await _syncService.SyncAllAsync(CurrentMonth.Year, CurrentMonth.Month);
+            }
+
             await LoadCalendarAsync();
             await LoadYearHolidaysAsync();
         }
         finally
         {
             IsRefreshing = false;
+        }
+    }
+
+    [RelayCommand]
+    async Task ManualSyncAsync()
+    {
+        if (!_connectivityService.IsConnected)
+        {
+            await Shell.Current.DisplayAlert("Offline", "Cannot sync while offline. Please check your internet connection.", "OK");
+            return;
+        }
+
+        try
+        {
+            IsSyncing = true;
+            var success = await _syncService.SyncAllAsync(CurrentMonth.Year, CurrentMonth.Month);
+
+            if (success)
+            {
+                await LoadCalendarAsync();
+                await LoadYearHolidaysAsync();
+                await Shell.Current.DisplayAlert("Sync Complete", "Calendar data has been synchronized successfully.", "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Sync Failed", "Failed to synchronize calendar data. Please try again later.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Sync Error", $"An error occurred during sync: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsSyncing = false;
         }
     }
 

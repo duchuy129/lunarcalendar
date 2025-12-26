@@ -1,5 +1,7 @@
 using LunarCalendar.MobileApp.Models;
+using LunarCalendar.MobileApp.Data;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace LunarCalendar.MobileApp.Services;
 
@@ -7,13 +9,20 @@ public class HolidayService : IHolidayService
 {
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl;
+    private readonly IConnectivityService _connectivityService;
+    private readonly LunarCalendarDatabase _database;
     private List<HolidayOccurrence>? _cachedMonthHolidays;
     private int _cachedYear;
     private int _cachedMonth;
 
-    public HolidayService(HttpClient httpClient)
+    public HolidayService(
+        HttpClient httpClient,
+        IConnectivityService connectivityService,
+        LunarCalendarDatabase database)
     {
         _httpClient = httpClient;
+        _connectivityService = connectivityService;
+        _database = database;
 
         // Configure base URL based on platform and device type
         if (DeviceInfo.Platform == DevicePlatform.Android && DeviceInfo.DeviceType == DeviceType.Virtual)
@@ -57,47 +66,161 @@ public class HolidayService : IHolidayService
 
     public async Task<List<HolidayOccurrence>> GetHolidaysForYearAsync(int year)
     {
+        // Try online first if connected
+        if (_connectivityService.IsConnected)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday/year/{year}");
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsStringAsync();
+                var holidays = JsonSerializer.Deserialize<List<HolidayOccurrence>>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (holidays != null && holidays.Any())
+                {
+                    // Save to database in background
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var entities = holidays.Select(h => new Data.Models.HolidayOccurrenceEntity
+                            {
+                                HolidayId = 0,
+                                GregorianDate = h.GregorianDate,
+                                Year = year,
+                                Month = h.GregorianDate.Month,
+                                Name = h.Holiday.Name,
+                                Description = h.Holiday.Description,
+                                Type = h.Holiday.Type.ToString(),
+                                ColorHex = h.Holiday.ColorHex,
+                                IsPublicHoliday = h.Holiday.IsPublicHoliday
+                            }).ToList();
+
+                            await _database.SaveHolidayOccurrencesAsync(entities);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Error saving holidays to database: {ex.Message}");
+                        }
+                    });
+                }
+
+                return holidays ?? new List<HolidayOccurrence>();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error fetching holidays online for year {year}: {ex.Message}, falling back to offline data");
+            }
+        }
+
+        // Fallback to offline data
         try
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday/year/{year}");
-            response.EnsureSuccessStatusCode();
-
-            var content = await response.Content.ReadAsStringAsync();
-            var holidays = JsonSerializer.Deserialize<List<HolidayOccurrence>>(content, new JsonSerializerOptions
+            var cachedEntities = await _database.GetHolidaysForYearAsync(year);
+            return cachedEntities.Select(e => new HolidayOccurrence
             {
-                PropertyNameCaseInsensitive = true
-            });
-
-            return holidays ?? new List<HolidayOccurrence>();
+                GregorianDate = e.GregorianDate,
+                Holiday = new Holiday
+                {
+                    Name = e.Name,
+                    Description = e.Description ?? string.Empty,
+                    Type = Enum.TryParse<HolidayType>(e.Type, out var type) ? type : HolidayType.TraditionalFestival,
+                    ColorHex = e.ColorHex ?? "#FF0000",
+                    IsPublicHoliday = e.IsPublicHoliday
+                }
+            }).ToList();
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error fetching holidays for year {year}: {ex.Message}");
+            Debug.WriteLine($"Error fetching offline holidays for year {year}: {ex.Message}");
             return new List<HolidayOccurrence>();
         }
     }
 
     public async Task<List<HolidayOccurrence>> GetHolidaysForMonthAsync(int year, int month)
     {
-        // Check cache first
+        // Check memory cache first
         if (_cachedMonthHolidays != null && _cachedYear == year && _cachedMonth == month)
         {
             return _cachedMonthHolidays;
         }
 
+        // Try online first if connected
+        if (_connectivityService.IsConnected)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday/month/{year}/{month}");
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsStringAsync();
+                var holidays = JsonSerializer.Deserialize<List<HolidayOccurrence>>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                // Cache the result in memory
+                _cachedMonthHolidays = holidays ?? new List<HolidayOccurrence>();
+                _cachedYear = year;
+                _cachedMonth = month;
+
+                // Save to database in background
+                if (_cachedMonthHolidays.Any())
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var entities = _cachedMonthHolidays.Select(h => new Data.Models.HolidayOccurrenceEntity
+                            {
+                                HolidayId = 0,
+                                GregorianDate = h.GregorianDate,
+                                Year = year,
+                                Month = month,
+                                Name = h.Holiday.Name,
+                                Description = h.Holiday.Description,
+                                Type = h.Holiday.Type.ToString(),
+                                ColorHex = h.Holiday.ColorHex,
+                                IsPublicHoliday = h.Holiday.IsPublicHoliday
+                            }).ToList();
+
+                            await _database.SaveHolidayOccurrencesAsync(entities);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Error saving holidays to database: {ex.Message}");
+                        }
+                    });
+                }
+
+                return _cachedMonthHolidays;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error fetching holidays online for {year}/{month}: {ex.Message}, falling back to offline data");
+            }
+        }
+
+        // Fallback to offline data
         try
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday/month/{year}/{month}");
-            response.EnsureSuccessStatusCode();
-
-            var content = await response.Content.ReadAsStringAsync();
-            var holidays = JsonSerializer.Deserialize<List<HolidayOccurrence>>(content, new JsonSerializerOptions
+            var cachedEntities = await _database.GetHolidaysForMonthAsync(year, month);
+            _cachedMonthHolidays = cachedEntities.Select(e => new HolidayOccurrence
             {
-                PropertyNameCaseInsensitive = true
-            });
-
-            // Cache the result
-            _cachedMonthHolidays = holidays ?? new List<HolidayOccurrence>();
+                GregorianDate = e.GregorianDate,
+                Holiday = new Holiday
+                {
+                    Name = e.Name,
+                    Description = e.Description ?? string.Empty,
+                    Type = Enum.TryParse<HolidayType>(e.Type, out var type) ? type : HolidayType.TraditionalFestival,
+                    ColorHex = e.ColorHex ?? "#FF0000",
+                    IsPublicHoliday = e.IsPublicHoliday
+                }
+            }).ToList();
             _cachedYear = year;
             _cachedMonth = month;
 
@@ -105,7 +228,7 @@ public class HolidayService : IHolidayService
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error fetching holidays for {year}/{month}: {ex.Message}");
+            Debug.WriteLine($"Error fetching offline holidays for {year}/{month}: {ex.Message}");
             return new List<HolidayOccurrence>();
         }
     }

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.ViewModels;
 using LunarCalendar.MobileApp.Views;
+using LunarCalendar.MobileApp.Data;
 using Refit;
 
 namespace LunarCalendar.MobileApp;
@@ -23,10 +24,16 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
+		// Register Database
+		var dbPath = Path.Combine(FileSystem.AppDataDirectory, "lunarcalendar.db3");
+		builder.Services.AddSingleton(sp => new LunarCalendarDatabase(dbPath));
+
 		// Register Services
+		builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 		builder.Services.AddSingleton<IUserModeService, UserModeService>();
 		builder.Services.AddSingleton<ICalendarService, CalendarService>();
 		builder.Services.AddSingleton<IHapticService, HapticService>();
+		builder.Services.AddSingleton<ISyncService, SyncService>();
 
 		// Register HTTP client for Holiday Service
 		builder.Services.AddHttpClient<IHolidayService, HolidayService>();

@@ -1,5 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LunarCalendar.MobileApp.Services;
+using LunarCalendar.MobileApp.Data;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -8,6 +10,10 @@ public partial class SettingsViewModel : BaseViewModel
     private const string ShowCulturalBackgroundKey = "ShowCulturalBackground";
     private const string EnableHapticFeedbackKey = "EnableHapticFeedback";
     private const string ShowLunarDatesKey = "ShowLunarDates";
+
+    private readonly IConnectivityService? _connectivityService;
+    private readonly ISyncService? _syncService;
+    private readonly LunarCalendarDatabase? _database;
 
     [ObservableProperty]
     private bool _showCulturalBackground;
@@ -21,11 +27,90 @@ public partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private string _appVersion = string.Empty;
 
+    [ObservableProperty]
+    private bool _isOnline = true;
+
+    [ObservableProperty]
+    private string _lastSyncTime = "Never";
+
+    [ObservableProperty]
+    private bool _isSyncing = false;
+
     public SettingsViewModel()
     {
         Title = "Settings";
         LoadSettings();
         LoadAppInfo();
+    }
+
+    public SettingsViewModel(
+        IConnectivityService connectivityService,
+        ISyncService syncService,
+        LunarCalendarDatabase database)
+    {
+        _connectivityService = connectivityService;
+        _syncService = syncService;
+        _database = database;
+
+        Title = "Settings";
+        LoadSettings();
+        LoadAppInfo();
+        UpdateSyncStatus();
+
+        // Monitor connectivity
+        if (_connectivityService != null)
+        {
+            IsOnline = _connectivityService.IsConnected;
+            _connectivityService.ConnectivityChanged += OnConnectivityChanged;
+        }
+
+        // Monitor sync status
+        if (_syncService != null)
+        {
+            _syncService.SyncStatusChanged += OnSyncStatusChanged;
+        }
+    }
+
+    private void OnConnectivityChanged(object? sender, bool isConnected)
+    {
+        IsOnline = isConnected;
+    }
+
+    private void OnSyncStatusChanged(object? sender, SyncStatusChangedEventArgs e)
+    {
+        IsSyncing = e.IsSyncing;
+        if (!e.IsSyncing && e.Success)
+        {
+            UpdateSyncStatus();
+        }
+    }
+
+    private void UpdateSyncStatus()
+    {
+        if (_syncService?.LastSyncTime != null)
+        {
+            var timeSince = DateTime.Now - _syncService.LastSyncTime.Value;
+            if (timeSince.TotalMinutes < 1)
+            {
+                LastSyncTime = "Just now";
+            }
+            else if (timeSince.TotalHours < 1)
+            {
+                LastSyncTime = $"{(int)timeSince.TotalMinutes} minutes ago";
+            }
+            else if (timeSince.TotalDays < 1)
+            {
+                LastSyncTime = $"{(int)timeSince.TotalHours} hours ago";
+            }
+            else
+            {
+                LastSyncTime = _syncService.LastSyncTime.Value.ToString("MMM dd, yyyy HH:mm");
+            }
+        }
+        else
+        {
+            LastSyncTime = "Never";
+        }
     }
 
     partial void OnShowCulturalBackgroundChanged(bool value)
@@ -61,6 +146,49 @@ public partial class SettingsViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    async Task SyncDataAsync()
+    {
+        if (_connectivityService == null || _syncService == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Sync service not available", "OK");
+            return;
+        }
+
+        if (!_connectivityService.IsConnected)
+        {
+            await Shell.Current.DisplayAlert("Offline", "Cannot sync while offline. Please check your internet connection.", "OK");
+            return;
+        }
+
+        try
+        {
+            IsSyncing = true;
+            var currentYear = DateTime.Today.Year;
+            var currentMonth = DateTime.Today.Month;
+
+            var success = await _syncService.SyncAllAsync(currentYear, currentMonth);
+
+            if (success)
+            {
+                UpdateSyncStatus();
+                await Shell.Current.DisplayAlert("Sync Complete", "Calendar data has been synchronized successfully.", "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Sync Failed", "Failed to synchronize calendar data. Please try again later.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Sync Error", $"An error occurred during sync: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsSyncing = false;
+        }
+    }
+
+    [RelayCommand]
     async Task ClearCacheAsync()
     {
         try
@@ -82,7 +210,13 @@ public partial class SettingsViewModel : BaseViewModel
                 }
             }
 
-            await Shell.Current.DisplayAlert("Success", "Cache cleared successfully", "OK");
+            // Clear database cache
+            if (_database != null)
+            {
+                await _database.ClearAllDataAsync();
+            }
+
+            await Shell.Current.DisplayAlert("Success", "Cache and offline data cleared successfully", "OK");
         }
         catch (Exception ex)
         {
