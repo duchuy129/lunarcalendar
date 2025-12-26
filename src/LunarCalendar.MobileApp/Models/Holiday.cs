@@ -14,6 +14,9 @@ public class Holiday
     public string ColorHex { get; set; } = string.Empty;
     public bool IsPublicHoliday { get; set; }
     public string Culture { get; set; } = "Vietnamese";
+
+    // Computed property to check if holiday has lunar date
+    public bool HasLunarDate => LunarMonth > 0 && LunarDay > 0;
 }
 
 public class HolidayOccurrence

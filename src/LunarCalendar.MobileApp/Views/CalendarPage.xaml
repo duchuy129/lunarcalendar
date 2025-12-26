@@ -13,6 +13,7 @@
             <converters:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter"/>
             <converters:IntToBoolConverter x:Key="IntToBoolConverter"/>
             <converters:MonthIndexConverter x:Key="MonthIndexConverter"/>
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -378,22 +379,18 @@
                                             </Label.FormattedText>
                                         </Label>
 
-                                        <Label FontSize="12"
+                                        <!-- Lunar date display -->
+                                        <Label FontSize="14"
                                               TextColor="#DC143C"
-                                              IsVisible="{Binding Holiday.LunarMonth, Converter={StaticResource IntToBoolConverter}}">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="Lunar: "/>
-                                                    <Span FontAttributes="Bold">
-                                                        <Span.Text>
-                                                            <MultiBinding StringFormat="{}{0}/{1}">
-                                                                <Binding Path="Holiday.LunarDay"/>
-                                                                <Binding Path="Holiday.LunarMonth"/>
-                                                            </MultiBinding>
-                                                        </Span.Text>
-                                                    </Span>
-                                                </FormattedString>
-                                            </Label.FormattedText>
+                                              FontAttributes="Bold"
+                                              Margin="0,4,0,0"
+                                              IsVisible="{Binding Holiday.HasLunarDate}">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="Lunar: {0}/{1}">
+                                                    <Binding Path="Holiday.LunarDay"/>
+                                                    <Binding Path="Holiday.LunarMonth"/>
+                                                </MultiBinding>
+                                            </Label.Text>
                                         </Label>
 
                                         <Label Text="{Binding Holiday.Description}"
