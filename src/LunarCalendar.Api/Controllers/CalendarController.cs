@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using LunarCalendar.Api.DTOs;
 using LunarCalendar.Api.Services;
@@ -5,7 +6,8 @@ using LunarCalendar.Api.Services;
 namespace LunarCalendar.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class CalendarController : ControllerBase
 {
     private readonly ILunarCalendarService _lunarCalendarService;
@@ -25,6 +27,7 @@ public class CalendarController : ControllerBase
     /// <param name="date">Gregorian date (defaults to today if not provided)</param>
     /// <returns>Lunar date information</returns>
     [HttpGet("convert")]
+    [ResponseCache(Duration = 3600, VaryByQueryKeys = new[] { "date" })] // Cache for 1 hour
     public ActionResult<LunarDateResponse> ConvertToLunar([FromQuery] DateTime? date = null)
     {
         try
@@ -60,6 +63,7 @@ public class CalendarController : ControllerBase
     /// <param name="date">Gregorian date (defaults to today if not provided)</param>
     /// <returns>Complete lunar calendar information including festivals and solar terms</returns>
     [HttpGet("lunar-info")]
+    [ResponseCache(Duration = 3600, VaryByQueryKeys = new[] { "date" })] // Cache for 1 hour
     public ActionResult<LunarCalendarInfoResponse> GetLunarInfo([FromQuery] DateTime? date = null)
     {
         try
@@ -102,6 +106,7 @@ public class CalendarController : ControllerBase
     /// <param name="month">Month (1-12)</param>
     /// <returns>Lunar date information for all days in the month</returns>
     [HttpGet("month")]
+    [ResponseCache(Duration = 86400, VaryByQueryKeys = new[] { "year", "month" })] // Cache for 24 hours
     public ActionResult<IEnumerable<LunarDateResponse>> GetMonthInfo(
         [FromQuery] int year,
         [FromQuery] int month)

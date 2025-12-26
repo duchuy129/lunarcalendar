@@ -17,10 +17,14 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto"
-          BackgroundColor="#FFF9F0">
+    <RefreshView Grid.Row="0" Grid.RowSpan="8"
+                 IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding RefreshCommand}"
+                 RefreshColor="{DynamicResource Primary}">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto"
+              BackgroundColor="#FFF9F0">
 
-        <!-- Cultural Background Image -->
+            <!-- Cultural Background Image -->
         <Image Grid.RowSpan="8"
                Source="cultural_background.png"
                Aspect="AspectFill"
@@ -159,6 +163,10 @@
                        ItemsSource="{Binding CalendarDays}"
                        IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                        SelectionMode="None">
+            <CollectionView.GestureRecognizers>
+                <SwipeGestureRecognizer Direction="Left" Command="{Binding NextMonthCommand}"/>
+                <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousMonthCommand}"/>
+            </CollectionView.GestureRecognizers>
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical"
                                Span="7"/>
@@ -417,5 +425,6 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
 
-    </Grid>
+        </Grid>
+    </RefreshView>
 </ContentPage>

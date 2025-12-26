@@ -1,10 +1,12 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using LunarCalendar.Api.Services;
 
 namespace LunarCalendar.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class HolidayController : ControllerBase
 {
     private readonly IHolidayService _holidayService;
@@ -20,6 +22,7 @@ public class HolidayController : ControllerBase
     /// Get all holidays
     /// </summary>
     [HttpGet]
+    [ResponseCache(Duration = 86400)] // Cache for 24 hours - holidays don't change often
     public async Task<IActionResult> GetAllHolidays()
     {
         try
@@ -38,6 +41,7 @@ public class HolidayController : ControllerBase
     /// Get holidays for a specific year
     /// </summary>
     [HttpGet("year/{year}")]
+    [ResponseCache(Duration = 86400)] // Cache for 24 hours
     public async Task<IActionResult> GetHolidaysForYear(int year)
     {
         try
@@ -61,6 +65,7 @@ public class HolidayController : ControllerBase
     /// Get holidays for a specific month
     /// </summary>
     [HttpGet("month/{year}/{month}")]
+    [ResponseCache(Duration = 86400)] // Cache for 24 hours
     public async Task<IActionResult> GetHolidaysForMonth(int year, int month)
     {
         try
@@ -89,6 +94,7 @@ public class HolidayController : ControllerBase
     /// Get holiday for a specific date
     /// </summary>
     [HttpGet("date/{year}/{month}/{day}")]
+    [ResponseCache(Duration = 86400)] // Cache for 24 hours
     public async Task<IActionResult> GetHolidayForDate(int year, int month, int day)
     {
         try

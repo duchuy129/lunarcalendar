@@ -30,13 +30,21 @@ public class CalendarService : ICalendarService
     {
         try
         {
-            return await _apiClient.GetMonthInfoAsync(year, month);
+            Console.WriteLine($"========== CALLING API: GetMonthInfoAsync({year}, {month}) ==========");
+            var result = await _apiClient.GetMonthInfoAsync(year, month);
+            Console.WriteLine($"========== API RETURNED: {result?.Count ?? 0} lunar dates ==========");
+            return result;
         }
         catch (Exception ex)
         {
             // Log error and return empty list for now
             // In a production app, you would use local fallback calculation
-            System.Diagnostics.Debug.WriteLine($"Error fetching month lunar dates: {ex.Message}");
+            Console.WriteLine($"========== ERROR: {ex.Message} ==========");
+            Console.WriteLine($"========== STACK: {ex.StackTrace} ==========");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"========== INNER: {ex.InnerException.Message} ==========");
+            }
             return new List<LunarDate>();
         }
     }

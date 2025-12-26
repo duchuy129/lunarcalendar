@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using LunarCalendar.Api.Data;
 using LunarCalendar.Api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add response caching
+builder.Services.AddResponseCaching();
+
+// Add memory cache for service-level caching
+builder.Services.AddMemoryCache();
+
+// Add API versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 
 // Database configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -70,6 +90,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();
 

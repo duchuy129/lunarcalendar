@@ -14,17 +14,30 @@ public class HolidayService : IHolidayService
     public HolidayService(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        // Use the same base URL as the API or configure it
-        _baseUrl = DeviceInfo.Platform == DevicePlatform.Android
-            ? "http://10.0.2.2:5090" // Android emulator
-            : "http://localhost:5090"; // iOS simulator
+
+        // Configure base URL based on platform and device type
+        if (DeviceInfo.Platform == DevicePlatform.Android && DeviceInfo.DeviceType == DeviceType.Virtual)
+        {
+            // Android emulator uses special IP to access host machine
+            _baseUrl = "http://10.0.2.2:5090";
+        }
+        else if (DeviceInfo.DeviceType == DeviceType.Physical)
+        {
+            // For physical devices, use your computer's actual IP address on the local network
+            _baseUrl = "http://10.0.0.72:5090"; // Your computer's IP
+        }
+        else
+        {
+            // iOS simulator and other virtual devices use localhost
+            _baseUrl = "http://localhost:5090";
+        }
     }
 
     public async Task<List<Holiday>> GetAllHolidaysAsync()
     {
         try
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/holiday");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday");
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
@@ -46,7 +59,7 @@ public class HolidayService : IHolidayService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/holiday/year/{year}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday/year/{year}");
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
@@ -74,7 +87,7 @@ public class HolidayService : IHolidayService
 
         try
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/holiday/month/{year}/{month}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday/month/{year}/{month}");
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
@@ -101,7 +114,7 @@ public class HolidayService : IHolidayService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/holiday/date/{date.Year}/{date.Month}/{date.Day}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/v1/holiday/date/{date.Year}/{date.Month}/{date.Day}");
 
             if (!response.IsSuccessStatusCode)
             {

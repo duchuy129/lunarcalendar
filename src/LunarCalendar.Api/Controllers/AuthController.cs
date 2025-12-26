@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using LunarCalendar.Api.DTOs;
 using LunarCalendar.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace LunarCalendar.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;

@@ -11,6 +11,7 @@ public partial class CalendarViewModel : BaseViewModel
     private readonly ICalendarService _calendarService;
     private readonly IUserModeService _userModeService;
     private readonly IHolidayService _holidayService;
+    private readonly IHapticService _hapticService;
 
     [ObservableProperty]
     private DateTime _currentMonth;
@@ -55,14 +56,19 @@ public partial class CalendarViewModel : BaseViewModel
     [ObservableProperty]
     private bool _showCulturalBackground = true;
 
+    [ObservableProperty]
+    private bool _isRefreshing = false;
+
     public CalendarViewModel(
         ICalendarService calendarService,
         IUserModeService userModeService,
-        IHolidayService holidayService)
+        IHolidayService holidayService,
+        IHapticService hapticService)
     {
         _calendarService = calendarService;
         _userModeService = userModeService;
         _holidayService = holidayService;
+        _hapticService = hapticService;
 
         Title = "Vietnamese Calendar";
         _currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -93,6 +99,9 @@ public partial class CalendarViewModel : BaseViewModel
     {
         try
         {
+            // Load settings
+            ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
+
             await LoadCalendarAsync();
             await LoadYearHolidaysAsync();
         }
@@ -104,9 +113,16 @@ public partial class CalendarViewModel : BaseViewModel
         }
     }
 
+    public void RefreshSettings()
+    {
+        // Refresh settings when returning to calendar page
+        ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
+    }
+
     [RelayCommand]
     async Task PreviousMonthAsync()
     {
+        _hapticService.PerformClick();
         CurrentMonth = CurrentMonth.AddMonths(-1);
         await LoadCalendarAsync();
     }
@@ -114,6 +130,7 @@ public partial class CalendarViewModel : BaseViewModel
     [RelayCommand]
     async Task NextMonthAsync()
     {
+        _hapticService.PerformClick();
         CurrentMonth = CurrentMonth.AddMonths(1);
         await LoadCalendarAsync();
     }
@@ -121,8 +138,24 @@ public partial class CalendarViewModel : BaseViewModel
     [RelayCommand]
     async Task TodayAsync()
     {
+        _hapticService.PerformClick();
         CurrentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         await LoadCalendarAsync();
+    }
+
+    [RelayCommand]
+    async Task RefreshAsync()
+    {
+        try
+        {
+            IsRefreshing = true;
+            await LoadCalendarAsync();
+            await LoadYearHolidaysAsync();
+        }
+        finally
+        {
+            IsRefreshing = false;
+        }
     }
 
     private async Task LoadCalendarAsync()
