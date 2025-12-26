@@ -27,6 +27,31 @@ public partial class CalendarViewModel : BaseViewModel
     [ObservableProperty]
     private string _userModeText = string.Empty;
 
+    [ObservableProperty]
+    private int _selectedYear;
+
+    [ObservableProperty]
+    private ObservableCollection<HolidayOccurrence> _yearHolidays = new();
+
+    [ObservableProperty]
+    private ObservableCollection<int> _availableYears = new();
+
+    [ObservableProperty]
+    private bool _isYearSectionExpanded = false;
+
+    // Month/Year picker properties
+    [ObservableProperty]
+    private int _selectedCalendarYear;
+
+    [ObservableProperty]
+    private int _selectedCalendarMonth;
+
+    [ObservableProperty]
+    private ObservableCollection<int> _availableCalendarYears = new();
+
+    [ObservableProperty]
+    private ObservableCollection<string> _availableMonths = new();
+
     public CalendarViewModel(
         ICalendarService calendarService,
         IUserModeService userModeService,
@@ -38,13 +63,42 @@ public partial class CalendarViewModel : BaseViewModel
 
         Title = "Calendar";
         _currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+        _selectedYear = DateTime.Today.Year;
+
+        // Initialize available years (current year ± 10 years)
+        for (int year = DateTime.Today.Year - 10; year <= DateTime.Today.Year + 10; year++)
+        {
+            AvailableYears.Add(year);
+            AvailableCalendarYears.Add(year);
+        }
+
+        // Initialize month names
+        AvailableMonths = new ObservableCollection<string>
+        {
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        };
+
+        // Set current month/year for pickers
+        _selectedCalendarYear = DateTime.Today.Year;
+        _selectedCalendarMonth = DateTime.Today.Month;
 
         UpdateUserModeText();
     }
 
     public async Task InitializeAsync()
     {
-        await LoadCalendarAsync();
+        try
+        {
+            await LoadCalendarAsync();
+            await LoadYearHolidaysAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"=== INIT ERROR: {ex.Message} ===");
+            System.Diagnostics.Debug.WriteLine($"=== STACK: {ex.StackTrace} ===");
+            // Don't throw - let the app continue even if holiday loading fails
+        }
     }
 
     [RelayCommand]
@@ -78,6 +132,10 @@ public partial class CalendarViewModel : BaseViewModel
 
             // Update month/year display
             MonthYearDisplay = CurrentMonth.ToString("MMMM yyyy");
+
+            // Sync picker values with current month
+            SelectedCalendarYear = CurrentMonth.Year;
+            SelectedCalendarMonth = CurrentMonth.Month;
 
             // Get lunar dates for the month
             var lunarDates = await _calendarService.GetMonthLunarDatesAsync(
@@ -146,5 +204,72 @@ public partial class CalendarViewModel : BaseViewModel
     private void UpdateUserModeText()
     {
         UserModeText = _userModeService.IsGuest ? "Guest Mode" : "Authenticated";
+    }
+
+    [RelayCommand]
+    async Task PreviousYearAsync()
+    {
+        SelectedYear--;
+        await LoadYearHolidaysAsync();
+    }
+
+    [RelayCommand]
+    async Task NextYearAsync()
+    {
+        SelectedYear++;
+        await LoadYearHolidaysAsync();
+    }
+
+    [RelayCommand]
+    async Task CurrentYearAsync()
+    {
+        SelectedYear = DateTime.Today.Year;
+        await LoadYearHolidaysAsync();
+    }
+
+    [RelayCommand]
+    async Task YearSelectedAsync()
+    {
+        await LoadYearHolidaysAsync();
+    }
+
+    [RelayCommand]
+    async Task JumpToMonthAsync()
+    {
+        // Update current month based on selected year and month
+        CurrentMonth = new DateTime(SelectedCalendarYear, SelectedCalendarMonth, 1);
+        await LoadCalendarAsync();
+    }
+
+    [RelayCommand]
+    void ToggleYearSection()
+    {
+        IsYearSectionExpanded = !IsYearSectionExpanded;
+    }
+
+    private async Task LoadYearHolidaysAsync()
+    {
+        try
+        {
+            var holidays = await _holidayService.GetHolidaysForYearAsync(SelectedYear);
+
+            // Get lunar info for each holiday to display both dates
+            foreach (var holiday in holidays)
+            {
+                // For lunar-based holidays, get the lunar date from the holiday definition
+                if (holiday.Holiday.LunarMonth > 0 && holiday.Holiday.LunarDay > 0)
+                {
+                    // Lunar date is already in the holiday model
+                    continue;
+                }
+            }
+
+            YearHolidays = new ObservableCollection<HolidayOccurrence>(
+                holidays.OrderBy(h => h.GregorianDate));
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading year holidays: {ex.Message}");
+        }
     }
 }

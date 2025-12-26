@@ -18,4 +18,21 @@ public partial class CalendarPage : ContentPage
         base.OnAppearing();
         await _viewModel.InitializeAsync();
     }
+
+    private async void OnYearPickerSelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_viewModel != null)
+        {
+            await _viewModel.YearSelectedCommand.ExecuteAsync(null);
+        }
+    }
+
+    private void OnMonthPickerSelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (sender is Picker picker && _viewModel != null)
+        {
+            // Update the selected month from picker index (0-based to 1-based)
+            _viewModel.SelectedCalendarMonth = picker.SelectedIndex + 1;
+        }
+    }
 }

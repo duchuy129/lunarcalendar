@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodels="clr-namespace:LunarCalendar.MobileApp.ViewModels"
+             xmlns:converters="clr-namespace:LunarCalendar.MobileApp.Converters"
              x:Class="LunarCalendar.MobileApp.Views.CalendarPage"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="#FFF9F0">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto"
-          Padding="0"
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter"/>
+            <converters:IntToBoolConverter x:Key="IntToBoolConverter"/>
+            <converters:MonthIndexConverter x:Key="MonthIndexConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto"
           BackgroundColor="#FFF9F0">
 
         <!-- Cultural Background Pattern (Subtle Gold Overlay) -->
-        <BoxView Grid.RowSpan="6"
+        <BoxView Grid.RowSpan="8"
                  Color="#FFD700"
                  Opacity="0.05"/>
 
@@ -59,8 +69,46 @@
                     WidthRequest="50"/>
         </Grid>
 
+        <!-- Month/Year Picker -->
+        <Grid Grid.Row="1"
+              Padding="16,8"
+              BackgroundColor="{DynamicResource Gray100}"
+              ColumnDefinitions="Auto,*,Auto,Auto"
+              ColumnSpacing="8">
+
+            <Label Grid.Column="0"
+                   Text="Jump to:"
+                   FontSize="14"
+                   VerticalOptions="Center"
+                   FontAttributes="Bold"/>
+
+            <Picker Grid.Column="1"
+                    ItemsSource="{Binding AvailableMonths}"
+                    SelectedIndex="{Binding SelectedCalendarMonth, Converter={StaticResource MonthIndexConverter}}"
+                    FontSize="14"
+                    VerticalOptions="Center"
+                    SelectedIndexChanged="OnMonthPickerSelectedIndexChanged"/>
+
+            <Picker Grid.Column="2"
+                    ItemsSource="{Binding AvailableCalendarYears}"
+                    SelectedItem="{Binding SelectedCalendarYear}"
+                    FontSize="14"
+                    VerticalOptions="Center"
+                    WidthRequest="90"
+                    SelectedIndexChanged="OnYearPickerSelectedIndexChanged"/>
+
+            <Button Grid.Column="3"
+                    Text="Go"
+                    Command="{Binding JumpToMonthCommand}"
+                    BackgroundColor="{DynamicResource Primary}"
+                    TextColor="White"
+                    FontSize="14"
+                    Padding="12,4"
+                    CornerRadius="4"/>
+        </Grid>
+
         <!-- Today's Lunar Date Display -->
-        <Label Grid.Row="1"
+        <Label Grid.Row="2"
                Text="{Binding TodayLunarDisplay}"
                FontSize="14"
                FontAttributes="Bold"
@@ -70,7 +118,7 @@
                BackgroundColor="{DynamicResource Gray100}"/>
 
         <!-- Day of Week Header -->
-        <Grid Grid.Row="2"
+        <Grid Grid.Row="3"
               Padding="4,8"
               BackgroundColor="{DynamicResource Gray100}">
             <Grid.ColumnDefinitions>
@@ -93,7 +141,7 @@
         </Grid>
 
         <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="4"
+        <ActivityIndicator Grid.Row="5"
                           IsVisible="{Binding IsBusy}"
                           IsRunning="{Binding IsBusy}"
                           Color="{DynamicResource Primary}"
@@ -101,7 +149,7 @@
                           HorizontalOptions="Center"/>
 
         <!-- Calendar Grid -->
-        <CollectionView Grid.Row="4"
+        <CollectionView Grid.Row="5"
                        ItemsSource="{Binding CalendarDays}"
                        IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                        SelectionMode="None">
@@ -195,8 +243,174 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
+        <!-- Year Holidays Section -->
+        <VerticalStackLayout Grid.Row="6"
+                            BackgroundColor="{DynamicResource Gray100}"
+                            Padding="0">
+
+            <!-- Section Header (Always visible - Toggle) -->
+            <Grid Padding="16,12"
+                  BackgroundColor="{DynamicResource Primary}">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleYearSectionCommand}"/>
+                </Grid.GestureRecognizers>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"
+                       Text="Vietnamese Holidays"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center"/>
+
+                <Label Grid.Column="1"
+                       Text="{Binding IsYearSectionExpanded, Converter={StaticResource BoolToExpandIconConverter}}"
+                       FontSize="18"
+                       TextColor="White"
+                       VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- Year Navigation and List (Collapsible) -->
+            <VerticalStackLayout IsVisible="{Binding IsYearSectionExpanded}"
+                                Padding="16">
+
+                <!-- Year Navigation -->
+                <Grid ColumnDefinitions="Auto,*,Auto,Auto"
+                      ColumnSpacing="8"
+                      Margin="0,0,0,12">
+
+                    <Button Grid.Column="0"
+                            Text="◀"
+                            Command="{Binding PreviousYearCommand}"
+                            BackgroundColor="{DynamicResource Primary}"
+                            TextColor="White"
+                            FontSize="18"
+                            WidthRequest="50"
+                            HeightRequest="40"/>
+
+                    <Picker Grid.Column="1"
+                            ItemsSource="{Binding AvailableYears}"
+                            SelectedItem="{Binding SelectedYear}"
+                            SelectedIndexChanged="OnYearPickerSelectedIndexChanged"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="{DynamicResource Primary}"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Center"/>
+
+                    <Button Grid.Column="2"
+                            Text="Today"
+                            Command="{Binding CurrentYearCommand}"
+                            BackgroundColor="{DynamicResource Primary}"
+                            TextColor="White"
+                            FontSize="14"
+                            Padding="12,0"
+                            HeightRequest="40"/>
+
+                    <Button Grid.Column="3"
+                            Text="▶"
+                            Command="{Binding NextYearCommand}"
+                            BackgroundColor="{DynamicResource Primary}"
+                            TextColor="White"
+                            FontSize="18"
+                            WidthRequest="50"
+                            HeightRequest="40"/>
+                </Grid>
+
+                <!-- Holidays List -->
+                <CollectionView ItemsSource="{Binding YearHolidays}"
+                               MaximumHeightRequest="400">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="12"
+                                   Margin="0,4"
+                                   BackgroundColor="White"
+                                   Stroke="{Binding Holiday.ColorHex}"
+                                   StrokeThickness="2">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8"/>
+                                </Border.StrokeShape>
+
+                                <Grid ColumnDefinitions="Auto,*"
+                                     ColumnSpacing="12">
+
+                                    <!-- Date Box -->
+                                    <VerticalStackLayout Grid.Column="0"
+                                                        Padding="8"
+                                                        BackgroundColor="{Binding Holiday.ColorHex}"
+                                                        WidthRequest="70"
+                                                        HorizontalOptions="Center">
+                                        <Label Text="{Binding GregorianDate, StringFormat='{0:MMM}'}"
+                                              FontSize="12"
+                                              TextColor="White"
+                                              HorizontalOptions="Center"/>
+                                        <Label Text="{Binding GregorianDate, StringFormat='{0:dd}'}"
+                                              FontSize="24"
+                                              FontAttributes="Bold"
+                                              TextColor="White"
+                                              HorizontalOptions="Center"/>
+                                        <Label Text="{Binding GregorianDate, StringFormat='{0:yyyy}'}"
+                                              FontSize="10"
+                                              TextColor="White"
+                                              HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Holiday Info -->
+                                    <VerticalStackLayout Grid.Column="1"
+                                                        Spacing="4"
+                                                        VerticalOptions="Center">
+                                        <Label Text="{Binding Holiday.Name}"
+                                              FontSize="16"
+                                              FontAttributes="Bold"
+                                              TextColor="{DynamicResource Gray900}"/>
+
+                                        <Label FontSize="12"
+                                              TextColor="{DynamicResource Gray600}">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Gregorian: "/>
+                                                    <Span Text="{Binding GregorianDate, StringFormat='{0:MMMM dd, yyyy}'}"
+                                                         FontAttributes="Bold"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Label FontSize="12"
+                                              TextColor="#DC143C"
+                                              IsVisible="{Binding Holiday.LunarMonth, Converter={StaticResource IntToBoolConverter}}">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Lunar: "/>
+                                                    <Span FontAttributes="Bold">
+                                                        <Span.Text>
+                                                            <MultiBinding StringFormat="{}{0}/{1}">
+                                                                <Binding Path="Holiday.LunarDay"/>
+                                                                <Binding Path="Holiday.LunarMonth"/>
+                                                            </MultiBinding>
+                                                        </Span.Text>
+                                                    </Span>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Label Text="{Binding Holiday.Description}"
+                                              FontSize="11"
+                                              TextColor="{DynamicResource Gray500}"
+                                              LineBreakMode="WordWrap"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+
         <!-- Bottom Info -->
-        <Label Grid.Row="5"
+        <Label Grid.Row="7"
                Text="{Binding UserModeText}"
                FontSize="12"
                TextColor="{DynamicResource Gray600}"
