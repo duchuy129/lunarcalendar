@@ -25,7 +25,7 @@
 		<ApplicationTitle>Vietnamese Lunar Calendar</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.lunarcalendar.app</ApplicationId>
+		<ApplicationId>com.huynguyen.lunarcalendar</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
@@ -41,6 +41,12 @@
 
 		<!-- iOS Simulator Code Signing -->
 		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' and '$(TargetFramework)' == 'net8.0-ios'">iossimulator-arm64</RuntimeIdentifier>
+
+		<!-- iOS Code Signing for Free Developer Account -->
+		<CodesignKey Condition="'$(TargetFramework)' == 'net8.0-ios'">Apple Development</CodesignKey>
+		<CodesignProvision Condition="'$(TargetFramework)' == 'net8.0-ios'">Automatic</CodesignProvision>
+		<MtouchUseLlvm Condition="'$(TargetFramework)' == 'net8.0-ios'">false</MtouchUseLlvm>
+		<IpaPackageName Condition="'$(TargetFramework)' == 'net8.0-ios'"></IpaPackageName>
 	</PropertyGroup>
 
 	<!-- Release Configuration Optimizations -->
