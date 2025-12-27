@@ -1,20 +1,21 @@
 # Development Roadmap
 ## Lunar Calendar Mobile Application
 
-**Version:** 1.0
-**Date:** 2025-12-11
+**Version:** 2.0
+**Date:** 2025-12-26
 **Project:** Lunar Calendar App
 
 ---
 
 ## 1. Overview
 
-This roadmap outlines the phased development approach for the Lunar Calendar mobile application, focusing on delivering a Minimum Viable Product (MVP) followed by feature enhancements.
+This roadmap outlines the phased development approach for the Lunar Calendar mobile application, focusing on delivering a Minimum Viable Product (MVP) followed by authentic cultural enhancements and social features.
 
 ### 1.1 Timeline Summary
 - **Phase 1 (MVP)**: 16 weeks (4 months) - Sprints 1-8
-- **Phase 2 (Post-MVP Enhancements)**: 26 weeks (6.5 months) - Sprints 9-21
-- **Total Duration**: 42 weeks (~10.5 months)
+- **Phase 2 (Authentic Lunar Calendar Features)**: 18 weeks (4.5 months) - Sprints 9-17
+- **Phase 3 (Event Management & Social Features)**: 16 weeks (4 months) - Sprints 18-25
+- **Total Duration**: 50 weeks (~12.5 months)
 
 ### 1.2 Team Structure
 - **1 Backend Developer**: ASP.NET Core API, database, DevOps
@@ -300,424 +301,146 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 #### Deliverables
 - **MVP Release**: Fully functional app with core features
-- Guest mode working seamlessly without barriers
-- Authenticated mode with full event management
 - Apps published to App Store and Google Play
 - Backend API deployed and monitored
 - Documentation complete
 
 ---
 
-## 3. Phase 2: Feature Enhancements (Post-MVP)
+## 3. Phase 2: Authentic Lunar Calendar Features
 
-**Goal**: Add event management and advanced features based on user feedback and roadmap priorities.
+**Goal**: Transform the app from a basic calendar converter into a comprehensive Vietnamese/Chinese lunar calendar with authentic astronomical and astrological information.
 
-### 3.1 Sprint 9: Event Management - Create & View (2 weeks)
-
-#### Backend Tasks
-- [ ] Implement Event entity and repository
-- [ ] Implement Category entity and repository
-- [ ] Create event service with business logic
-- [ ] Create events endpoints:
-  - `POST /api/events` (create event)
-  - `GET /api/events/{id}` (get single event)
-  - `GET /api/events/range` (get events in date range)
-  - `GET /api/events` (get all user events with pagination)
-- [ ] Implement event validation (dates, required fields)
-- [ ] Add authorization checks (users can only access own events)
-- [ ] Write unit and integration tests
-- [ ] Configure AutoMapper for DTOs
-
-#### Mobile Tasks
-- [ ] Add "Add Event" button to calendar view
-- [ ] Implement guest mode check before event creation
-- [ ] Show upgrade prompt when guest taps "Add Event"
-- [ ] Create event creation form UI (for authenticated users)
-- [ ] Create EventDetailViewModel
-- [ ] Create CreateEventViewModel with validation
-- [ ] Implement event form fields:
-  - Title (required)
-  - Description
-  - Start date/time picker
-  - End date/time picker
-  - All-day toggle
-  - Calendar type (Gregorian/Lunar)
-  - Color picker
-- [ ] Create EventService for API communication
-- [ ] Display events on calendar dates (visual indicators)
-- [ ] Create event detail page
-- [ ] Implement date/time pickers
-- [ ] Add event creation flow with navigation
-- [ ] Cache events locally in SQLite for authenticated users
-- [ ] Test upgrade prompt flow from guest to authenticated
-
-#### Deliverables
-- Authenticated users can create events from mobile app
-- Guest users see upgrade prompt when attempting to create events
-- Events are displayed on calendar for authenticated users
-- Events sync with backend API
-- Event details can be viewed
+**Duration**: 18 weeks (9 sprints × 2 weeks)
 
 ---
 
-### 3.2 Sprint 10: Event Management - Edit & Delete (2 weeks)
+### 3.1 Sprint 9: Sexagenary Cycle Foundation (2 weeks)
 
 #### Backend Tasks
-- [ ] Create update event endpoint (`PUT /api/events/{id}`)
-- [ ] Create delete event endpoint (`DELETE /api/events/{id}`)
-- [ ] Implement soft delete for events (IsDeleted flag)
-- [ ] Add event modification validation
-- [ ] Ensure authorization for edit/delete operations
-- [ ] Write tests for update and delete operations
-- [ ] Add audit logging for event changes
+- [ ] Research and implement Sexagenary cycle (Can Chi / 干支) calculation algorithm
+- [ ] Create data models for:
+  - 10 Heavenly Stems (Thiên Can / 天干): Giáp, Ất, Bính, Đinh, Mậu, Kỷ, Canh, Tân, Nhâm, Quý
+  - 12 Earthly Branches (Địa Chi / 地支): Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi
+  - Five elements (Ngũ hành / 五行): Metal, Wood, Water, Fire, Earth
+- [ ] Implement calculation for:
+  - Year stem-branch (Năm Can Chi)
+  - Month stem-branch (Tháng Can Chi)
+  - Day stem-branch (Ngày Can Chi)
+  - Hour stem-branch (Giờ Can Chi)
+- [ ] Create API endpoints:
+  - `GET /api/calendar/sexagenary/{date}` - Get full sexagenary info for a date
+  - `GET /api/calendar/year-info/{year}` - Get year's zodiac animal and element
+- [ ] Write comprehensive unit tests for cycle calculations
+- [ ] Add localization support for stem-branch names (Vietnamese, Chinese, English)
 
 #### Mobile Tasks
-- [ ] Add edit button to event detail page
-- [ ] Create edit event form (reuse create form)
-- [ ] Implement EditEventViewModel
-- [ ] Add delete button with confirmation dialog
-- [ ] Implement delete functionality
-- [ ] Update local cache on edit/delete
-- [ ] Handle optimistic updates in UI
-- [ ] Add undo functionality for delete (optional)
-- [ ] Test edit/delete flows
+- [ ] Create SexagenaryService for fetching cycle data
+- [ ] Design UI components for displaying:
+  - Daily stem-branch (Ngày Can Chi) on calendar cells
+  - Current day's full sexagenary info in header
+  - Visual element indicators (五行 symbols or colors)
+- [ ] Add "Today's Information" section showing:
+  - Date in Gregorian, Lunar, and Sexagenary formats
+  - Zodiac animal for the day
+  - Five element association
+- [ ] Implement caching for sexagenary data
+- [ ] Add educational tooltips explaining what stem-branch means
+- [ ] Test display on different screen sizes
 
 #### Deliverables
-- Users can edit existing events
-- Users can delete events with confirmation
-- Changes sync with backend
-- Local cache stays synchronized
+- Full sexagenary cycle calculation working for any date
+- Year, month, day, and hour stem-branch displayed
+- Users can see traditional Chinese/Vietnamese date representation
+- Educational information helps users understand the system
 
 ---
 
-### 3.3 Sprint 11: Event Categories & Organization (2 weeks)
+### 3.2 Sprint 10: Zodiac Animals & Year Characteristics (2 weeks)
+### 3.3 Sprint 11: Dynamic Backgrounds Based on Zodiac Year (2 weeks)
+### 3.4 Sprint 12: Moon Phases & Lunar Day Information (2 weeks)
+### 3.5 Sprint 13: Additional Lunar Calendar Systems (2 weeks)
+### 3.6 Sprint 14: Vietnamese & Chinese Localization (2 weeks)
+### 3.7 Sprint 15: Auspicious Dates & Chinese Almanac (2 weeks)
+### 3.8 Sprint 16: Hour-based Zodiac & Time Selection (2 weeks)
+### 3.9 Sprint 17: Solar Terms & Agricultural Calendar (2 weeks)
 
-#### Backend Tasks
-- [ ] Create category endpoints:
-  - `GET /api/categories` (get all user categories)
-  - `POST /api/categories` (create category)
-  - `PUT /api/categories/{id}` (update category)
-  - `DELETE /api/categories/{id}` (delete category)
-- [ ] Implement default categories on user registration
-- [ ] Add category filtering to events endpoint
-- [ ] Write tests for category operations
-- [ ] Implement event-category sync with offline support
-
-#### Mobile Tasks
-- [ ] Create category management UI
-- [ ] Add category selector to event form
-- [ ] Display event colors on calendar based on category
-- [ ] Implement category list page
-- [ ] Add category creation/editing
-- [ ] Create CategoryService
-- [ ] Ensure event colors don't conflict with holiday colors
-- [ ] Add filter to show/hide event categories
-- [ ] Test category operations offline and online
-
-#### Deliverables
-- Users can create and manage event categories
-- Events can be assigned to categories
-- Calendar displays events with category colors alongside holidays
-- Event management works seamlessly with existing holiday display
+**For complete sprint details including backend tasks, mobile tasks, and deliverables for Sprints 10-17, see [PHASE2_PHASE3_PLAN.md](../PHASE2_PHASE3_PLAN.md)**
 
 ---
 
-### 3.4 Sprint 12: Search & Filtering (2 weeks)
+## Phase 2 Summary
 
-#### Backend Tasks
-- [ ] Create event search endpoint with full-text search
-- [ ] Add holiday search capability
-- [ ] Implement advanced filtering (date range, category, calendar type, holidays)
-- [ ] Optimize search queries with database indexing
-- [ ] Add search result pagination
-- [ ] Implement search suggestions/autocomplete
+At the end of Phase 2, the app will be a **comprehensive, culturally authentic Vietnamese/Chinese lunar calendar** with:
 
-#### Mobile Tasks
-- [ ] Create search UI with search bar
-- [ ] Implement SearchViewModel
-- [ ] Add filter options (bottom sheet or modal)
-- [ ] Display search results in list view (events and holidays)
-- [ ] Add search history
-- [ ] Implement real-time search (debounced)
-- [ ] Test search performance
+✅ **Astronomical Features:**
+- Complete sexagenary cycle (Can Chi / 干支)
+- 12 zodiac animals with rich information
+- Moon phases and lunar day characteristics
+- 24 solar terms and agricultural calendar
 
-#### Deliverables
-- Users can search events and holidays by title/description
-- Advanced filtering by multiple criteria
-- Fast and responsive search experience
+✅ **Astrological Features:**
+- Chinese almanac (Huangli / Lịch Vạn Niên)
+- Auspicious date finder
+- Hour-based luck ratings
+- Daily recommendations and warnings
 
----
+✅ **Cultural Features:**
+- Dynamic zodiac backgrounds that change with lunar year
+- Vietnamese and Chinese calendar systems
+- Full localization (Vietnamese, Chinese, English)
+- Traditional farming wisdom
 
-### 3.5 Sprint 13: Event Reminders & Notifications (2 weeks)
-
-#### Backend Tasks
-- [ ] Implement push notification service integration
-  - Configure APNs for iOS
-  - Configure FCM for Android
-- [ ] Create notification scheduling service
-- [ ] Create endpoints for device token registration
-- [ ] Implement reminder notification logic
-- [ ] Add background job for sending reminders
-- [ ] Test notification delivery
-
-#### Mobile Tasks
-- [ ] Request notification permissions
-- [ ] Register device token with backend
-- [ ] Add reminder time picker to event form
-- [ ] Implement local notifications as fallback
-- [ ] Handle notification taps (deep linking to event)
-- [ ] Add notification settings page
-- [ ] Allow users to customize reminder defaults
-- [ ] Test notifications on iOS and Android
-
-#### Deliverables
-- Users receive reminders for upcoming events
-- Push notifications work on both platforms
-- Users can customize notification preferences
+✅ **User Experience:**
+- Beautiful, culturally appropriate design
+- Dark mode support
+- Excellent performance
+- Accessibility features
 
 ---
 
-### 3.6 Sprint 14: Recurring Events (2 weeks)
+## 4. Phase 3: Event Management & Social Features
 
-#### Backend Tasks
-- [ ] Design recurrence rule schema (iCalendar RRULE format)
-- [ ] Implement recurrence calculation service
-- [ ] Update event endpoints to support recurrence
-- [ ] Create endpoint to get single instance or series
-- [ ] Implement logic for editing single vs. all instances
-- [ ] Write tests for various recurrence patterns
+**Goal**: Add personal event management and social features to complement the rich cultural calendar foundation.
 
-#### Mobile Tasks
-- [ ] Design recurring event UI
-- [ ] Add recurrence pattern selector (daily, weekly, monthly, yearly)
-- [ ] Add recurrence end options (never, after N times, until date)
-- [ ] Update event detail page to show recurrence info
-- [ ] Implement edit options (this event, all events, future events)
-- [ ] Display recurring events correctly on calendar
-- [ ] Test various recurrence scenarios
+**Duration**: 14 weeks (7 sprints × 2 weeks)
 
-#### Deliverables
-- Users can create recurring events
-- Recurrence patterns are displayed correctly
-- Users can edit individual or all instances
+**Note**: For complete details of Phase 2 (Authentic Lunar Calendar Features) and Phase 3 (Event Management & Social Features), see [PHASE2_PHASE3_PLAN.md](../PHASE2_PHASE3_PLAN.md)
+
+### Key Phase 3 Features:
+- Event Management (Create, Edit, Delete with Lunar date support)
+- Smart Scheduling with Almanac Integration
+- Event Reminders with Cultural Context
+- Recurring Events (Gregorian and Lunar)
+- Calendar Sharing & Family Features
+- Export, Backup & Data Portability
+- Home Screen Widgets & Quick Actions
 
 ---
 
-### 3.7 Sprint 15: Additional Lunar Calendar Systems (2 weeks)
+## 5. Post-Phase 3: Continuous Improvement
 
-#### Backend Tasks
-- [ ] Research and implement Vietnamese lunar calendar
-- [ ] Research and implement Islamic (Hijri) calendar
-- [ ] Create configuration for multiple calendar systems
-- [ ] Update calendar service to support multiple systems
-- [ ] Add calendar system selection to user settings
-- [ ] Test accuracy of all calendar conversions
-
-#### Mobile Tasks
-- [ ] Add calendar system selector to settings
-- [ ] Update calendar display for different systems
-- [ ] Show calendar-specific information (zodiac, moon phase, etc.)
-- [ ] Add localization for calendar names
-- [ ] Update UI to accommodate different calendar formats
-- [ ] Test with users familiar with each calendar system
-
-#### Deliverables
-- Support for Chinese, Vietnamese, and Islamic calendars
-- Users can select preferred calendar system
-- Accurate date conversions for all systems
-
----
-
-### 3.8 Sprint 16: Localization & Internationalization (2 weeks)
-
-#### Backend Tasks
-- [ ] Set up localization infrastructure
-- [ ] Create resource files for multiple languages
-- [ ] Translate API error messages
-- [ ] Support multiple languages in responses
-- [ ] Add language selection to user profile
-
-#### Mobile Tasks
-- [ ] Extract all UI strings to resource files
-- [ ] Translate UI to target languages:
-  - English (default)
-  - Chinese (Simplified and Traditional)
-  - Vietnamese
-- [ ] Implement language switching in settings
-- [ ] Test RTL languages if applicable
-- [ ] Format dates/times according to locale
-- [ ] Test all screens in each language
-- [ ] Ensure layouts work with translated text
-
-#### Deliverables
-- App supports multiple languages
-- Users can switch languages in settings
-- All UI elements are properly translated
-
----
-
-### 3.9 Sprint 17: Home Screen Widgets (2 weeks)
-
-#### Backend Tasks
-- [ ] Create optimized widget data endpoint
-- [ ] Implement caching for widget data
-- [ ] Ensure API performance for frequent widget refreshes
-
-#### Mobile Tasks
-- [ ] Design widget layouts for iOS (small, medium, large)
-- [ ] Design widget layouts for Android
-- [ ] Implement iOS widget using WidgetKit
-- [ ] Implement Android widget using App Widgets
-- [ ] Show today's events and lunar date in widget
-- [ ] Add widget customization options
-- [ ] Handle widget tap to open app
-- [ ] Test widget updates and refresh
-- [ ] Optimize widget performance and battery usage
-
-#### Deliverables
-- Users can add calendar widgets to home screen
-- Widgets display current date and upcoming events
-- Widgets update automatically
-
----
-
-### 3.10 Sprint 18: Social Features & Sharing (2 weeks)
-
-#### Backend Tasks
-- [ ] Design shared calendar schema
-- [ ] Implement calendar sharing service
-- [ ] Create endpoints for inviting users
-- [ ] Implement permissions (view-only, edit)
-- [ ] Add shared events to event queries
-- [ ] Implement notification for shared event updates
-
-#### Mobile Tasks
-- [ ] Create calendar sharing UI
-- [ ] Implement invite flow (email or share code)
-- [ ] Display shared calendars separately
-- [ ] Show event ownership indicators
-- [ ] Add sharing permissions UI
-- [ ] Implement event export (iCal format)
-- [ ] Add share event functionality (text, image)
-- [ ] Test collaborative scenarios
-
-#### Deliverables
-- Users can share calendars with family/friends
-- Shared events sync across all participants
-- Events can be exported and shared externally
-
----
-
-### 3.11 Sprint 19: Advanced Features & Integration (2 weeks)
-
-#### Backend Tasks
-- [ ] Expand holiday database for multiple countries (China, Korea, etc.)
-- [ ] Integrate weather API for event locations
-- [ ] Implement auspicious dates calculation (Chinese almanac)
-- [ ] Add backup/restore functionality
-- [ ] Create data export endpoint (JSON, CSV)
-
-#### Mobile Tasks
-- [ ] Add weather information to events
-- [ ] Implement auspicious dates feature (lucky/unlucky days)
-- [ ] Create backup/restore UI
-- [ ] Add data export functionality
-- [ ] Implement account deletion with data purge
-- [ ] Add privacy settings
-- [ ] Enhance comprehensive settings page
-
-#### Deliverables
-- Weather integration for events
-- Users can backup and restore data
-- Additional cultural/traditional features (auspicious dates)
-- Multi-country holiday support
-
----
-
-### 3.12 Sprint 20: Performance Optimization & Analytics (2 weeks)
-
-#### Backend Tasks
-- [ ] Implement Redis caching layer
-- [ ] Optimize database queries with query analysis
-- [ ] Set up database read replicas
-- [ ] Implement API rate limiting per user
-- [ ] Add application performance monitoring (APM)
-- [ ] Optimize Docker image sizes
-- [ ] Implement health check endpoints
-- [ ] Add metrics collection (Prometheus/Grafana)
-
-#### Mobile Tasks
-- [ ] Implement app analytics (Firebase Analytics or AppCenter)
-- [ ] Optimize image loading and caching
-- [ ] Reduce app size (ProGuard, app bundles)
-- [ ] Optimize battery usage
-- [ ] Reduce memory footprint
-- [ ] Implement crash reporting
-- [ ] Add performance monitoring
-- [ ] Optimize startup time
-
-#### Deliverables
-- Improved API performance
-- Reduced mobile app size and resource usage
-- Analytics and monitoring in place
-
----
-
-### 3.13 Sprint 21: Final Polish & Phase 2 Release (2 weeks)
-
-#### Backend Tasks
-- [ ] Security audit and penetration testing
-- [ ] Performance load testing
-- [ ] Database optimization review
-- [ ] Documentation updates
-- [ ] Deployment automation improvements
-- [ ] Disaster recovery testing
-
-#### Mobile Tasks
-- [ ] UI/UX polish based on user feedback
-- [ ] Accessibility improvements (WCAG compliance)
-- [ ] Final bug fixes
-- [ ] App store optimization (ASO)
-- [ ] Update screenshots and descriptions
-- [ ] Submit app updates to stores
-- [ ] Create release notes
-
-#### Deliverables
-- **Phase 2 Release**: Feature-complete app with enhancements
-- Updated apps in App Store and Google Play
-- All features tested and documented
-
----
-
-## 4. Post-Phase 2: Continuous Improvement
-
-### 4.1 Ongoing Activities
+### 5.1 Ongoing Activities
 - Monitor user feedback and reviews
 - Analyze usage analytics
 - Fix bugs and issues
 - Maintain dependencies and security updates
 - Optimize based on performance metrics
-- Plan Phase 3 features based on user demand
+- Plan future features based on user demand
 
-### 4.2 Potential Future Features
-- **Local guest events** (Phase 3): Allow guests to create events stored locally only
-- **Guest data migration**: Seamless migration of local guest events when upgrading
-- Apple Watch and Android Wear companion apps
-- iPad and tablet optimization
-- Web application (Progressive Web App)
-- Integration with Google Calendar, Apple Calendar, Outlook
-- AI-powered event suggestions
-- Voice input for event creation
-- Advanced data visualization and insights
-- Team/organization features
-- Premium subscription features
-- Third-party calendar plugins
+### 5.2 Potential Future Features (Phase 4+)
+- **Advanced Astrology**: Birth chart (Tứ Trụ / 四柱), Feng Shui calculator
+- **Platform Expansion**: Apple Watch, Android Wear, iPad optimization, Web app
+- **Calendar Integration**: Google Calendar, Apple Calendar, Outlook sync
+- **AI Features**: Smart event suggestions, voice input, natural language date parsing
+- **Premium Features**: Professional astrology consultations, detailed compatibility reports
+- **Community**: Share almanac interpretations, regional customs, expert Q&A
 
 ---
 
-## 5. Risk Management
+## 6. Risk Management
 
-### 5.1 Technical Risks
+### 6.1 Technical Risks
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
@@ -727,7 +450,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 | Data sync conflicts | Medium | Implement robust conflict resolution, server-wins strategy |
 | Third-party service downtime | Low | Implement fallbacks, graceful degradation |
 
-### 5.2 Schedule Risks
+### 6.2 Schedule Risks
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
@@ -736,7 +459,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 | App store approval delays | Low | Submit early, follow guidelines strictly |
 | Dependency on external APIs | Low | Choose reliable providers, have alternatives |
 
-### 5.3 Business Risks
+### 6.3 Business Risks
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
@@ -747,9 +470,9 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-## 6. Success Metrics
+## 7. Success Metrics
 
-### 6.1 MVP Success Criteria
+### 7.1 MVP Success Criteria
 - Successfully deployed to both app stores
 - 100 beta users testing the app (mix of guest and authenticated users)
 - < 5% crash rate
@@ -760,7 +483,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 - < 2 second average API response time
 - 99% uptime for backend services
 
-### 6.2 Phase 2 Success Criteria
+### 7.2 Phase 2 Success Criteria
 - 1,000+ active users
 - < 2% crash rate
 - Average app rating > 4.5 stars
@@ -768,9 +491,18 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 - User retention > 40% after 30 days
 - Positive user feedback on new features
 
+### 7.3 Phase 3 Success Criteria
+- All event management features adopted by > 60% of users
+- Calendar sharing used by > 30% of users
+- Widget installation > 40% of users
+- Smart scheduling (almanac integration) used > 50% of time
+- App rating maintained at 4.7+
+- User retention > 60% after 30 days
+- Monthly active users growing 15%+ month-over-month
+
 ---
 
-## 7. Sprint Schedule Overview
+## 8. Sprint Schedule Overview
 
 | Sprint | Duration | Focus Area | Phase |
 |--------|----------|------------|-------|
@@ -782,27 +514,31 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 | Sprint 6 | 2 weeks | UI Polish & User Experience | MVP |
 | Sprint 7 | 2 weeks | Offline Support & Synchronization | MVP |
 | Sprint 8 | 2 weeks | Testing, Bug Fixes & MVP Release | MVP |
-| Sprint 9 | 2 weeks | Event Management - Create & View | Post-MVP |
-| Sprint 10 | 2 weeks | Event Management - Edit & Delete | Post-MVP |
-| Sprint 11 | 2 weeks | Event Categories & Organization | Post-MVP |
-| Sprint 12 | 2 weeks | Search & Filtering | Post-MVP |
-| Sprint 13 | 2 weeks | Event Reminders & Notifications | Post-MVP |
-| Sprint 14 | 2 weeks | Recurring Events | Post-MVP |
-| Sprint 15 | 2 weeks | Additional Lunar Calendar Systems | Post-MVP |
-| Sprint 16 | 2 weeks | Localization & Internationalization | Post-MVP |
-| Sprint 17 | 2 weeks | Home Screen Widgets | Post-MVP |
-| Sprint 18 | 2 weeks | Social Features & Sharing | Post-MVP |
-| Sprint 19 | 2 weeks | Advanced Features & Integration | Post-MVP |
-| Sprint 20 | 2 weeks | Performance Optimization & Analytics | Post-MVP |
-| Sprint 21 | 2 weeks | Final Polish & Phase 2 Release | Post-MVP |
+| Sprint 9 | 2 weeks | Sexagenary Cycle Foundation | Phase 2 |
+| Sprint 10 | 2 weeks | Zodiac Animals & Year Characteristics | Phase 2 |
+| Sprint 11 | 2 weeks | Dynamic Backgrounds Based on Zodiac Year | Phase 2 |
+| Sprint 12 | 2 weeks | Moon Phases & Lunar Day Information | Phase 2 |
+| Sprint 13 | 2 weeks | Additional Lunar Calendar Systems | Phase 2 |
+| Sprint 14 | 2 weeks | Vietnamese & Chinese Localization | Phase 2 |
+| Sprint 15 | 2 weeks | Auspicious Dates & Chinese Almanac | Phase 2 |
+| Sprint 16 | 2 weeks | Hour-based Zodiac & Time Selection | Phase 2 |
+| Sprint 17 | 2 weeks | Solar Terms & Agricultural Calendar | Phase 2 |
+| Sprint 18 | 2 weeks | Event Management - Create & View | Phase 3 |
+| Sprint 19 | 2 weeks | Event Management - Edit, Delete & Categories | Phase 3 |
+| Sprint 20 | 2 weeks | Search, Filtering & Event Intelligence | Phase 3 |
+| Sprint 21 | 2 weeks | Event Reminders & Notifications | Phase 3 |
+| Sprint 22 | 2 weeks | Recurring Events | Phase 3 |
+| Sprint 23 | 2 weeks | Calendar Sharing & Family Features | Phase 3 |
+| Sprint 24 | 2 weeks | Export, Backup & Data Portability | Phase 3 |
+| Sprint 25 | 2 weeks | Home Screen Widgets & Quick Actions | Phase 3 |
 
-**Total Duration**: 42 weeks (~10.5 months)
+**Total Duration**: 50 weeks (~12.5 months)
 
 ---
 
-## 8. Dependencies and Prerequisites
+## 9. Dependencies and Prerequisites
 
-### 8.1 Before Phase 1
+### 9.1 Before Phase 1
 - Development team assembled and onboarded
 - Development tools and licenses acquired
 - Cloud hosting account set up (Azure/AWS/GCP)
@@ -811,7 +547,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 - Project management tools configured (Jira, GitHub, etc.)
 - Design assets and branding finalized
 
-### 8.2 Cost Estimates
+### 9.2 Cost Estimates
 
 #### Initial Setup Costs (One-Time)
 
@@ -1033,7 +769,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-### 8.3 Between Phases
+### 9.3 Between Phases
 - MVP user feedback collected and analyzed
 - Analytics data reviewed
 - Priority features for Phase 2 confirmed
@@ -1041,39 +777,39 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 
 ---
 
-## 9. Communication Plan
+## 10. Communication Plan
 
-### 9.1 Daily
+### 10.1 Daily
 - Daily standup meetings (15 minutes)
 - Async updates in team chat
 
-### 9.2 Weekly
+### 10.2 Weekly
 - Sprint planning (start of sprint)
 - Sprint retrospective (end of sprint)
 - Progress demo to stakeholders
 
-### 9.3 Bi-weekly
+### 10.3 Bi-weekly
 - Product roadmap review
 - Technical architecture review
 - User feedback review session
 
 ---
 
-## 10. Quality Assurance Strategy
+## 11. Quality Assurance Strategy
 
-### 10.1 Continuous Testing
+### 11.1 Continuous Testing
 - Automated unit tests (minimum 70% coverage)
 - Integration tests for API endpoints
 - UI tests for critical user flows
 - Regression testing before each release
 
-### 10.2 Manual Testing
+### 11.2 Manual Testing
 - Exploratory testing each sprint
 - Usability testing with real users
 - Device compatibility testing
 - Accessibility testing
 
-### 10.3 Code Quality
+### 11.3 Code Quality
 - Code reviews for all pull requests
 - Static code analysis tools
 - Consistent coding standards
@@ -1087,6 +823,7 @@ This roadmap outlines the phased development approach for the Lunar Calendar mob
 |---------|------|--------|---------|
 | 1.0 | 2025-12-11 | Initial | Initial development roadmap |
 | 1.1 | 2025-12-25 | Updated | Reorganized MVP to prioritize cultural features (holidays, visuals) over event management. Moved event management (old Sprints 5-7) to Post-MVP phase. Added Sprint 5: Cultural Enhancements and Sprint 6: UI Polish. |
+| 2.0 | 2025-12-26 | Updated | Major reorganization: Phase 2 now focuses on authentic lunar calendar features (Sexagenary cycle, zodiac animals, dynamic backgrounds, almanac, solar terms, localization). Phase 3 contains event management and social features. Updated timeline from 42 weeks to 50 weeks. Added detailed link to [PHASE2_PHASE3_PLAN.md](../PHASE2_PHASE3_PLAN.md) for complete sprint details. |
 
 ---
 
