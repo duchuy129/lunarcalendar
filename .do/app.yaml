@@ -1,0 +1,85 @@
+# DigitalOcean App Platform Configuration
+# This file defines the app infrastructure for deployment
+# Estimated cost: $10/month (Basic Web Service)
+
+name: lunarcalendar-api
+region: nyc
+
+services:
+  - name: api
+    # Source configuration
+    github:
+      repo: your-username/lunarcalendar
+      branch: main
+      deploy_on_push: true
+
+    # Build configuration
+    dockerfile_path: Dockerfile
+
+    # Service configuration
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    # basic-xxs: $5/month, 512MB RAM, 1 vCPU (sufficient for MVP)
+    # Upgrade to basic-xs ($10/month, 1GB RAM) if needed
+
+    # HTTP configuration
+    http_port: 8080
+
+    # Health check
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 30
+      timeout_seconds: 3
+      success_threshold: 1
+      failure_threshold: 3
+
+    # Environment variables
+    envs:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: "Production"
+
+      - key: ASPNETCORE_URLS
+        value: "http://+:8080"
+
+      - key: AllowedHosts
+        value: "*"
+
+      - key: JwtSettings__SecretKey
+        type: SECRET
+        # Set this in DigitalOcean dashboard: App -> Settings -> Environment Variables
+
+      - key: JwtSettings__Issuer
+        value: "LunarCalendarApi"
+
+      - key: JwtSettings__Audience
+        value: "LunarCalendarApp"
+
+      - key: JwtSettings__ExpirationMinutes
+        value: "1440"
+
+      # Database connection (commented out - not needed for MVP)
+      # Uncomment when you add database in Sprint 9+
+      # - key: ConnectionStrings__DefaultConnection
+      #   type: SECRET
+
+    # Routes
+    routes:
+      - path: /
+
+# Database configuration (commented out - not needed for MVP)
+# Uncomment and configure when you add database in Sprint 9+
+# databases:
+#   - name: lunarcalendar-db
+#     engine: PG
+#     version: "15"
+#     production: false
+#     # cluster_name: lunarcalendar-db-cluster
+#     # size: db-s-1vcpu-1gb  # $15/month
+
+# Notes:
+# 1. For MVP without database: ~$5-10/month depending on instance size
+# 2. With database (Sprint 9+): ~$20-25/month total
+# 3. DigitalOcean $200 credit = 20-40 months free for MVP!
+# 4. Auto-scaling available but not needed for MVP
+# 5. HTTPS is automatically configured by DigitalOcean

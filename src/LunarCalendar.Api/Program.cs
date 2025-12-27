@@ -4,6 +4,7 @@ using LunarCalendar.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,60 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Configure Swagger with comprehensive documentation
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Vietnamese Lunar Calendar API",
+        Description = "A comprehensive API for Vietnamese lunar calendar calculations, holidays, and cultural information.",
+        Contact = new OpenApiContact
+        {
+            Name = "LunarCalendar Support",
+            Email = "support@lunarcalendar.app"
+        },
+        License = new OpenApiLicense
+        {
+            Name = "MIT License",
+            Url = new Uri("https://opensource.org/licenses/MIT")
+        }
+    });
+
+    // Add JWT authentication to Swagger
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+
+    // Enable XML comments if available
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
+});
 
 // Add response caching
 builder.Services.AddResponseCaching();
@@ -82,11 +136,39 @@ builder.Services.AddSingleton<IHolidayService, HolidayService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments for MVP (can restrict later)
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "LunarCalendar API v1");
+    options.RoutePrefix = "swagger";
+    options.DocumentTitle = "Vietnamese Lunar Calendar API";
+    options.DisplayRequestDuration();
+});
+
+// Security headers
+app.Use(async (context, next) =>
+{
+    // Prevent clickjacking
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+
+    // Prevent MIME type sniffing
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+
+    // XSS protection (legacy but still useful)
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+
+    // Referrer policy
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+
+    // Content Security Policy (basic for API)
+    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
+
+    // Permissions policy
+    context.Response.Headers.Append("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+
+    await next();
+});
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
@@ -96,9 +178,53 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Health check endpoint
-app.MapGet("/health", () => Results.Ok(new { status = "Healthy", timestamp = DateTime.UtcNow }))
+// Enhanced health check endpoint with detailed information
+app.MapGet("/health", () =>
+{
+    var health = new
+    {
+        status = "Healthy",
+        timestamp = DateTime.UtcNow,
+        version = "1.0.0",
+        environment = app.Environment.EnvironmentName,
+        uptime = Environment.TickCount64 / 1000 // seconds since startup
+    };
+    return Results.Ok(health);
+})
     .WithName("HealthCheck")
-    .WithOpenApi();
+    .WithTags("System")
+    .WithOpenApi(operation =>
+    {
+        operation.Summary = "Health Check";
+        operation.Description = "Returns the health status of the API and basic system information.";
+        return operation;
+    });
+
+// API info endpoint
+app.MapGet("/", () => Results.Ok(new
+{
+    name = "Vietnamese Lunar Calendar API",
+    version = "1.0.0",
+    description = "API for lunar calendar calculations and Vietnamese holidays",
+    documentation = "/swagger",
+    endpoints = new
+    {
+        health = "/health",
+        swagger = "/swagger",
+        lunarDate = "/api/v1/lunardate/{year}/{month}/{day}",
+        monthInfo = "/api/v1/lunardate/month/{year}/{month}",
+        holidays = "/api/v1/holiday/year/{year}",
+        monthHolidays = "/api/v1/holiday/month/{year}/{month}"
+    }
+}))
+    .WithName("ApiInfo")
+    .WithTags("System")
+    .WithOpenApi(operation =>
+    {
+        operation.Summary = "API Information";
+        operation.Description = "Returns basic information about the API and available endpoints.";
+        return operation;
+    })
+    .ExcludeFromDescription(); // Don't show in Swagger UI
 
 app.Run();

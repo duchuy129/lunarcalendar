@@ -1,0 +1,61 @@
+# .dockerignore - exclude unnecessary files from Docker build context
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs/
+
+# Build outputs
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# IDE and editor files
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Mobile app (not needed for API deployment)
+src/LunarCalendar.MobileApp/
+
+# Test projects
+**/tests/
+**/*.Tests/
+
+# Database files
+*.db
+*.db3
+*.sqlite
+
+# Environment files (use environment variables instead)
+.env
+.env.*
+!.env.example
+
+# Package manager
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*.swp
+*~
+
+# Docker
+docker-compose.override.yml
+Dockerfile.dev

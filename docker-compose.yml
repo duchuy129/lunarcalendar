@@ -1,0 +1,54 @@
+# Docker Compose for local production testing
+# This mimics the DigitalOcean production environment locally
+
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lunarcalendar-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING:-Host=db;Database=lunarcalendar;Username=postgres;Password=postgres}
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-production-secret-key-min-32-chars-change-this-in-production}
+      - JwtSettings__Issuer=LunarCalendarApi
+      - JwtSettings__Audience=LunarCalendarApp
+      - JwtSettings__ExpirationMinutes=1440
+      - AllowedHosts=*
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  db:
+    image: postgres:15-alpine
+    container_name: lunarcalendar-db
+    environment:
+      - POSTGRES_DB=lunarcalendar
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
