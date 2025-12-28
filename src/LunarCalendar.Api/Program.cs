@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using LunarCalendar.Api.Data;
 using LunarCalendar.Api.Services;
+using LunarCalendar.Api.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Add global exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Configure Swagger with comprehensive documentation
 builder.Services.AddSwaggerGen(options =>
@@ -117,13 +122,31 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // CORS configuration
+// Note: Mobile apps don't typically need CORS since they're not browser-based
+// However, if you plan to add a web interface, configure specific origins
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("MobileAppPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        // For mobile apps, CORS is not strictly necessary
+        // But we configure it for potential web clients in the future
+        if (builder.Environment.IsDevelopment())
+        {
+            // Allow all in development for testing
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        }
+        else
+        {
+            // In production, restrict to specific origins if you add a web interface
+            // For now, allow any origin but this should be restricted when you deploy
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+            // TODO: Replace with specific origin when production web interface is added
+            // policy.WithOrigins("https://lunarcalendar.app")
+        }
     });
 });
 
@@ -136,6 +159,9 @@ builder.Services.AddSingleton<IHolidayService, HolidayService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// Add exception handling middleware first
+app.UseExceptionHandler();
+
 // Enable Swagger in all environments for MVP (can restrict later)
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -171,7 +197,7 @@ app.Use(async (context, next) =>
 });
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("MobileAppPolicy");
 app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();

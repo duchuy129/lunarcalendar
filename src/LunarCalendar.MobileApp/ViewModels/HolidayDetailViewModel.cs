@@ -28,6 +28,16 @@ public partial class HolidayDetailViewModel : BaseViewModel
         HolidayOccurrence = holidayOccurrence;
         Title = holidayOccurrence.Holiday.Name;
 
+        // DEBUG: Log holiday data to verify what we're receiving
+        System.Diagnostics.Debug.WriteLine($"========== HOLIDAY DETAIL DEBUG ==========");
+        System.Diagnostics.Debug.WriteLine($"Holiday Name: {holidayOccurrence.Holiday.Name}");
+        System.Diagnostics.Debug.WriteLine($"Description: {holidayOccurrence.Holiday.Description}");
+        System.Diagnostics.Debug.WriteLine($"Description Length: {holidayOccurrence.Holiday.Description?.Length ?? 0}");
+        System.Diagnostics.Debug.WriteLine($"IsPublicHoliday: {holidayOccurrence.Holiday.IsPublicHoliday}");
+        System.Diagnostics.Debug.WriteLine($"Type: {holidayOccurrence.Holiday.Type}");
+        System.Diagnostics.Debug.WriteLine($"ColorHex: {holidayOccurrence.Holiday.ColorHex}");
+        System.Diagnostics.Debug.WriteLine($"==========================================");
+
         // Format Gregorian date
         GregorianDateFormatted = holidayOccurrence.GregorianDate.ToString("MMMM dd, yyyy (dddd)");
 

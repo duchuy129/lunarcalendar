@@ -30,10 +30,20 @@
 	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<!-- Allow localhost only for development -->
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<!-- Exception for localhost development (HTTPS) -->
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>MauiSplash</string>

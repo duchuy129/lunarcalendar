@@ -79,10 +79,10 @@ public class CalendarService : ICalendarService
                     LunarMonth = entity.LunarMonth,
                     LunarDay = entity.LunarDay,
                     IsLeapMonth = entity.IsLeapMonth,
-                    LunarYearName = entity.LunarYearName,
-                    LunarMonthName = entity.LunarMonthName,
-                    LunarDayName = entity.LunarDayName,
-                    AnimalSign = entity.AnimalSign
+                    LunarYearName = entity.LunarYearName ?? string.Empty,
+                    LunarMonthName = entity.LunarMonthName ?? string.Empty,
+                    LunarDayName = entity.LunarDayName ?? string.Empty,
+                    AnimalSign = entity.AnimalSign ?? string.Empty
                 };
             }
         }
@@ -162,10 +162,10 @@ public class CalendarService : ICalendarService
                 LunarMonth = e.LunarMonth,
                 LunarDay = e.LunarDay,
                 IsLeapMonth = e.IsLeapMonth,
-                LunarYearName = e.LunarYearName,
-                LunarMonthName = e.LunarMonthName,
-                LunarDayName = e.LunarDayName,
-                AnimalSign = e.AnimalSign
+                LunarYearName = e.LunarYearName ?? string.Empty,
+                LunarMonthName = e.LunarMonthName ?? string.Empty,
+                LunarDayName = e.LunarDayName ?? string.Empty,
+                AnimalSign = e.AnimalSign ?? string.Empty
             }).ToList();
 
             Debug.WriteLine($"CalendarService: Retrieved {lunarDates.Count} lunar dates from offline database");
