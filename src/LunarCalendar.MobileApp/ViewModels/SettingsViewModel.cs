@@ -29,6 +29,9 @@ public partial class SettingsViewModel : BaseViewModel
     private int _upcomingHolidaysDays;
 
     [ObservableProperty]
+    private List<int> _availableHolidaysDays = new() { 7, 14, 30, 60, 90 };
+
+    [ObservableProperty]
     private string _appVersion = string.Empty;
 
     [ObservableProperty]

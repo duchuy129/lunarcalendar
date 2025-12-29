@@ -80,19 +80,12 @@
                                    TextColor="{DynamicResource Gray600}"/>
                         </VerticalStackLayout>
                         <Picker Grid.Column="1"
+                                ItemsSource="{Binding AvailableHolidaysDays}"
                                 SelectedItem="{Binding UpcomingHolidaysDays}"
                                 FontSize="14"
                                 TextColor="{DynamicResource Primary}"
                                 VerticalOptions="Center"
-                                WidthRequest="80">
-                            <Picker.Items>
-                                <x:String>7</x:String>
-                                <x:String>14</x:String>
-                                <x:String>30</x:String>
-                                <x:String>60</x:String>
-                                <x:String>90</x:String>
-                            </Picker.Items>
-                        </Picker>
+                                WidthRequest="80"/>
                     </Grid>
                 </VerticalStackLayout>
             </Border>

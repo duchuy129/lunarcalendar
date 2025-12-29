@@ -34,8 +34,13 @@
 
         <!-- Month Navigation Header -->
         <Grid Grid.Row="0"
-              Padding="16,8"
               BackgroundColor="{DynamicResource Primary}">
+            <Grid.Padding>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="8,0" />
+                    <On Platform="Android" Value="8,2" />
+                </OnPlatform>
+            </Grid.Padding>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -109,10 +114,11 @@
 
         <!-- Month/Year Picker -->
         <Grid Grid.Row="1"
-              Padding="16,8"
+              Padding="12,12,12,12"
               BackgroundColor="{DynamicResource Gray100}"
               ColumnDefinitions="Auto,*,Auto,Auto"
-              ColumnSpacing="8">
+              ColumnSpacing="8"
+              MinimumHeightRequest="56">
 
             <Label Grid.Column="0"
                    Text="Month:"
@@ -127,6 +133,7 @@
                     FontSize="14"
                     TextColor="{DynamicResource Gray900}"
                     VerticalOptions="Center"
+                    Margin="0,2,0,2"
                     SelectedIndexChanged="OnMonthPickerSelectedIndexChanged"/>
 
             <Picker Grid.Column="2"
@@ -135,7 +142,8 @@
                     FontSize="14"
                     TextColor="{DynamicResource Gray900}"
                     VerticalOptions="Center"
-                    WidthRequest="90"
+                    WidthRequest="85"
+                    Margin="0,2,0,2"
                     SelectedIndexChanged="OnYearPickerSelectedIndexChanged"/>
 
             <Button Grid.Column="3"
@@ -145,29 +153,35 @@
                     TextColor="White"
                     FontSize="14"
                     Padding="12,4"
-                    CornerRadius="4"/>
+                    CornerRadius="4"
+                    VerticalOptions="Center"/>
         </Grid>
 
         <!-- Today's Date Display -->
         <Label Grid.Row="2"
                HorizontalOptions="Center"
-               Padding="12,8"
                BackgroundColor="{DynamicResource Gray100}">
+            <Label.Padding>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="6,2" />
+                    <On Platform="Android" Value="6,4" />
+                </OnPlatform>
+            </Label.Padding>
             <Label.FormattedText>
                 <FormattedString>
                     <Span Text="Today: "
-                          FontSize="22"
+                          FontSize="16"
                           FontAttributes="Bold"
                           TextColor="#2E7D32"/>
                     <Span Text="{Binding TodayGregorianDisplay}"
-                          FontSize="22"
+                          FontSize="16"
                           FontAttributes="Bold"
                           TextColor="#2E7D32"/>
                     <Span Text=" - "
-                          FontSize="22"
+                          FontSize="16"
                           TextColor="#2E7D32"/>
                     <Span Text="{Binding TodayLunarDisplay}"
-                          FontSize="22"
+                          FontSize="16"
                           FontAttributes="Bold"
                           TextColor="#2E7D32"/>
                 </FormattedString>
@@ -176,8 +190,13 @@
 
         <!-- Day of Week Header -->
         <Grid Grid.Row="3"
-              Padding="4,8"
               BackgroundColor="{DynamicResource Gray100}">
+            <Grid.Padding>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="2,0" />
+                    <On Platform="Android" Value="2,2" />
+                </OnPlatform>
+            </Grid.Padding>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -222,8 +241,8 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border Padding="4"
-                           Margin="2"
+                    <Border Padding="2"
+                           Margin="1"
                            Stroke="{Binding HolidayColor}"
                            StrokeThickness="2">
                         <Border.StrokeShape>
@@ -238,7 +257,7 @@
                         </Border.Triggers>
 
                         <VerticalStackLayout Spacing="2"
-                                           Padding="4">
+                                           Padding="2">
                             <!-- Gregorian Day -->
                             <Label Text="{Binding Day}"
                                   FontSize="16"
@@ -265,7 +284,8 @@
                                   FontSize="10"
                                   TextColor="Red"
                                   HorizontalOptions="Center"
-                                  LineBreakMode="NoWrap">
+                                  LineBreakMode="NoWrap"
+                                  IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ShowLunarDates}">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label"
                                                Binding="{Binding IsCurrentMonth}"

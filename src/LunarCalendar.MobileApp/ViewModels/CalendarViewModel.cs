@@ -77,6 +77,9 @@ public partial class CalendarViewModel : BaseViewModel
     private bool _showCulturalBackground = true;
 
     [ObservableProperty]
+    private bool _showLunarDates = true;
+
+    [ObservableProperty]
     private bool _isRefreshing = false;
 
     [ObservableProperty]
@@ -159,6 +162,7 @@ public partial class CalendarViewModel : BaseViewModel
         {
             // Load settings
             ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
+            ShowLunarDates = SettingsViewModel.GetShowLunarDates();
             UpcomingHolidaysDays = SettingsViewModel.GetUpcomingHolidaysDays();
 
             await LoadCalendarAsync();
@@ -177,6 +181,7 @@ public partial class CalendarViewModel : BaseViewModel
     {
         // Refresh settings when returning to calendar page
         ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
+        ShowLunarDates = SettingsViewModel.GetShowLunarDates();
         var newDays = SettingsViewModel.GetUpcomingHolidaysDays();
         if (UpcomingHolidaysDays != newDays)
         {
@@ -319,8 +324,16 @@ public partial class CalendarViewModel : BaseViewModel
             var weeksNeeded = (int)Math.Ceiling(totalDays / 7.0);
             var daysToGenerate = weeksNeeded * 7;
 
-            // Adjust calendar height based on number of weeks (approximately 75px per week)
-            CalendarHeight = weeksNeeded == 5 ? 350 : 380;
+            // Adjust calendar height based on number of weeks
+            // iOS needs less height due to tighter spacing
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                CalendarHeight = weeksNeeded == 5 ? 300 : 340;
+            }
+            else
+            {
+                CalendarHeight = weeksNeeded == 5 ? 320 : 360;
+            }
 
             // Generate days for the calculated number of weeks
             for (int i = 0; i < daysToGenerate; i++)

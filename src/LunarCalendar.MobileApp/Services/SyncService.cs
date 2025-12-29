@@ -194,11 +194,10 @@ public class SyncService : ISyncService
             return false;
         }
 
-        await _syncLock.WaitAsync(cancellationToken);
+        SetSyncStatus(true, "Syncing all data...");
+
         try
         {
-            SetSyncStatus(true, "Syncing all data...");
-
             var lunarSuccess = await SyncLunarDatesForMonthAsync(year, month, cancellationToken);
             var holidaySuccess = await SyncHolidaysForYearAsync(year, cancellationToken);
 
@@ -207,9 +206,12 @@ public class SyncService : ISyncService
 
             return success;
         }
-        finally
+        catch (Exception ex)
         {
-            _syncLock.Release();
+            _lastSyncError = ex.Message;
+            SetSyncStatus(false, "Sync failed", false, ex.Message);
+            Debug.WriteLine($"SyncService: Failed to sync all: {ex.Message}");
+            return false;
         }
     }
 
