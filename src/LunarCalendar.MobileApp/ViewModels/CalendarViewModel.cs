@@ -278,8 +278,9 @@ public partial class CalendarViewModel : BaseViewModel
             var todayLunar = lunarDates.FirstOrDefault(ld => ld.GregorianDate.Date == DateTime.Today);
             if (todayLunar != null)
             {
-                TodayGregorianDisplay = DateTime.Today.ToString("MMMM dd, yyyy");
-                TodayLunarDisplay = $"{todayLunar.LunarDay}/{todayLunar.LunarMonth}/{todayLunar.LunarYear}";
+                // Show only Lunar day and Sexagenary year (e.g., "15/12 - Dragon")
+                TodayGregorianDisplay = $"{todayLunar.LunarDay}/{todayLunar.LunarMonth}";
+                TodayLunarDisplay = $"Year of the {todayLunar.AnimalSign}";
             }
 
             // Create calendar days

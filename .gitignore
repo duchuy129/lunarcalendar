@@ -484,7 +484,6 @@ $RECYCLE.BIN/
 .env.*.local
 appsettings.*.json
 !appsettings.json
-!appsettings.Development.json
 
 # Database files (local development)
 *.db

@@ -32,4 +32,5 @@ public class HolidayOccurrence
 {
     public Holiday Holiday { get; set; } = null!;
     public DateTime GregorianDate { get; set; }
+    public string AnimalSign { get; set; } = string.Empty;
 }

@@ -154,16 +154,21 @@
                BackgroundColor="{DynamicResource Gray100}">
             <Label.FormattedText>
                 <FormattedString>
+                    <Span Text="Today: "
+                          FontSize="22"
+                          FontAttributes="Bold"
+                          TextColor="#2E7D32"/>
                     <Span Text="{Binding TodayGregorianDisplay}"
-                          FontSize="28"
+                          FontSize="22"
                           FontAttributes="Bold"
-                          TextColor="{DynamicResource Gray900}"/>
-                    <Span Text=" "
-                          FontSize="28"/>
+                          TextColor="#2E7D32"/>
+                    <Span Text=" - "
+                          FontSize="22"
+                          TextColor="#2E7D32"/>
                     <Span Text="{Binding TodayLunarDisplay}"
-                          FontSize="28"
+                          FontSize="22"
                           FontAttributes="Bold"
-                          TextColor="Red"/>
+                          TextColor="#2E7D32"/>
                 </FormattedString>
             </Label.FormattedText>
         </Label>
@@ -401,7 +406,7 @@
                                     <!-- Date Box -->
                                     <VerticalStackLayout Grid.Column="0"
                                                         Padding="8"
-                                                        BackgroundColor="{Binding Holiday.ColorHex}"
+                                                        BackgroundColor="{Binding ColorHex}"
                                                         WidthRequest="70"
                                                         HorizontalOptions="Center">
                                         <Label Text="{Binding GregorianDate, StringFormat='{0:MMM}'}"
@@ -423,7 +428,7 @@
                                     <VerticalStackLayout Grid.Column="1"
                                                         Spacing="4"
                                                         VerticalOptions="Center">
-                                        <Label Text="{Binding Holiday.Name}"
+                                        <Label Text="{Binding HolidayName}"
                                               FontSize="16"
                                               FontAttributes="Bold"
                                               TextColor="{DynamicResource Gray900}"/>
@@ -440,20 +445,14 @@
                                         </Label>
 
                                         <!-- Lunar date display -->
-                                        <Label FontSize="14"
+                                        <Label Text="{Binding LunarDateDisplay}"
+                                              FontSize="14"
                                               TextColor="#DC143C"
                                               FontAttributes="Bold"
                                               Margin="0,4,0,0"
-                                              IsVisible="{Binding Holiday.HasLunarDate}">
-                                            <Label.Text>
-                                                <MultiBinding StringFormat="Lunar: {0}/{1}">
-                                                    <Binding Path="Holiday.LunarDay"/>
-                                                    <Binding Path="Holiday.LunarMonth"/>
-                                                </MultiBinding>
-                                            </Label.Text>
-                                        </Label>
+                                              IsVisible="{Binding HasLunarDate}"/>
 
-                                        <Label Text="{Binding Holiday.Description}"
+                                        <Label Text="{Binding HolidayDescription}"
                                               FontSize="11"
                                               TextColor="{DynamicResource Gray500}"
                                               LineBreakMode="WordWrap"/>

@@ -112,4 +112,43 @@ public class LunarCalendarServiceTests
         Assert.NotNull(result);
         Assert.Equal(date, result.GregorianDate);
     }
+
+    [Theory]
+    [InlineData(2025, 1, 29, "Snake")] // 2025 Lunar New Year - Year of Snake
+    [InlineData(2024, 2, 10, "Dragon")] // 2024 Lunar New Year - Year of Dragon
+    [InlineData(2026, 2, 17, "Horse")] // 2026 Lunar New Year - Year of Horse
+    public void ConvertToLunar_ReturnCorrectAnimalSign_ForLunarNewYear(int year, int month, int day, string expectedAnimal)
+    {
+        // Arrange
+        var tetDate = new DateTime(year, month, day);
+
+        // Act
+        var result = _service.ConvertToLunar(tetDate);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedAnimal, result.AnimalSign);
+        Assert.NotEmpty(result.LunarYearName);
+        Assert.NotEmpty(result.HeavenlyStem);
+        Assert.NotEmpty(result.EarthlyBranch);
+    }
+
+    [Fact]
+    public void ConvertToLunar_SexagenaryCycle_ConsistentAcrossYear()
+    {
+        // Arrange - All dates in the same lunar year should have same animal sign
+        var date1 = new DateTime(2025, 1, 29); // Start of Snake year
+        var date2 = new DateTime(2025, 6, 15); // Middle of Snake year
+        var date3 = new DateTime(2026, 1, 1); // Still Snake year
+
+        // Act
+        var lunar1 = _service.ConvertToLunar(date1);
+        var lunar2 = _service.ConvertToLunar(date2);
+        var lunar3 = _service.ConvertToLunar(date3);
+
+        // Assert - All should be in Snake year
+        Assert.Equal("Snake", lunar1.AnimalSign);
+        Assert.Equal("Snake", lunar2.AnimalSign);
+        Assert.Equal("Snake", lunar3.AnimalSign);
+    }
 }

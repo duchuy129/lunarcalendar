@@ -29,10 +29,13 @@ public class HolidayService : IHolidayService
             if (holiday.GregorianMonth.HasValue && holiday.GregorianDay.HasValue)
             {
                 var gregorianDate = new DateTime(year, holiday.GregorianMonth.Value, holiday.GregorianDay.Value);
+                var lunarInfo = _lunarCalendarService.ConvertToLunar(gregorianDate);
+
                 occurrences.Add(new HolidayOccurrence
                 {
                     Holiday = holiday,
-                    GregorianDate = gregorianDate
+                    GregorianDate = gregorianDate,
+                    AnimalSign = lunarInfo.AnimalSign
                 });
             }
             // Handle Lunar-based holidays
@@ -79,10 +82,12 @@ public class HolidayService : IHolidayService
                     {
                         if (!occurrences.Any(o => o.Holiday.Id == holiday.Id && o.GregorianDate.Date == gregorianDate30.Date))
                         {
+                            var lunarInfo30 = _lunarCalendarService.ConvertToLunar(gregorianDate30);
                             occurrences.Add(new HolidayOccurrence
                             {
                                 Holiday = holiday,
-                                GregorianDate = gregorianDate30
+                                GregorianDate = gregorianDate30,
+                                AnimalSign = lunarInfo30.AnimalSign
                             });
                         }
                     }
@@ -108,10 +113,12 @@ public class HolidayService : IHolidayService
                 // Check if we already have this holiday occurrence
                 if (!occurrences.Any(o => o.Holiday.Id == holiday.Id && o.GregorianDate.Date == gregorianDate.Date))
                 {
+                    var lunarInfo = _lunarCalendarService.ConvertToLunar(gregorianDate);
                     occurrences.Add(new HolidayOccurrence
                     {
                         Holiday = holiday,
-                        GregorianDate = gregorianDate
+                        GregorianDate = gregorianDate,
+                        AnimalSign = lunarInfo.AnimalSign
                     });
                 }
             }
