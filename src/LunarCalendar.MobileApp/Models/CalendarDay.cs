@@ -1,3 +1,5 @@
+using LunarCalendar.Core.Models;
+
 namespace LunarCalendar.MobileApp.Models;
 
 public class CalendarDay

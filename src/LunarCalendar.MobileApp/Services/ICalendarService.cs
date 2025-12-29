@@ -1,4 +1,4 @@
-using LunarCalendar.MobileApp.Models;
+using LunarCalendar.Core.Models;
 
 namespace LunarCalendar.MobileApp.Services;
 

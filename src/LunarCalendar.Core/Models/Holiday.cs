@@ -1,4 +1,4 @@
-namespace LunarCalendar.MobileApp.Models;
+namespace LunarCalendar.Core.Models;
 
 public class Holiday
 {

@@ -150,7 +150,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Register application services
+// Register Core services (shared library)
+builder.Services.AddSingleton<LunarCalendar.Core.Services.ILunarCalculationService, LunarCalendar.Core.Services.LunarCalculationService>();
+builder.Services.AddSingleton<LunarCalendar.Core.Services.IHolidayCalculationService, LunarCalendar.Core.Services.HolidayCalculationService>();
+
+// Register API services (wrappers that add extra features)
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<ILunarCalendarService, LunarCalendarService>();

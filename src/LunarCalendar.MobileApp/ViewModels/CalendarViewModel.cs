@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
 

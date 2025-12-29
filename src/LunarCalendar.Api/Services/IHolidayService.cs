@@ -1,4 +1,4 @@
-using LunarCalendar.Api.Models;
+using LunarCalendar.Core.Models;
 
 namespace LunarCalendar.Api.Services;
 
@@ -23,14 +23,4 @@ public interface IHolidayService
     /// Gets holiday for a specific Gregorian date
     /// </summary>
     Task<Holiday?> GetHolidayForDateAsync(DateTime date);
-}
-
-/// <summary>
-/// Represents a specific occurrence of a holiday in a Gregorian year
-/// </summary>
-public class HolidayOccurrence
-{
-    public Holiday Holiday { get; set; } = null!;
-    public DateTime GregorianDate { get; set; }
-    public string AnimalSign { get; set; } = string.Empty;
 }

@@ -1,6 +1,6 @@
-using LunarCalendar.Api.Models;
+using LunarCalendar.Core.Models;
 
-namespace LunarCalendar.Api.Data;
+namespace LunarCalendar.Core.Data;
 
 public static class HolidaySeeder
 {

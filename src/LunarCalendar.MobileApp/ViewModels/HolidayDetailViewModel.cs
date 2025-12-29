@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
 
