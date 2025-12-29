@@ -5,38 +5,54 @@
              x:Class="LunarCalendar.MobileApp.Views.HolidayDetailPage"
              x:DataType="viewmodels:HolidayDetailViewModel"
              Title="{Binding Title}"
-             BackgroundColor="#FFF9F0">
+             Background="{DynamicResource BackgroundGradient}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="24">
 
-            <!-- Holiday Icon/Color Indicator -->
-            <Border HeightRequest="120"
-                    WidthRequest="120"
+            <!-- Holiday Icon/Color Indicator - Elegant Gradient Design -->
+            <Border HeightRequest="160"
+                    WidthRequest="160"
                     StrokeThickness="0"
-                    HorizontalOptions="Center"
-                    BackgroundColor="{Binding HolidayColorHex}">
+                    HorizontalOptions="Center">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="{Binding HolidayColorHex}" Offset="0.0"/>
+                        <GradientStop Color="{Binding HolidayColorHex}" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Shadow>
+                    <Shadow Brush="{Binding HolidayColorHex}"
+                            Opacity="0.3"
+                            Radius="28"
+                            Offset="0,10"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="60"/>
+                    <RoundRectangle CornerRadius="80"/>
                 </Border.StrokeShape>
 
                 <VerticalStackLayout VerticalOptions="Center"
                                     HorizontalOptions="Center"
-                                    Spacing="4">
+                                    Spacing="2">
                     <Label Text="{Binding GregorianDateMonth}"
-                          FontSize="18"
-                          TextColor="White"
-                          FontAttributes="Bold"
-                          HorizontalOptions="Center"/>
-                    <Label Text="{Binding GregorianDateDay}"
-                          FontSize="42"
-                          TextColor="White"
-                          FontAttributes="Bold"
-                          HorizontalOptions="Center"/>
-                    <Label Text="{Binding GregorianDateYear}"
                           FontSize="16"
                           TextColor="White"
-                          HorizontalOptions="Center"/>
+                          Opacity="0.95"
+                          FontAttributes="Bold"
+                          HorizontalOptions="Center"
+                          Margin="0,0,0,4"/>
+                    <Label Text="{Binding GregorianDateDay}"
+                          FontSize="52"
+                          TextColor="White"
+                          FontAttributes="Bold"
+                          HorizontalOptions="Center"
+                          Margin="0,-4,0,-4"/>
+                    <Label Text="{Binding GregorianDateYear}"
+                          FontSize="15"
+                          TextColor="White"
+                          Opacity="0.90"
+                          HorizontalOptions="Center"
+                          Margin="0,4,0,0"/>
                 </VerticalStackLayout>
             </Border>
 
@@ -48,27 +64,43 @@
                    HorizontalOptions="Center"
                    HorizontalTextAlignment="Center"/>
 
-            <!-- Holiday Type Badge -->
-            <Border Padding="12,6"
-                    BackgroundColor="{Binding HolidayColorHex}"
-                    HorizontalOptions="Center"
-                    StrokeThickness="0">
+            <!-- Holiday Type Badge - Elegant Gradient Design -->
+            <Border Padding="18,9"
+                    StrokeThickness="0"
+                    HorizontalOptions="Center">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="{Binding HolidayColorHex}" Offset="0.0"/>
+                        <GradientStop Color="{Binding HolidayColorHex}" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Shadow>
+                    <Shadow Brush="{Binding HolidayColorHex}"
+                            Opacity="0.2"
+                            Radius="10"
+                            Offset="0,3"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="16"/>
+                    <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
                 <Label Text="{Binding HolidayTypeText}"
                        TextColor="White"
-                       FontSize="14"
+                       FontSize="13"
                        FontAttributes="Bold"/>
             </Border>
 
             <!-- Date Information Card -->
             <Border Padding="20"
-                    BackgroundColor="White"
-                    Stroke="{DynamicResource Gray200}"
-                    StrokeThickness="1">
+                    Background="{DynamicResource CardGradient}"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.1"
+                            Radius="12"
+                            Offset="0,4"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12"/>
+                    <RoundRectangle CornerRadius="16"/>
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="16">
@@ -95,7 +127,7 @@
                                FontAttributes="Bold"/>
                         <Label Text="{Binding LunarDateWithAnimalSign}"
                                FontSize="18"
-                               TextColor="#DC143C"
+                               TextColor="{DynamicResource LunarRed}"
                                FontAttributes="Bold"/>
                     </VerticalStackLayout>
 

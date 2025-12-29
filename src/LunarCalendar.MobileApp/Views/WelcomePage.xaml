@@ -5,7 +5,7 @@
              x:Class="LunarCalendar.MobileApp.Views.WelcomePage"
              x:DataType="viewmodels:WelcomeViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="{DynamicResource PageBackgroundColor}">
+             Background="{DynamicResource BackgroundGradient}">
 
     <Grid RowDefinitions="*,Auto,Auto,Auto,Auto,*"
           Padding="30">

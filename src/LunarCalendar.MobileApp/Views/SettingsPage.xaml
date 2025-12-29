@@ -4,18 +4,23 @@
              xmlns:viewmodels="clr-namespace:LunarCalendar.MobileApp.ViewModels"
              x:Class="LunarCalendar.MobileApp.Views.SettingsPage"
              Title="{Binding Title}"
-             BackgroundColor="#FFF9F0">
+             Background="{DynamicResource BackgroundGradient}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Display Settings Section -->
             <Border Padding="0"
-                    BackgroundColor="White"
-                    Stroke="{DynamicResource Gray200}"
-                    StrokeThickness="1">
+                    Background="{DynamicResource CardGradient}"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.1"
+                            Radius="12"
+                            Offset="0,4"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12"/>
+                    <RoundRectangle CornerRadius="16"/>
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
@@ -92,11 +97,16 @@
 
             <!-- Interaction Settings Section -->
             <Border Padding="0"
-                    BackgroundColor="White"
-                    Stroke="{DynamicResource Gray200}"
-                    StrokeThickness="1">
+                    Background="{DynamicResource CardGradient}"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.1"
+                            Radius="12"
+                            Offset="0,4"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12"/>
+                    <RoundRectangle CornerRadius="16"/>
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
@@ -127,11 +137,16 @@
 
             <!-- Sync Settings Section -->
             <Border Padding="0"
-                    BackgroundColor="White"
-                    Stroke="{DynamicResource Gray200}"
-                    StrokeThickness="1">
+                    Background="{DynamicResource CardGradient}"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.1"
+                            Radius="12"
+                            Offset="0,4"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12"/>
+                    <RoundRectangle CornerRadius="16"/>
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
@@ -218,11 +233,16 @@
 
             <!-- Data Settings Section -->
             <Border Padding="0"
-                    BackgroundColor="White"
-                    Stroke="{DynamicResource Gray200}"
-                    StrokeThickness="1">
+                    Background="{DynamicResource CardGradient}"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.1"
+                            Radius="12"
+                            Offset="0,4"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12"/>
+                    <RoundRectangle CornerRadius="16"/>
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
@@ -260,11 +280,16 @@
 
             <!-- About Section -->
             <Border Padding="0"
-                    BackgroundColor="White"
-                    Stroke="{DynamicResource Gray200}"
-                    StrokeThickness="1">
+                    Background="{DynamicResource CardGradient}"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.1"
+                            Radius="12"
+                            Offset="0,4"/>
+                </Border.Shadow>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12"/>
+                    <RoundRectangle CornerRadius="16"/>
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->

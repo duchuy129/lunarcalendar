@@ -6,7 +6,7 @@
              xmlns:converters="clr-namespace:LunarCalendar.MobileApp.Converters"
              x:Class="LunarCalendar.MobileApp.Views.CalendarPage"
              Title="{Binding Title}"
-             BackgroundColor="#FFF9F0">
+             Background="{DynamicResource BackgroundGradient}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -23,18 +23,24 @@
                  RefreshColor="{DynamicResource Primary}">
         <ScrollView>
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-                  BackgroundColor="#FFF9F0">
+                  BackgroundColor="Transparent">
 
             <!-- Cultural Background Image -->
         <Image Grid.RowSpan="9"
                Source="cultural_background.png"
                Aspect="AspectFill"
-               Opacity="0.15"
+               Opacity="0.08"
                IsVisible="{Binding ShowCulturalBackground}"/>
 
         <!-- Month Navigation Header -->
         <Grid Grid.Row="0"
-              BackgroundColor="{DynamicResource Primary}">
+              Background="{DynamicResource PrimaryGradientVertical}">
+            <Grid.Shadow>
+                <Shadow Brush="{DynamicResource Primary}"
+                        Opacity="0.3"
+                        Radius="8"
+                        Offset="0,2"/>
+            </Grid.Shadow>
             <Grid.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
                     <On Platform="iOS" Value="8,0" />
@@ -113,10 +119,21 @@
         </Grid>
 
         <!-- Month/Year Picker -->
-        <Grid Grid.Row="1"
-              Padding="12,12,12,12"
-              BackgroundColor="{DynamicResource Gray100}"
-              ColumnDefinitions="Auto,*,Auto,Auto"
+        <Border Grid.Row="1"
+                Margin="12,8"
+                Padding="16,12"
+                Background="{DynamicResource CardGradient}"
+                StrokeThickness="0">
+            <Border.Shadow>
+                <Shadow Brush="Black"
+                        Opacity="0.1"
+                        Radius="12"
+                        Offset="0,4"/>
+            </Border.Shadow>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto"
               ColumnSpacing="8"
               MinimumHeightRequest="56">
 
@@ -152,51 +169,54 @@
                     BackgroundColor="{DynamicResource Primary}"
                     TextColor="White"
                     FontSize="14"
-                    Padding="12,4"
-                    CornerRadius="4"
+                    Padding="12,8"
+                    CornerRadius="12"
                     VerticalOptions="Center"/>
         </Grid>
+        </Border>
 
         <!-- Today's Date Display -->
-        <Label Grid.Row="2"
-               HorizontalOptions="Center"
-               BackgroundColor="{DynamicResource Gray100}">
-            <Label.Padding>
-                <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="6,2" />
-                    <On Platform="Android" Value="6,4" />
-                </OnPlatform>
-            </Label.Padding>
-            <Label.FormattedText>
-                <FormattedString>
-                    <Span Text="Today: "
-                          FontSize="16"
-                          FontAttributes="Bold"
-                          TextColor="#2E7D32"/>
-                    <Span Text="{Binding TodayGregorianDisplay}"
-                          FontSize="16"
-                          FontAttributes="Bold"
-                          TextColor="#2E7D32"/>
-                    <Span Text=" - "
-                          FontSize="16"
-                          TextColor="#2E7D32"/>
-                    <Span Text="{Binding TodayLunarDisplay}"
-                          FontSize="16"
-                          FontAttributes="Bold"
-                          TextColor="#2E7D32"/>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
+        <Border Grid.Row="2"
+                Margin="12,8"
+                Padding="16,12"
+                Background="{DynamicResource TodayGreen}"
+                StrokeThickness="0">
+            <Border.Shadow>
+                <Shadow Brush="{DynamicResource TodayGreen}"
+                        Opacity="0.3"
+                        Radius="12"
+                        Offset="0,4"/>
+            </Border.Shadow>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+            <Label HorizontalOptions="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Today: "
+                              FontSize="16"
+                              FontAttributes="Bold"
+                              TextColor="White"/>
+                        <Span Text="{Binding TodayGregorianDisplay}"
+                              FontSize="16"
+                              FontAttributes="Bold"
+                              TextColor="White"/>
+                        <Span Text=" • "
+                              FontSize="16"
+                              TextColor="White"/>
+                        <Span Text="{Binding TodayLunarDisplay}"
+                              FontSize="16"
+                              FontAttributes="Bold"
+                              TextColor="White"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Border>
 
         <!-- Day of Week Header -->
         <Grid Grid.Row="3"
-              BackgroundColor="{DynamicResource Gray100}">
-            <Grid.Padding>
-                <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="2,0" />
-                    <On Platform="Android" Value="2,2" />
-                </OnPlatform>
-            </Grid.Padding>
+              BackgroundColor="Transparent"
+              Padding="12,8,12,4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -207,13 +227,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" Text="Sun" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}"/>
-            <Label Grid.Column="1" Text="Mon" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}"/>
-            <Label Grid.Column="2" Text="Tue" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}"/>
-            <Label Grid.Column="3" Text="Wed" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}"/>
-            <Label Grid.Column="4" Text="Thu" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}"/>
-            <Label Grid.Column="5" Text="Fri" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}"/>
-            <Label Grid.Column="6" Text="Sat" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="{DynamicResource Gray600}"/>
+            <Label Grid.Column="0" Text="Sun" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="1" Text="Mon" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="2" Text="Tue" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="3" Text="Wed" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="4" Text="Thu" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="5" Text="Fri" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="6" Text="Sat" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
         </Grid>
 
         <!-- Loading Indicator -->
@@ -230,7 +250,8 @@
                        IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                        SelectionMode="None"
                        HeightRequest="{Binding CalendarHeight}"
-                       VerticalOptions="Start">
+                       VerticalOptions="Start"
+                       Margin="12,0">
             <CollectionView.GestureRecognizers>
                 <SwipeGestureRecognizer Direction="Left" Command="{Binding NextMonthCommand}"/>
                 <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousMonthCommand}"/>
@@ -241,18 +262,36 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border Padding="2"
-                           Margin="1"
-                           Stroke="{Binding HolidayColor}"
-                           StrokeThickness="2">
+                    <Border Padding="4"
+                           Margin="3"
+                           Background="White"
+                           StrokeThickness="0">
+                        <Border.Shadow>
+                            <Shadow Brush="Black"
+                                    Opacity="0.08"
+                                    Radius="6"
+                                    Offset="0,2"/>
+                        </Border.Shadow>
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="8"/>
+                            <RoundRectangle CornerRadius="12"/>
                         </Border.StrokeShape>
                         <Border.Triggers>
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding IsToday}"
                                        Value="True">
-                                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}"/>
+                                <Setter Property="Background" Value="{DynamicResource PrimaryGradient}"/>
+                                <Setter Property="Shadow">
+                                    <Shadow Brush="{DynamicResource Primary}"
+                                            Opacity="0.3"
+                                            Radius="10"
+                                            Offset="0,3"/>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Border"
+                                       Binding="{Binding HasHoliday}"
+                                       Value="True">
+                                <Setter Property="Stroke" Value="{Binding HolidayColor}"/>
+                                <Setter Property="StrokeThickness" Value="2"/>
                             </DataTrigger>
                         </Border.Triggers>
 
@@ -282,7 +321,7 @@
                             <!-- Lunar Day -->
                             <Label Text="{Binding LunarDateDisplay}"
                                   FontSize="10"
-                                  TextColor="Red"
+                                  TextColor="{DynamicResource LunarRed}"
                                   HorizontalOptions="Center"
                                   LineBreakMode="NoWrap"
                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ShowLunarDates}">
@@ -330,15 +369,15 @@
 
         <!-- Upcoming Holidays Section -->
         <VerticalStackLayout Grid.Row="6"
-                            BackgroundColor="{DynamicResource Gray100}"
+                            BackgroundColor="Transparent"
                             Padding="16,12">
 
             <!-- Section Header -->
             <Label Text="{Binding UpcomingHolidaysDays, StringFormat='Upcoming Holidays (Next {0} Days)'}"
-                   FontSize="16"
+                   FontSize="18"
                    FontAttributes="Bold"
                    TextColor="{DynamicResource Primary}"
-                   Margin="0,0,0,12"/>
+                   Margin="0,8,0,12"/>
 
             <!-- No Upcoming Holidays Message -->
             <Label Text="No upcoming holidays in this period"
@@ -353,13 +392,18 @@
                            IsVisible="{Binding UpcomingHolidays.Count, Converter={StaticResource IntToBoolConverter}}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="12"
-                               Margin="0,4"
-                               BackgroundColor="White"
-                               Stroke="{Binding Holiday.ColorHex}"
-                               StrokeThickness="2">
+                        <Border Padding="16"
+                               Margin="0,6"
+                               Background="{DynamicResource CardGradient}"
+                               StrokeThickness="0">
+                            <Border.Shadow>
+                                <Shadow Brush="Black"
+                                        Opacity="0.1"
+                                        Radius="10"
+                                        Offset="0,4"/>
+                            </Border.Shadow>
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="8"/>
+                                <RoundRectangle CornerRadius="16"/>
                             </Border.StrokeShape>
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ViewHolidayDetailCommand}"
@@ -369,26 +413,47 @@
                             <Grid ColumnDefinitions="Auto,*"
                                  ColumnSpacing="12">
 
-                                <!-- Date Box -->
-                                <VerticalStackLayout Grid.Column="0"
-                                                    Padding="8"
-                                                    BackgroundColor="{Binding ColorHex}"
-                                                    WidthRequest="70"
-                                                    HorizontalOptions="Center">
-                                    <Label Text="{Binding GregorianDate, StringFormat='{0:MMM}'}"
-                                          FontSize="12"
-                                          TextColor="White"
-                                          HorizontalOptions="Center"/>
-                                    <Label Text="{Binding GregorianDate, StringFormat='{0:dd}'}"
-                                          FontSize="24"
-                                          FontAttributes="Bold"
-                                          TextColor="White"
-                                          HorizontalOptions="Center"/>
-                                    <Label Text="{Binding GregorianDate, StringFormat='{0:yyyy}'}"
-                                          FontSize="10"
-                                          TextColor="White"
-                                          HorizontalOptions="Center"/>
-                                </VerticalStackLayout>
+                                <!-- Date Box - Elegant Soft Gradient Design -->
+                                <Border Grid.Column="0"
+                                       Padding="12,14"
+                                       StrokeThickness="0"
+                                       WidthRequest="70">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="{Binding ColorHex}" Offset="0.0"/>
+                                            <GradientStop Color="{Binding ColorHex}" Offset="1.0"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{Binding ColorHex}"
+                                                Opacity="0.25"
+                                                Radius="12"
+                                                Offset="0,4"/>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="14"/>
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout HorizontalOptions="Center" Spacing="0">
+                                        <Label Text="{Binding GregorianDate, StringFormat='{0:MMM}'}"
+                                              FontSize="10"
+                                              TextColor="White"
+                                              Opacity="0.95"
+                                              FontAttributes="Bold"
+                                              HorizontalOptions="Center"
+                                              Margin="0,0,0,2"/>
+                                        <Label Text="{Binding GregorianDate, StringFormat='{0:dd}'}"
+                                              FontSize="26"
+                                              FontAttributes="Bold"
+                                              TextColor="White"
+                                              HorizontalOptions="Center"
+                                              Margin="0,0,0,2"/>
+                                        <Label Text="{Binding GregorianDate, StringFormat='{0:yyyy}'}"
+                                              FontSize="9"
+                                              TextColor="White"
+                                              Opacity="0.85"
+                                              HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+                                </Border>
 
                                 <!-- Holiday Info -->
                                 <VerticalStackLayout Grid.Column="1"
@@ -406,7 +471,7 @@
                                     <!-- Lunar date display -->
                                     <Label Text="{Binding LunarDateDisplay}"
                                           FontSize="14"
-                                          TextColor="#DC143C"
+                                          TextColor="{DynamicResource LunarRed}"
                                           FontAttributes="Bold"
                                           Margin="0,4,0,0"
                                           IsVisible="{Binding HasLunarDate}"/>
@@ -424,13 +489,24 @@
         </VerticalStackLayout>
 
         <!-- Year Holidays Section -->
-        <VerticalStackLayout Grid.Row="7"
-                            BackgroundColor="{DynamicResource Gray100}"
-                            Padding="0">
+        <Border Grid.Row="7"
+                Margin="12,8"
+                StrokeThickness="0"
+                Background="{DynamicResource CardGradient}">
+            <Border.Shadow>
+                <Shadow Brush="Black"
+                        Opacity="0.1"
+                        Radius="12"
+                        Offset="0,4"/>
+            </Border.Shadow>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16"/>
+            </Border.StrokeShape>
+        <VerticalStackLayout Padding="0">
 
             <!-- Section Header (Always visible - Toggle) -->
-            <Grid Padding="16,12"
-                  BackgroundColor="{DynamicResource Primary}">
+            <Grid Padding="16,16"
+                  Background="{DynamicResource PrimaryGradientVertical}">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ToggleYearSectionCommand}"/>
                 </Grid.GestureRecognizers>
@@ -441,14 +517,14 @@
 
                 <Label Grid.Column="0"
                        Text="Vietnamese Holidays"
-                       FontSize="16"
+                       FontSize="18"
                        FontAttributes="Bold"
                        TextColor="White"
                        VerticalOptions="Center"/>
 
                 <Label Grid.Column="1"
                        Text="{Binding IsYearSectionExpanded, Converter={StaticResource BoolToExpandIconConverter}}"
-                       FontSize="18"
+                       FontSize="20"
                        TextColor="White"
                        VerticalOptions="Center"/>
             </Grid>
@@ -505,13 +581,18 @@
                                MaximumHeightRequest="400">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border Padding="12"
-                                   Margin="0,4"
+                            <Border Padding="14"
+                                   Margin="0,6"
                                    BackgroundColor="White"
-                                   Stroke="{Binding Holiday.ColorHex}"
-                                   StrokeThickness="2">
+                                   StrokeThickness="0">
+                                <Border.Shadow>
+                                    <Shadow Brush="Black"
+                                            Opacity="0.08"
+                                            Radius="8"
+                                            Offset="0,2"/>
+                                </Border.Shadow>
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="8"/>
+                                    <RoundRectangle CornerRadius="12"/>
                                 </Border.StrokeShape>
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ViewHolidayDetailCommand}"
@@ -521,26 +602,47 @@
                                 <Grid ColumnDefinitions="Auto,*"
                                      ColumnSpacing="12">
 
-                                    <!-- Date Box -->
-                                    <VerticalStackLayout Grid.Column="0"
-                                                        Padding="8"
-                                                        BackgroundColor="{Binding ColorHex}"
-                                                        WidthRequest="70"
-                                                        HorizontalOptions="Center">
-                                        <Label Text="{Binding GregorianDate, StringFormat='{0:MMM}'}"
-                                              FontSize="12"
-                                              TextColor="White"
-                                              HorizontalOptions="Center"/>
-                                        <Label Text="{Binding GregorianDate, StringFormat='{0:dd}'}"
-                                              FontSize="24"
-                                              FontAttributes="Bold"
-                                              TextColor="White"
-                                              HorizontalOptions="Center"/>
-                                        <Label Text="{Binding GregorianDate, StringFormat='{0:yyyy}'}"
-                                              FontSize="10"
-                                              TextColor="White"
-                                              HorizontalOptions="Center"/>
-                                    </VerticalStackLayout>
+                                    <!-- Date Box - Elegant Soft Gradient Design -->
+                                    <Border Grid.Column="0"
+                                           Padding="12,14"
+                                           StrokeThickness="0"
+                                           WidthRequest="70">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="{Binding ColorHex}" Offset="0.0"/>
+                                                <GradientStop Color="{Binding ColorHex}" Offset="1.0"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Border.Shadow>
+                                            <Shadow Brush="{Binding ColorHex}"
+                                                    Opacity="0.25"
+                                                    Radius="12"
+                                                    Offset="0,4"/>
+                                        </Border.Shadow>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="14"/>
+                                        </Border.StrokeShape>
+                                        <VerticalStackLayout HorizontalOptions="Center" Spacing="0">
+                                            <Label Text="{Binding GregorianDate, StringFormat='{0:MMM}'}"
+                                                  FontSize="10"
+                                                  TextColor="White"
+                                                  Opacity="0.95"
+                                                  FontAttributes="Bold"
+                                                  HorizontalOptions="Center"
+                                                  Margin="0,0,0,2"/>
+                                            <Label Text="{Binding GregorianDate, StringFormat='{0:dd}'}"
+                                                  FontSize="26"
+                                                  FontAttributes="Bold"
+                                                  TextColor="White"
+                                                  HorizontalOptions="Center"
+                                                  Margin="0,0,0,2"/>
+                                            <Label Text="{Binding GregorianDate, StringFormat='{0:yyyy}'}"
+                                                  FontSize="9"
+                                                  TextColor="White"
+                                                  Opacity="0.85"
+                                                  HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+                                    </Border>
 
                                     <!-- Holiday Info -->
                                     <VerticalStackLayout Grid.Column="1"
@@ -558,7 +660,7 @@
                                         <!-- Lunar date display -->
                                         <Label Text="{Binding LunarDateDisplay}"
                                               FontSize="14"
-                                              TextColor="#DC143C"
+                                              TextColor="{DynamicResource LunarRed}"
                                               FontAttributes="Bold"
                                               Margin="0,4,0,0"
                                               IsVisible="{Binding HasLunarDate}"/>
@@ -575,6 +677,7 @@
                 </CollectionView>
             </VerticalStackLayout>
         </VerticalStackLayout>
+        </Border>
 
             </Grid>
         </ScrollView>
