@@ -49,6 +49,12 @@ public partial class CalendarViewModel : BaseViewModel
     private ObservableCollection<HolidayOccurrence> _yearHolidays = new();
 
     [ObservableProperty]
+    private ObservableCollection<HolidayOccurrence> _upcomingHolidays = new();
+
+    [ObservableProperty]
+    private int _upcomingHolidaysDays = 30;
+
+    [ObservableProperty]
     private ObservableCollection<int> _availableYears = new();
 
     [ObservableProperty]
@@ -72,6 +78,9 @@ public partial class CalendarViewModel : BaseViewModel
 
     [ObservableProperty]
     private bool _isRefreshing = false;
+
+    [ObservableProperty]
+    private double _calendarHeight = 380;
 
     public CalendarViewModel(
         ICalendarService calendarService,
@@ -150,9 +159,11 @@ public partial class CalendarViewModel : BaseViewModel
         {
             // Load settings
             ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
+            UpcomingHolidaysDays = SettingsViewModel.GetUpcomingHolidaysDays();
 
             await LoadCalendarAsync();
             await LoadYearHolidaysAsync();
+            await LoadUpcomingHolidaysAsync();
         }
         catch (Exception ex)
         {
@@ -162,10 +173,16 @@ public partial class CalendarViewModel : BaseViewModel
         }
     }
 
-    public void RefreshSettings()
+    public async void RefreshSettings()
     {
         // Refresh settings when returning to calendar page
         ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
+        var newDays = SettingsViewModel.GetUpcomingHolidaysDays();
+        if (UpcomingHolidaysDays != newDays)
+        {
+            UpcomingHolidaysDays = newDays;
+            await LoadUpcomingHolidaysAsync();
+        }
     }
 
     [RelayCommand]
@@ -197,8 +214,6 @@ public partial class CalendarViewModel : BaseViewModel
     {
         try
         {
-            IsRefreshing = true;
-
             // If online, trigger sync
             if (_connectivityService.IsConnected)
             {
@@ -207,9 +222,16 @@ public partial class CalendarViewModel : BaseViewModel
 
             await LoadCalendarAsync();
             await LoadYearHolidaysAsync();
+            await LoadUpcomingHolidaysAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error during refresh: {ex.Message}");
         }
         finally
         {
+            // Small delay to ensure smooth animation completion before stopping spinner
+            await Task.Delay(100);
             IsRefreshing = false;
         }
     }
@@ -291,8 +313,17 @@ public partial class CalendarViewModel : BaseViewModel
             var firstDayOfWeek = (int)firstDayOfMonth.DayOfWeek; // 0 = Sunday
             var startDate = firstDayOfMonth.AddDays(-firstDayOfWeek);
 
-            // Generate 42 days (6 weeks) for consistent calendar grid
-            for (int i = 0; i < 42; i++)
+            // Calculate number of weeks needed for this month
+            var daysInMonth = DateTime.DaysInMonth(CurrentMonth.Year, CurrentMonth.Month);
+            var totalDays = firstDayOfWeek + daysInMonth;
+            var weeksNeeded = (int)Math.Ceiling(totalDays / 7.0);
+            var daysToGenerate = weeksNeeded * 7;
+
+            // Adjust calendar height based on number of weeks (approximately 75px per week)
+            CalendarHeight = weeksNeeded == 5 ? 350 : 380;
+
+            // Generate days for the calculated number of weeks
+            for (int i = 0; i < daysToGenerate; i++)
             {
                 var date = startDate.AddDays(i);
                 var isCurrentMonth = date.Month == CurrentMonth.Month;
@@ -412,6 +443,38 @@ public partial class CalendarViewModel : BaseViewModel
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error loading year holidays: {ex.Message}");
+        }
+    }
+
+    private async Task LoadUpcomingHolidaysAsync()
+    {
+        try
+        {
+            var today = DateTime.Today;
+            var endDate = today.AddDays(UpcomingHolidaysDays);
+            var upcomingHolidays = new List<HolidayOccurrence>();
+
+            // Get current year holidays
+            var currentYearHolidays = await _holidayService.GetHolidaysForYearAsync(today.Year);
+
+            // If the range extends into next year, get next year's holidays too
+            if (endDate.Year > today.Year)
+            {
+                var nextYearHolidays = await _holidayService.GetHolidaysForYearAsync(today.Year + 1);
+                currentYearHolidays = currentYearHolidays.Concat(nextYearHolidays).ToList();
+            }
+
+            // Filter holidays that fall within the upcoming range
+            upcomingHolidays = currentYearHolidays
+                .Where(h => h.GregorianDate.Date >= today && h.GregorianDate.Date <= endDate)
+                .OrderBy(h => h.GregorianDate)
+                .ToList();
+
+            UpcomingHolidays = new ObservableCollection<HolidayOccurrence>(upcomingHolidays);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading upcoming holidays: {ex.Message}");
         }
     }
 }

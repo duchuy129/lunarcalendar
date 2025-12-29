@@ -31,6 +31,7 @@ public class HolidayOccurrence
     public string HolidayDescription => Holiday?.Description ?? string.Empty;
     public string ColorHex => Holiday?.ColorHex ?? "#FF0000";
     public bool IsPublicHoliday => Holiday?.IsPublicHoliday ?? false;
+    public string GregorianDateFormatted => GregorianDate.ToString("MMMM dd, yyyy");
 
     // Lunar date display with animal sign for Tet holidays
     public string LunarDateDisplay

@@ -8,7 +8,13 @@ public class IntToBoolConverter : IValueConverter
     {
         if (value is int intValue)
         {
-            return intValue > 0;
+            var result = intValue > 0;
+            // Check if parameter is "inverse" to invert the result
+            if (parameter is string paramString && paramString.Equals("inverse", StringComparison.OrdinalIgnoreCase))
+            {
+                return !result;
+            }
+            return result;
         }
         return false;
     }

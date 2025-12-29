@@ -10,6 +10,7 @@ public partial class SettingsViewModel : BaseViewModel
     private const string ShowCulturalBackgroundKey = "ShowCulturalBackground";
     private const string EnableHapticFeedbackKey = "EnableHapticFeedback";
     private const string ShowLunarDatesKey = "ShowLunarDates";
+    private const string UpcomingHolidaysDaysKey = "UpcomingHolidaysDays";
 
     private readonly IConnectivityService? _connectivityService;
     private readonly ISyncService? _syncService;
@@ -23,6 +24,9 @@ public partial class SettingsViewModel : BaseViewModel
 
     [ObservableProperty]
     private bool _showLunarDates;
+
+    [ObservableProperty]
+    private int _upcomingHolidaysDays;
 
     [ObservableProperty]
     private string _appVersion = string.Empty;
@@ -128,11 +132,17 @@ public partial class SettingsViewModel : BaseViewModel
         SaveSetting(ShowLunarDatesKey, value);
     }
 
+    partial void OnUpcomingHolidaysDaysChanged(int value)
+    {
+        Preferences.Set(UpcomingHolidaysDaysKey, value);
+    }
+
     private void LoadSettings()
     {
         ShowCulturalBackground = Preferences.Get(ShowCulturalBackgroundKey, true);
         EnableHapticFeedback = Preferences.Get(EnableHapticFeedbackKey, true);
         ShowLunarDates = Preferences.Get(ShowLunarDatesKey, true);
+        UpcomingHolidaysDays = Preferences.Get(UpcomingHolidaysDaysKey, 30);
     }
 
     private void SaveSetting(string key, bool value)
@@ -267,5 +277,10 @@ public partial class SettingsViewModel : BaseViewModel
     public static bool GetShowLunarDates()
     {
         return Preferences.Get(ShowLunarDatesKey, true);
+    }
+
+    public static int GetUpcomingHolidaysDays()
+    {
+        return Preferences.Get(UpcomingHolidaysDaysKey, 30);
     }
 }
