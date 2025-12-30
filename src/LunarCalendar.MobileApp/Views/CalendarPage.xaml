@@ -4,6 +4,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodels="clr-namespace:LunarCalendar.MobileApp.ViewModels"
              xmlns:converters="clr-namespace:LunarCalendar.MobileApp.Converters"
+             xmlns:ext="clr-namespace:LunarCalendar.MobileApp.Extensions"
              x:Class="LunarCalendar.MobileApp.Views.CalendarPage"
              Title="{Binding Title}"
              Background="{DynamicResource BackgroundGradient}">
@@ -89,7 +90,7 @@
             </StackLayout>
 
             <Button Grid.Row="0" Grid.Column="2"
-                    Text="Today"
+                    Text="{ext:Translate Today}"
                     Command="{Binding TodayCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
@@ -138,7 +139,7 @@
               MinimumHeightRequest="56">
 
             <Label Grid.Column="0"
-                   Text="Month:"
+                   Text="{ext:Translate Month}"
                    FontSize="14"
                    TextColor="{DynamicResource Gray900}"
                    VerticalOptions="Center"
@@ -164,7 +165,7 @@
                     SelectedIndexChanged="OnYearPickerSelectedIndexChanged"/>
 
             <Button Grid.Column="3"
-                    Text="Go"
+                    Text="{ext:Translate Go}"
                     Command="{Binding JumpToMonthCommand}"
                     BackgroundColor="{DynamicResource Primary}"
                     TextColor="White"
@@ -193,7 +194,7 @@
             <Label HorizontalOptions="Center">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="Today: "
+                        <Span Text="{ext:Translate TodayLabel}"
                               FontSize="16"
                               FontAttributes="Bold"
                               TextColor="White"/>
@@ -227,13 +228,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" Text="Sun" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
-            <Label Grid.Column="1" Text="Mon" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
-            <Label Grid.Column="2" Text="Tue" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
-            <Label Grid.Column="3" Text="Wed" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
-            <Label Grid.Column="4" Text="Thu" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
-            <Label Grid.Column="5" Text="Fri" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
-            <Label Grid.Column="6" Text="Sat" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="0" Text="{ext:Translate Sunday}" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="1" Text="{ext:Translate Monday}" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="2" Text="{ext:Translate Tuesday}" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="3" Text="{ext:Translate Wednesday}" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="4" Text="{ext:Translate Thursday}" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="5" Text="{ext:Translate Friday}" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Label Grid.Column="6" Text="{ext:Translate Saturday}" HorizontalOptions="Center" FontSize="13" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
         </Grid>
 
         <!-- Loading Indicator -->
@@ -373,14 +374,14 @@
                             Padding="16,12">
 
             <!-- Section Header -->
-            <Label Text="{Binding UpcomingHolidaysDays, StringFormat='Upcoming Holidays (Next {0} Days)'}"
+            <Label Text="{Binding UpcomingHolidaysTitle}"
                    FontSize="18"
                    FontAttributes="Bold"
                    TextColor="{DynamicResource Primary}"
                    Margin="0,8,0,12"/>
 
             <!-- No Upcoming Holidays Message -->
-            <Label Text="No upcoming holidays in this period"
+            <Label Text="{ext:Translate NoUpcomingHolidaysMessage}"
                    FontSize="14"
                    TextColor="{DynamicResource Gray600}"
                    HorizontalOptions="Center"
@@ -516,7 +517,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0"
-                       Text="Vietnamese Holidays"
+                       Text="{ext:Translate VietnameseHolidays}"
                        FontSize="18"
                        FontAttributes="Bold"
                        TextColor="White"
@@ -558,7 +559,7 @@
                             VerticalOptions="Center"/>
 
                     <Button Grid.Column="2"
-                            Text="Today"
+                            Text="{ext:Translate Today}"
                             Command="{Binding CurrentYearCommand}"
                             BackgroundColor="{DynamicResource Primary}"
                             TextColor="White"

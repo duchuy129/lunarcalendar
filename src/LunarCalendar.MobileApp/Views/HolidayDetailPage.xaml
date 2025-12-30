@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:LunarCalendar.MobileApp.ViewModels"
+             xmlns:ext="clr-namespace:LunarCalendar.MobileApp.Extensions"
              x:Class="LunarCalendar.MobileApp.Views.HolidayDetailPage"
              x:DataType="viewmodels:HolidayDetailViewModel"
              Title="{Binding Title}"
@@ -106,7 +107,7 @@
                 <VerticalStackLayout Spacing="16">
                     <!-- Gregorian Date -->
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Gregorian Date"
+                        <Label Text="{ext:Translate GregorianDate}"
                                FontSize="12"
                                TextColor="{DynamicResource Gray600}"
                                FontAttributes="Bold"/>
@@ -121,7 +122,7 @@
 
                     <!-- Lunar Date -->
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Lunar Date"
+                        <Label Text="{ext:Translate LunarDate}"
                                FontSize="12"
                                TextColor="{DynamicResource Gray600}"
                                FontAttributes="Bold"/>
@@ -141,7 +142,7 @@
                                           IsVisible="{Binding IsPublicHoliday}">
                         <Label Text="🏛️"
                                FontSize="20"/>
-                        <Label Text="Public Holiday"
+                        <Label Text="{ext:Translate PublicHoliday}"
                                FontSize="14"
                                TextColor="#4B5563"
                                VerticalOptions="Center"/>
@@ -160,7 +161,7 @@
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="About This Holiday"
+                    <Label Text="{ext:Translate AboutThisHoliday}"
                            FontSize="16"
                            FontAttributes="Bold"
                            TextColor="{DynamicResource Gray900}"/>
@@ -169,30 +170,6 @@
                            TextColor="#4B5563"
                            LineBreakMode="WordWrap"/>
                 </VerticalStackLayout>
-            </Border>
-
-            <!-- Culture Info -->
-            <Border Padding="16"
-                    BackgroundColor="{Binding HolidayColorHex}"
-                    StrokeThickness="0"
-                    Opacity="0.15">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12"/>
-                </Border.StrokeShape>
-                <HorizontalStackLayout Spacing="8"
-                                      HorizontalOptions="Center">
-                    <Label Text="🌏"
-                           FontSize="18"/>
-                    <Label Text="{Binding HolidayCulture}"
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           TextColor="{DynamicResource Gray800}"
-                           VerticalOptions="Center"/>
-                    <Label Text="Culture"
-                           FontSize="14"
-                           TextColor="{DynamicResource Gray700}"
-                           VerticalOptions="Center"/>
-                </HorizontalStackLayout>
             </Border>
 
         </VerticalStackLayout>

@@ -69,7 +69,7 @@
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
-                    <Label Text="{ext:Translate DisplaySettings}"
+                    <Label Text="Display Settings"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{DynamicResource Primary}"
@@ -79,10 +79,10 @@
                     <Grid Padding="16,12"
                           ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
-                            <Label Text="{ext:Translate CulturalBackground}"
+                            <Label Text="Cultural Background"
                                    FontSize="16"
                                    TextColor="{DynamicResource Gray900}"/>
-                            <Label Text="{ext:Translate CulturalBackgroundDesc}"
+                            <Label Text="Display traditional Vietnamese cultural imagery"
                                    FontSize="12"
                                    TextColor="{DynamicResource Gray600}"/>
                         </VerticalStackLayout>
@@ -100,10 +100,10 @@
                     <Grid Padding="16,12"
                           ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
-                            <Label Text="{ext:Translate ShowLunarDates}"
+                            <Label Text="Show Lunar Dates"
                                    FontSize="16"
                                    TextColor="{DynamicResource Gray900}"/>
-                            <Label Text="{ext:Translate ShowLunarDatesDesc}"
+                            <Label Text="Display lunar calendar dates on calendar grid"
                                    FontSize="12"
                                    TextColor="{DynamicResource Gray600}"/>
                         </VerticalStackLayout>
@@ -122,10 +122,10 @@
                           ColumnDefinitions="*,Auto"
                           ColumnSpacing="12">
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
-                            <Label Text="{ext:Translate UpcomingHolidaysRange}"
+                            <Label Text="Upcoming Holidays Range"
                                    FontSize="16"
                                    TextColor="{DynamicResource Gray900}"/>
-                            <Label Text="{ext:Translate UpcomingHolidaysRangeDesc}"
+                            <Label Text="Number of days to show upcoming holidays"
                                    FontSize="12"
                                    TextColor="{DynamicResource Gray600}"/>
                         </VerticalStackLayout>
@@ -155,7 +155,7 @@
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
-                    <Label Text="{ext:Translate InteractionSettings}"
+                    <Label Text="Interaction Settings"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{DynamicResource Primary}"
@@ -165,10 +165,10 @@
                     <Grid Padding="16,12"
                           ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
-                            <Label Text="{ext:Translate HapticFeedback}"
+                            <Label Text="Haptic Feedback"
                                    FontSize="16"
                                    TextColor="{DynamicResource Gray900}"/>
-                            <Label Text="{ext:Translate HapticFeedbackDesc}"
+                            <Label Text="Vibrate on button presses (iOS only)"
                                    FontSize="12"
                                    TextColor="{DynamicResource Gray600}"/>
                         </VerticalStackLayout>
@@ -195,7 +195,7 @@
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
-                    <Label Text="{ext:Translate SyncAndOffline}"
+                    <Label Text="Sync &amp; Offline"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{DynamicResource Primary}"
@@ -205,7 +205,7 @@
                     <Grid Padding="16,12"
                           ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
-                            <Label Text="{ext:Translate ConnectionStatus}"
+                            <Label Text="Connection Status"
                                    FontSize="16"
                                    TextColor="{DynamicResource Gray900}"/>
                             <Label Text="{Binding IsOnline, StringFormat='{0}'}"
@@ -222,13 +222,13 @@
                                 <DataTrigger TargetType="Label"
                                            Binding="{Binding IsOnline}"
                                            Value="True">
-                                    <Setter Property="Text" Value="{ext:Translate Online}" />
+                                    <Setter Property="Text" Value="Online" />
                                     <Setter Property="TextColor" Value="Green" />
                                 </DataTrigger>
                                 <DataTrigger TargetType="Label"
                                            Binding="{Binding IsOnline}"
                                            Value="False">
-                                    <Setter Property="Text" Value="{ext:Translate Offline}" />
+                                    <Setter Property="Text" Value="Offline" />
                                     <Setter Property="TextColor" Value="Orange" />
                                 </DataTrigger>
                             </Label.Triggers>
@@ -242,7 +242,7 @@
                     <!-- Last Sync Time -->
                     <Grid Padding="16,12">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="{ext:Translate LastSync}"
+                            <Label Text="Last Sync"
                                    FontSize="16"
                                    TextColor="{DynamicResource Gray900}"/>
                             <Label Text="{Binding LastSyncTime}"
@@ -257,7 +257,7 @@
 
                     <!-- Sync Now Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate SyncNow}"
+                        <Button Text="Sync Now"
                                 Command="{Binding SyncDataCommand}"
                                 BackgroundColor="{DynamicResource Primary}"
                                 TextColor="White"
@@ -267,7 +267,7 @@
                                 <DataTrigger TargetType="Button"
                                            Binding="{Binding IsSyncing}"
                                            Value="True">
-                                    <Setter Property="Text" Value="{ext:Translate Syncing}" />
+                                    <Setter Property="Text" Value="Syncing..." />
                                     <Setter Property="IsEnabled" Value="False" />
                                 </DataTrigger>
                             </Button.Triggers>
@@ -291,7 +291,7 @@
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
-                    <Label Text="{ext:Translate DataAndStorage}"
+                    <Label Text="Data &amp; Storage"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{DynamicResource Primary}"
@@ -299,7 +299,7 @@
 
                     <!-- Clear Cache Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate ClearCache}"
+                        <Button Text="Clear Cache &amp; Offline Data"
                                 Command="{Binding ClearCacheCommand}"
                                 BackgroundColor="{DynamicResource Primary}"
                                 TextColor="White"
@@ -313,7 +313,7 @@
 
                     <!-- Reset Settings Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate ResetSettings}"
+                        <Button Text="Reset All Settings"
                                 Command="{Binding ResetSettingsCommand}"
                                 BackgroundColor="{DynamicResource Tertiary}"
                                 TextColor="White"
@@ -338,7 +338,7 @@
                 </Border.StrokeShape>
                 <VerticalStackLayout Spacing="0">
                     <!-- Section Header -->
-                    <Label Text="{ext:Translate About}"
+                    <Label Text="About"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{DynamicResource Primary}"
@@ -347,7 +347,7 @@
                     <!-- App Version -->
                     <Grid Padding="16,12">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="{ext:Translate AppVersion}"
+                            <Label Text="App Version"
                                    FontSize="16"
                                    TextColor="{DynamicResource Gray900}"/>
                             <Label Text="{Binding AppVersion}"
@@ -362,7 +362,7 @@
 
                     <!-- About Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate AboutThisApp}"
+                        <Button Text="About This App"
                                 Command="{Binding AboutCommand}"
                                 BackgroundColor="{DynamicResource Secondary}"
                                 TextColor="White"

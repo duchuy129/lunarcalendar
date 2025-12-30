@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" msdata:Ordinal="5" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Welcome Page -->
+  <data name="AppName" xml:space="preserve">
+    <value>Lịch Âm</value>
+  </data>
+  <data name="WelcomeTagline" xml:space="preserve">
+    <value>Theo dõi sự kiện qua lịch dương và lịch âm</value>
+  </data>
+  <data name="ContinueAsGuest" xml:space="preserve">
+    <value>Tiếp tục với tư cách Khách</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Đăng nhập</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Đăng ký</value>
+  </data>
+  <data name="GuestModeInfo" xml:space="preserve">
+    <value>Chế độ khách cho phép bạn xem lịch.
+Đăng ký để tạo và đồng bộ sự kiện.</value>
+  </data>
+
+  <!-- Calendar Page -->
+  <data name="Calendar" xml:space="preserve">
+    <value>Lịch</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Tháng trước</value>
+  </data>
+  <data name="NextMonth" xml:space="preserve">
+    <value>Tháng sau</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Hôm nay</value>
+  </data>
+  <data name="GoToToday" xml:space="preserve">
+    <value>Đến hôm nay</value>
+  </data>
+  <data name="CurrentMonthYear" xml:space="preserve">
+    <value>Tháng và năm hiện tại</value>
+  </data>
+  <data name="SyncStatus" xml:space="preserve">
+    <value>Trạng thái đồng bộ</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Tháng:</value>
+  </data>
+  <data name="Go" xml:space="preserve">
+    <value>Đi</value>
+  </data>
+  <data name="TodayLabel" xml:space="preserve">
+    <value>Hôm nay:</value>
+  </data>
+
+  <!-- Days of Week -->
+  <data name="Sunday" xml:space="preserve">
+    <value>CN</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>T2</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>T3</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>T4</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>T5</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>T6</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>T7</value>
+  </data>
+
+  <!-- Upcoming Holidays Section -->
+  <data name="UpcomingHolidaysTitle" xml:space="preserve">
+    <value>Ngày Lễ Sắp Tới ({0} Ngày Tiếp Theo)</value>
+  </data>
+  <data name="NoUpcomingHolidays" xml:space="preserve">
+    <value>Không có ngày lễ sắp tới trong khoảng thời gian này</value>
+  </data>
+
+  <!-- Year Holidays Section -->
+  <data name="VietnameseHolidays" xml:space="preserve">
+    <value>Ngày Lễ Việt Nam</value>
+  </data>
+
+  <!-- Holiday Detail Page -->
+  <data name="GregorianDate" xml:space="preserve">
+    <value>Lịch Dương</value>
+  </data>
+  <data name="LunarDate" xml:space="preserve">
+    <value>Lịch Âm</value>
+  </data>
+  <data name="PublicHoliday" xml:space="preserve">
+    <value>Ngày Lễ Chính Thức</value>
+  </data>
+  <data name="AboutThisHoliday" xml:space="preserve">
+    <value>Về Ngày Lễ Này</value>
+  </data>
+  <data name="Culture" xml:space="preserve">
+    <value>Văn Hóa</value>
+  </data>
+
+  <!-- Settings Page -->
+  <data name="Settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="DisplaySettings" xml:space="preserve">
+    <value>Cài Đặt Hiển Thị</value>
+  </data>
+  <data name="CulturalBackground" xml:space="preserve">
+    <value>Hình Nền Văn Hóa</value>
+  </data>
+  <data name="CulturalBackgroundDesc" xml:space="preserve">
+    <value>Hiển thị hình ảnh văn hóa truyền thống Việt Nam</value>
+  </data>
+  <data name="ShowLunarDates" xml:space="preserve">
+    <value>Hiển Thị Ngày Âm Lịch</value>
+  </data>
+  <data name="ShowLunarDatesDesc" xml:space="preserve">
+    <value>Hiển thị ngày âm lịch trên lưới lịch</value>
+  </data>
+  <data name="UpcomingHolidaysRange" xml:space="preserve">
+    <value>Phạm Vi Ngày Lễ Sắp Tới</value>
+  </data>
+  <data name="UpcomingHolidaysRangeDesc" xml:space="preserve">
+    <value>Số ngày hiển thị ngày lễ sắp tới</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Ngôn Ngữ</value>
+  </data>
+  <data name="LanguageDesc" xml:space="preserve">
+    <value>Chọn ngôn ngữ ưa thích của bạn</value>
+  </data>
+  <data name="InteractionSettings" xml:space="preserve">
+    <value>Cài Đặt Tương Tác</value>
+  </data>
+  <data name="HapticFeedback" xml:space="preserve">
+    <value>Phản Hồi Xúc Giác</value>
+  </data>
+  <data name="HapticFeedbackDesc" xml:space="preserve">
+    <value>Rung khi nhấn nút (chỉ iOS)</value>
+  </data>
+  <data name="SyncAndOffline" xml:space="preserve">
+    <value>Đồng Bộ &amp; Ngoại Tuyến</value>
+  </data>
+  <data name="ConnectionStatus" xml:space="preserve">
+    <value>Trạng Thái Kết Nối</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>Trực tuyến</value>
+  </data>
+  <data name="Offline" xml:space="preserve">
+    <value>Ngoại tuyến</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Đồng Bộ Lần Cuối</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Đồng Bộ Ngay</value>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Đang đồng bộ...</value>
+  </data>
+  <data name="DataAndStorage" xml:space="preserve">
+    <value>Dữ Liệu &amp; Lưu Trữ</value>
+  </data>
+  <data name="ClearCache" xml:space="preserve">
+    <value>Xóa Bộ Nhớ Cache &amp; Dữ Liệu Ngoại Tuyến</value>
+  </data>
+  <data name="ResetSettings" xml:space="preserve">
+    <value>Đặt Lại Tất Cả Cài Đặt</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Giới Thiệu</value>
+  </data>
+  <data name="AppVersion" xml:space="preserve">
+    <value>Phiên Bản Ứng Dụng</value>
+  </data>
+  <data name="AboutThisApp" xml:space="preserve">
+    <value>Về Ứng Dụng Này</value>
+  </data>
+
+  <!-- Sync Messages -->
+  <data name="SyncComplete" xml:space="preserve">
+    <value>Đồng Bộ Hoàn Tất</value>
+  </data>
+  <data name="SyncCompleteMessage" xml:space="preserve">
+    <value>Dữ liệu lịch đã được đồng bộ thành công.</value>
+  </data>
+  <data name="SyncFailed" xml:space="preserve">
+    <value>Đồng Bộ Thất Bại</value>
+  </data>
+  <data name="SyncFailedMessage" xml:space="preserve">
+    <value>Không thể đồng bộ dữ liệu lịch. Vui lòng thử lại sau.</value>
+  </data>
+  <data name="SyncError" xml:space="preserve">
+    <value>Lỗi Đồng Bộ</value>
+  </data>
+  <data name="SyncErrorMessage" xml:space="preserve">
+    <value>Đã xảy ra lỗi trong quá trình đồng bộ: {0}</value>
+  </data>
+  <data name="OfflineMessage" xml:space="preserve">
+    <value>Không thể đồng bộ khi ngoại tuyến. Vui lòng kiểm tra kết nối internet.</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="SyncServiceNotAvailable" xml:space="preserve">
+    <value>Dịch vụ đồng bộ không khả dụng</value>
+  </data>
+
+  <!-- Cache/Storage Messages -->
+  <data name="Success" xml:space="preserve">
+    <value>Thành Công</value>
+  </data>
+  <data name="CacheClearedMessage" xml:space="preserve">
+    <value>Đã xóa bộ nhớ cache và dữ liệu ngoại tuyến thành công</value>
+  </data>
+  <data name="ClearCacheError" xml:space="preserve">
+    <value>Không thể xóa bộ nhớ cache: {0}</value>
+  </data>
+
+  <!-- About Dialog -->
+  <data name="AboutMessage" xml:space="preserve">
+    <value>Lịch Âm Việt Nam
+
+Ứng dụng lịch đẹp hiển thị cả lịch dương và lịch âm Việt Nam cùng các ngày lễ truyền thống.
+
+© 2025 Bản quyền đã được bảo hộ.</value>
+  </data>
+
+  <!-- Reset Settings Dialog -->
+  <data name="ResetSettingsTitle" xml:space="preserve">
+    <value>Đặt Lại Cài Đặt</value>
+  </data>
+  <data name="ResetSettingsMessage" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn đặt lại tất cả cài đặt về giá trị mặc định không?</value>
+  </data>
+  <data name="SettingsResetMessage" xml:space="preserve">
+    <value>Đã đặt lại cài đặt về giá trị mặc định</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Có</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+
+  <!-- Time Formats -->
+  <data name="JustNow" xml:space="preserve">
+    <value>Vừa xong</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>{0} phút trước</value>
+  </data>
+  <data name="HoursAgo" xml:space="preserve">
+    <value>{0} giờ trước</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Chưa bao giờ</value>
+  </data>
+
+  <!-- Months -->
+  <data name="January" xml:space="preserve">
+    <value>Tháng Một</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Tháng Hai</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Tháng Ba</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Tháng Tư</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Tháng Năm</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Tháng Sáu</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Tháng Bảy</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Tháng Tám</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Tháng Chín</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Tháng Mười</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Tháng Mười Một</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Tháng Mười Hai</value>
+  </data>
+
+  <!-- Language Names -->
+  <data name="LanguageEnglish" xml:space="preserve">
+    <value>English (Tiếng Anh)</value>
+  </data>
+  <data name="LanguageVietnamese" xml:space="preserve">
+    <value>Tiếng Việt</value>
+  </data>
+
+  <!-- Restart Required -->
+  <data name="RestartRequired" xml:space="preserve">
+    <value>Yêu Cầu Khởi Động Lại</value>
+  </data>
+  <data name="RestartRequiredMessage" xml:space="preserve">
+    <value>Vui lòng khởi động lại ứng dụng để áp dụng ngôn ngữ mới.</value>
+  </data>
+
+  <!-- Upcoming Holidays -->
+  <data name="UpcomingHolidaysFormat" xml:space="preserve">
+    <value>Ngày Lễ Sắp Tới ({0} Ngày)</value>
+  </data>
+  <data name="NoUpcomingHolidaysMessage" xml:space="preserve">
+    <value>Không có ngày lễ sắp tới trong khoảng thời gian này</value>
+  </data>
+
+  <!-- Holiday Display -->
+  <data name="LunarLabel" xml:space="preserve">
+    <value>Âm Lịch:</value>
+  </data>
+  <data name="YearOfThe" xml:space="preserve">
+    <value>Năm</value>
+  </data>
+
+  <!-- Animal Signs -->
+  <data name="AnimalRat" xml:space="preserve">
+    <value>Tý</value>
+  </data>
+  <data name="AnimalOx" xml:space="preserve">
+    <value>Sửu</value>
+  </data>
+  <data name="AnimalTiger" xml:space="preserve">
+    <value>Dần</value>
+  </data>
+  <data name="AnimalRabbit" xml:space="preserve">
+    <value>Mão</value>
+  </data>
+  <data name="AnimalDragon" xml:space="preserve">
+    <value>Thìn</value>
+  </data>
+  <data name="AnimalSnake" xml:space="preserve">
+    <value>Tỵ</value>
+  </data>
+  <data name="AnimalHorse" xml:space="preserve">
+    <value>Ngọ</value>
+  </data>
+  <data name="AnimalGoat" xml:space="preserve">
+    <value>Mùi</value>
+  </data>
+  <data name="AnimalMonkey" xml:space="preserve">
+    <value>Thân</value>
+  </data>
+  <data name="AnimalRooster" xml:space="preserve">
+    <value>Dậu</value>
+  </data>
+  <data name="AnimalDog" xml:space="preserve">
+    <value>Tuất</value>
+  </data>
+  <data name="AnimalPig" xml:space="preserve">
+    <value>Hợi</value>
+  </data>
+
+  <!-- Holiday Types -->
+  <data name="MajorDay" xml:space="preserve">
+    <value>Ngày Trọng Đại</value>
+  </data>
+  <data name="TraditionalFestival" xml:space="preserve">
+    <value>Lễ Hội Truyền Thống</value>
+  </data>
+  <data name="SeasonalCelebration" xml:space="preserve">
+    <value>Lễ Kỷ Niệm Theo Mùa</value>
+  </data>
+</root>

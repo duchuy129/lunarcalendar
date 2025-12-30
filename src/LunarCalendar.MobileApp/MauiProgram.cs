@@ -42,6 +42,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.IHolidayCalculationService, LunarCalendar.Core.Services.HolidayCalculationService>();
 
 		// Register App Services
+		builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
 		builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 		builder.Services.AddSingleton<IUserModeService, UserModeService>();
 		builder.Services.AddSingleton<ICalendarService, CalendarService>();

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:LunarCalendar.MobileApp.ViewModels"
+             xmlns:ext="clr-namespace:LunarCalendar.MobileApp.Extensions"
              x:Class="LunarCalendar.MobileApp.Views.WelcomePage"
              x:DataType="viewmodels:WelcomeViewModel"
              Shell.NavBarIsVisible="False"
@@ -17,12 +18,12 @@
             <Label Text="🌙"
                    FontSize="80"
                    HorizontalOptions="Center"/>
-            <Label Text="Lunar Calendar"
+            <Label Text="{ext:Translate AppName}"
                    FontSize="32"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
                    Margin="0,20,0,0"/>
-            <Label Text="Track events across calendars"
+            <Label Text="{ext:Translate WelcomeTagline}"
                    FontSize="16"
                    TextColor="{DynamicResource Gray600}"
                    HorizontalOptions="Center"
@@ -31,7 +32,7 @@
 
         <!-- Continue as Guest Button -->
         <Button Grid.Row="1"
-                Text="Continue as Guest"
+                Text="{ext:Translate ContinueAsGuest}"
                 Command="{Binding ContinueAsGuestCommand}"
                 BackgroundColor="{DynamicResource Primary}"
                 TextColor="White"
@@ -43,7 +44,7 @@
 
         <!-- Sign In Button -->
         <Button Grid.Row="2"
-                Text="Sign In"
+                Text="{ext:Translate SignIn}"
                 Command="{Binding NavigateToSignInCommand}"
                 BackgroundColor="Transparent"
                 TextColor="{DynamicResource Primary}"
@@ -57,7 +58,7 @@
 
         <!-- Sign Up Button -->
         <Button Grid.Row="3"
-                Text="Sign Up"
+                Text="{ext:Translate SignUp}"
                 Command="{Binding NavigateToSignUpCommand}"
                 BackgroundColor="Transparent"
                 TextColor="{DynamicResource Primary}"
@@ -67,7 +68,7 @@
 
         <!-- Info Text -->
         <Label Grid.Row="4"
-               Text="Guest mode lets you view the calendar.&#x0a;Sign up to create and sync events."
+               Text="{ext:Translate GuestModeInfo}"
                FontSize="12"
                TextColor="{DynamicResource Gray600}"
                HorizontalOptions="Center"

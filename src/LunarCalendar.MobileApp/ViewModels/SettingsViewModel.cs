@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.Data;
+using LunarCalendar.MobileApp.Resources.Strings;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -15,6 +16,7 @@ public partial class SettingsViewModel : BaseViewModel
     private readonly IConnectivityService? _connectivityService;
     private readonly ISyncService? _syncService;
     private readonly LunarCalendarDatabase? _database;
+    private readonly ILocalizationService? _localizationService;
 
     [ObservableProperty]
     private bool _showCulturalBackground;
@@ -43,9 +45,15 @@ public partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private bool _isSyncing = false;
 
+    [ObservableProperty]
+    private List<LanguageOption> _availableLanguages = new();
+
+    [ObservableProperty]
+    private LanguageOption? _selectedLanguage;
+
     public SettingsViewModel()
     {
-        Title = "Settings";
+        Title = AppResources.Settings;
         LoadSettings();
         LoadAppInfo();
     }
@@ -53,15 +61,18 @@ public partial class SettingsViewModel : BaseViewModel
     public SettingsViewModel(
         IConnectivityService connectivityService,
         ISyncService syncService,
-        LunarCalendarDatabase database)
+        LunarCalendarDatabase database,
+        ILocalizationService localizationService)
     {
         _connectivityService = connectivityService;
         _syncService = syncService;
         _database = database;
+        _localizationService = localizationService;
 
-        Title = "Settings";
+        Title = AppResources.Settings;
         LoadSettings();
         LoadAppInfo();
+        LoadLanguageSettings();
         UpdateSyncStatus();
 
         // Monitor connectivity
@@ -99,15 +110,15 @@ public partial class SettingsViewModel : BaseViewModel
             var timeSince = DateTime.Now - _syncService.LastSyncTime.Value;
             if (timeSince.TotalMinutes < 1)
             {
-                LastSyncTime = "Just now";
+                LastSyncTime = AppResources.JustNow;
             }
             else if (timeSince.TotalHours < 1)
             {
-                LastSyncTime = $"{(int)timeSince.TotalMinutes} minutes ago";
+                LastSyncTime = string.Format(AppResources.MinutesAgo, (int)timeSince.TotalMinutes);
             }
             else if (timeSince.TotalDays < 1)
             {
-                LastSyncTime = $"{(int)timeSince.TotalHours} hours ago";
+                LastSyncTime = string.Format(AppResources.HoursAgo, (int)timeSince.TotalHours);
             }
             else
             {
@@ -116,7 +127,28 @@ public partial class SettingsViewModel : BaseViewModel
         }
         else
         {
-            LastSyncTime = "Never";
+            LastSyncTime = AppResources.Never;
+        }
+    }
+
+    private void LoadLanguageSettings()
+    {
+        if (_localizationService != null)
+        {
+            AvailableLanguages = _localizationService.AvailableLanguages;
+            var currentLang = _localizationService.CurrentLanguage;
+            SelectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == currentLang);
+        }
+    }
+
+    partial void OnSelectedLanguageChanged(LanguageOption? value)
+    {
+        if (value != null && _localizationService != null)
+        {
+            // Simply set the language - UI will update automatically via bindings
+            _localizationService.SetLanguage(value.Code);
+
+            System.Diagnostics.Debug.WriteLine($"=== Language switched to: {value.Code} ===");
         }
     }
 
@@ -163,13 +195,13 @@ public partial class SettingsViewModel : BaseViewModel
     {
         if (_connectivityService == null || _syncService == null)
         {
-            await Shell.Current.DisplayAlert("Error", "Sync service not available", "OK");
+            await Shell.Current.DisplayAlert(AppResources.ErrorTitle, AppResources.SyncServiceNotAvailable, AppResources.OK);
             return;
         }
 
         if (!_connectivityService.IsConnected)
         {
-            await Shell.Current.DisplayAlert("Offline", "Cannot sync while offline. Please check your internet connection.", "OK");
+            await Shell.Current.DisplayAlert(AppResources.Offline, AppResources.OfflineMessage, AppResources.OK);
             return;
         }
 
@@ -184,16 +216,16 @@ public partial class SettingsViewModel : BaseViewModel
             if (success)
             {
                 UpdateSyncStatus();
-                await Shell.Current.DisplayAlert("Sync Complete", "Calendar data has been synchronized successfully.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.SyncComplete, AppResources.SyncCompleteMessage, AppResources.OK);
             }
             else
             {
-                await Shell.Current.DisplayAlert("Sync Failed", "Failed to synchronize calendar data. Please try again later.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.SyncFailed, AppResources.SyncFailedMessage, AppResources.OK);
             }
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Sync Error", $"An error occurred during sync: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert(AppResources.SyncError, string.Format(AppResources.SyncErrorMessage, ex.Message), AppResources.OK);
         }
         finally
         {
@@ -229,11 +261,11 @@ public partial class SettingsViewModel : BaseViewModel
                 await _database.ClearAllDataAsync();
             }
 
-            await Shell.Current.DisplayAlert("Success", "Cache and offline data cleared successfully", "OK");
+            await Shell.Current.DisplayAlert(AppResources.Success, AppResources.CacheClearedMessage, AppResources.OK);
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"Failed to clear cache: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert(AppResources.ErrorTitle, string.Format(AppResources.ClearCacheError, ex.Message), AppResources.OK);
         }
         finally
         {
@@ -245,25 +277,25 @@ public partial class SettingsViewModel : BaseViewModel
     async Task AboutAsync()
     {
         await Shell.Current.DisplayAlert(
-            "About",
-            "Vietnamese Lunar Calendar\n\nA beautiful calendar app that displays both Gregorian and Vietnamese Lunar dates with traditional holidays.\n\n© 2025 All rights reserved.",
-            "OK");
+            AppResources.About,
+            AppResources.AboutMessage,
+            AppResources.OK);
     }
 
     [RelayCommand]
     async Task ResetSettingsAsync()
     {
         var confirmed = await Shell.Current.DisplayAlert(
-            "Reset Settings",
-            "Are you sure you want to reset all settings to default values?",
-            "Yes",
-            "No");
+            AppResources.ResetSettingsTitle,
+            AppResources.ResetSettingsMessage,
+            AppResources.Yes,
+            AppResources.No);
 
         if (confirmed)
         {
             Preferences.Clear();
             LoadSettings();
-            await Shell.Current.DisplayAlert("Success", "Settings have been reset to default values", "OK");
+            await Shell.Current.DisplayAlert(AppResources.Success, AppResources.SettingsResetMessage, AppResources.OK);
         }
     }
 

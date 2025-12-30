@@ -1,7 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
+using LunarCalendar.MobileApp.Resources.Strings;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -13,6 +15,15 @@ public partial class HolidayDetailViewModel : BaseViewModel
     public HolidayDetailViewModel(ICalendarService calendarService)
     {
         _calendarService = calendarService;
+
+        // Subscribe to language changes
+        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
+        {
+            if (HolidayOccurrence != null)
+            {
+                UpdateLocalizedStrings();
+            }
+        });
     }
     [ObservableProperty]
     private HolidayOccurrence _holidayOccurrence = null!;
@@ -84,7 +95,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
         if (holidayOccurrence.Holiday.HasLunarDate)
         {
             // This is a lunar-based holiday, use the holiday's lunar date
-            lunarDateText = $"Lunar: {holidayOccurrence.Holiday.LunarDay}/{holidayOccurrence.Holiday.LunarMonth}";
+            lunarDateText = $"{AppResources.LunarLabel} {holidayOccurrence.Holiday.LunarDay}/{holidayOccurrence.Holiday.LunarMonth}";
             if (holidayOccurrence.Holiday.IsLeapMonth)
             {
                 lunarDateText += " (Leap Month)";
@@ -104,7 +115,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
                 if (lunarDate != null)
                 {
-                    lunarDateText = $"Lunar: {lunarDate.LunarDay}/{lunarDate.LunarMonth}";
+                    lunarDateText = $"{AppResources.LunarLabel} {lunarDate.LunarDay}/{lunarDate.LunarMonth}";
                 }
                 else
                 {
@@ -120,17 +131,29 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
         LunarDateFormatted = lunarDateText;
 
-        // Format holiday type
+        // Format holiday type using resources
         HolidayTypeText = holidayOccurrence.Holiday.Type switch
         {
-            HolidayType.MajorHoliday => "Major Holiday",
-            HolidayType.TraditionalFestival => "Traditional Festival",
-            HolidayType.SeasonalCelebration => "Seasonal Celebration",
-            _ => "Holiday"
+            HolidayType.MajorHoliday => AppResources.MajorDay,
+            HolidayType.TraditionalFestival => AppResources.TraditionalFestival,
+            HolidayType.SeasonalCelebration => AppResources.SeasonalCelebration,
+            _ => string.Empty
         };
 
-        // Set animal sign display for Tet holidays (1/1, 1/2, 1/3)
-        AnimalSignDisplay = holidayOccurrence.AnimalSignDisplay;
+        // Set animal sign display for Tet holidays (1/1, 1/2, 1/3) - localized version
+        if (!string.IsNullOrEmpty(holidayOccurrence.AnimalSign) &&
+            holidayOccurrence.Holiday.HasLunarDate &&
+            holidayOccurrence.Holiday.LunarMonth == 1 &&
+            holidayOccurrence.Holiday.LunarDay >= 1 &&
+            holidayOccurrence.Holiday.LunarDay <= 3)
+        {
+            var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(holidayOccurrence.AnimalSign);
+            AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";
+        }
+        else
+        {
+            AnimalSignDisplay = string.Empty;
+        }
 
         // Combine lunar date with animal sign for iOS compatibility (avoid FormattedString)
         LunarDateWithAnimalSign = LunarDateFormatted + AnimalSignDisplay;
@@ -153,5 +176,48 @@ public partial class HolidayDetailViewModel : BaseViewModel
         System.Diagnostics.Debug.WriteLine($"HasDescription: {HasDescription}");
         System.Diagnostics.Debug.WriteLine($"HolidayDescription: '{HolidayDescription}'");
         System.Diagnostics.Debug.WriteLine($"==========================================");
+    }
+
+    private void UpdateLocalizedStrings()
+    {
+        // Update holiday type text
+        HolidayTypeText = HolidayOccurrence.Holiday.Type switch
+        {
+            HolidayType.MajorHoliday => AppResources.MajorDay,
+            HolidayType.TraditionalFestival => AppResources.TraditionalFestival,
+            HolidayType.SeasonalCelebration => AppResources.SeasonalCelebration,
+            _ => string.Empty
+        };
+
+        // Update dates with current culture
+        GregorianDateFormatted = HolidayOccurrence.GregorianDate.ToString("MMMM dd, yyyy (dddd)");
+        GregorianDateMonth = HolidayOccurrence.GregorianDate.ToString("MMM");
+
+        // Update lunar date text and animal sign
+        if (HolidayOccurrence.Holiday.HasLunarDate)
+        {
+            var lunarText = $"{AppResources.LunarLabel} {HolidayOccurrence.Holiday.LunarDay}/{HolidayOccurrence.Holiday.LunarMonth}";
+            if (HolidayOccurrence.Holiday.IsLeapMonth)
+            {
+                lunarText += " (Leap Month)";
+            }
+            LunarDateFormatted = lunarText;
+
+            // Update animal sign with localized version
+            if (!string.IsNullOrEmpty(HolidayOccurrence.AnimalSign) &&
+                HolidayOccurrence.Holiday.LunarMonth == 1 &&
+                HolidayOccurrence.Holiday.LunarDay >= 1 &&
+                HolidayOccurrence.Holiday.LunarDay <= 3)
+            {
+                var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(HolidayOccurrence.AnimalSign);
+                AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";
+            }
+            else
+            {
+                AnimalSignDisplay = string.Empty;
+            }
+
+            LunarDateWithAnimalSign = lunarText + AnimalSignDisplay;
+        }
     }
 }

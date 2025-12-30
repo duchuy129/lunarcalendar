@@ -1,9 +1,12 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
+using LunarCalendar.MobileApp.Resources.Strings;
+using System.Globalization;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -50,10 +53,12 @@ public partial class CalendarViewModel : BaseViewModel
     private ObservableCollection<HolidayOccurrence> _yearHolidays = new();
 
     [ObservableProperty]
-    private ObservableCollection<HolidayOccurrence> _upcomingHolidays = new();
+    private ObservableCollection<LocalizedHolidayOccurrence> _upcomingHolidays = new();
 
     [ObservableProperty]
     private int _upcomingHolidaysDays = 30;
+
+    public string UpcomingHolidaysTitle => string.Format(AppResources.UpcomingHolidaysFormat, UpcomingHolidaysDays);
 
     [ObservableProperty]
     private ObservableCollection<int> _availableYears = new();
@@ -101,7 +106,7 @@ public partial class CalendarViewModel : BaseViewModel
         _connectivityService = connectivityService;
         _syncService = syncService;
 
-        Title = "Vietnamese Calendar";
+        Title = AppResources.Calendar;
         _currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         _selectedYear = DateTime.Today.Year;
 
@@ -112,12 +117,8 @@ public partial class CalendarViewModel : BaseViewModel
             AvailableCalendarYears.Add(year);
         }
 
-        // Initialize month names
-        AvailableMonths = new ObservableCollection<string>
-        {
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        };
+        // Initialize month names from resources
+        LoadMonthNames();
 
         // Set current month/year for pickers
         _selectedCalendarYear = DateTime.Today.Year;
@@ -131,6 +132,36 @@ public partial class CalendarViewModel : BaseViewModel
 
         // Monitor sync status
         _syncService.SyncStatusChanged += OnSyncStatusChanged;
+
+        // Subscribe to language changes
+        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
+        {
+            LoadMonthNames();
+            Title = AppResources.Calendar; // Update title with new language
+            OnPropertyChanged(nameof(UpcomingHolidaysTitle));
+            RefreshLocalizedHolidayProperties();
+            _ = LoadCalendarAsync(); // Refresh today section and all date displays
+        });
+    }
+
+    private void LoadMonthNames()
+    {
+        AvailableMonths = new ObservableCollection<string>
+        {
+            AppResources.January, AppResources.February, AppResources.March,
+            AppResources.April, AppResources.May, AppResources.June,
+            AppResources.July, AppResources.August, AppResources.September,
+            AppResources.October, AppResources.November, AppResources.December
+        };
+    }
+
+    private void RefreshLocalizedHolidayProperties()
+    {
+        // Refresh all localized holiday occurrences
+        foreach (var holiday in UpcomingHolidays)
+        {
+            holiday.RefreshLocalizedProperties();
+        }
     }
 
     private void OnConnectivityChanged(object? sender, bool isConnected)
@@ -308,7 +339,8 @@ public partial class CalendarViewModel : BaseViewModel
             {
                 // Show only Lunar day and Sexagenary year (e.g., "15/12 - Dragon")
                 TodayGregorianDisplay = $"{todayLunar.LunarDay}/{todayLunar.LunarMonth}";
-                TodayLunarDisplay = $"Year of the {todayLunar.AnimalSign}";
+                var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
+                TodayLunarDisplay = $"{AppResources.YearOfThe} {localizedAnimalSign}";
             }
 
             // Create calendar days
@@ -422,8 +454,15 @@ public partial class CalendarViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    async Task ViewHolidayDetailAsync(HolidayOccurrence holidayOccurrence)
+    async Task ViewHolidayDetailAsync(object parameter)
     {
+        HolidayOccurrence? holidayOccurrence = parameter switch
+        {
+            LocalizedHolidayOccurrence localized => localized.HolidayOccurrence,
+            HolidayOccurrence occurrence => occurrence,
+            _ => null
+        };
+
         if (holidayOccurrence == null) return;
 
         var navigationParameter = new Dictionary<string, object>
@@ -484,7 +523,8 @@ public partial class CalendarViewModel : BaseViewModel
                 .OrderBy(h => h.GregorianDate)
                 .ToList();
 
-            UpcomingHolidays = new ObservableCollection<HolidayOccurrence>(upcomingHolidays);
+            UpcomingHolidays = new ObservableCollection<LocalizedHolidayOccurrence>(
+                upcomingHolidays.Select(h => new LocalizedHolidayOccurrence(h)));
         }
         catch (Exception ex)
         {

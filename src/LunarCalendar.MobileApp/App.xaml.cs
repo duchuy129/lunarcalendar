@@ -1,4 +1,7 @@
-﻿namespace LunarCalendar.MobileApp;
+﻿using LunarCalendar.MobileApp.Services;
+using System.Globalization;
+
+namespace LunarCalendar.MobileApp;
 
 public partial class App : Application
 {
@@ -6,7 +9,42 @@ public partial class App : Application
 	{
 		InitializeComponent();
 
+		// Initialize localization BEFORE creating any pages
+		InitializeLocalization();
+
 		MainPage = new AppShell();
+	}
+
+	private void InitializeLocalization()
+	{
+		// Get saved language preference
+		var savedLanguage = Preferences.Get("AppLanguage", string.Empty);
+
+		if (string.IsNullOrEmpty(savedLanguage))
+		{
+			// Use system language if available
+			savedLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+		}
+
+		// Set the culture
+		CultureInfo culture;
+		switch (savedLanguage.ToLower())
+		{
+			case "vi":
+				culture = new CultureInfo("vi-VN");
+				break;
+			case "en":
+			default:
+				culture = new CultureInfo("en-US");
+				break;
+		}
+
+		CultureInfo.CurrentCulture = culture;
+		CultureInfo.CurrentUICulture = culture;
+		CultureInfo.DefaultThreadCurrentCulture = culture;
+		CultureInfo.DefaultThreadCurrentUICulture = culture;
+
+		System.Diagnostics.Debug.WriteLine($"=== App Language Set: {culture.Name} ===");
 	}
 
 	protected override Window CreateWindow(IActivationState? activationState)
