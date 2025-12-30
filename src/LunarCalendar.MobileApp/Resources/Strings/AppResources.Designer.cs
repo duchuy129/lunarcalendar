@@ -928,5 +928,29 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
                 return ResourceManager.GetString("Holiday_NewYearsEve_Description", resourceCulture);
             }
         }
+
+        public static string SelectMonthYear {
+            get {
+                return ResourceManager.GetString("SelectMonthYear", resourceCulture);
+            }
+        }
+
+        public static string SelectMonth {
+            get {
+                return ResourceManager.GetString("SelectMonth", resourceCulture);
+            }
+        }
+
+        public static string SelectYear {
+            get {
+                return ResourceManager.GetString("SelectYear", resourceCulture);
+            }
+        }
+
+        public static string GoToToday {
+            get {
+                return ResourceManager.GetString("GoToToday", resourceCulture);
+            }
+        }
     }
 }

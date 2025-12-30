@@ -82,7 +82,7 @@
 
   <!-- Calendar Page -->
   <data name="Calendar" xml:space="preserve">
-    <value>Lịch</value>
+    <value>Lịch Vạn Niên</value>
   </data>
   <data name="PreviousMonth" xml:space="preserve">
     <value>Tháng trước</value>
@@ -107,6 +107,15 @@
   </data>
   <data name="Go" xml:space="preserve">
     <value>Đi</value>
+  </data>
+  <data name="SelectMonthYear" xml:space="preserve">
+    <value>Chọn Tháng &amp; Năm</value>
+  </data>
+  <data name="SelectMonth" xml:space="preserve">
+    <value>Chọn Tháng</value>
+  </data>
+  <data name="SelectYear" xml:space="preserve">
+    <value>Chọn Năm</value>
   </data>
   <data name="TodayLabel" xml:space="preserve">
     <value>Hôm nay:</value>

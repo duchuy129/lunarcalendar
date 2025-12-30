@@ -108,6 +108,15 @@ Sign up to create and sync events.</value>
   <data name="Go" xml:space="preserve">
     <value>Go</value>
   </data>
+  <data name="SelectMonthYear" xml:space="preserve">
+    <value>Select Month &amp; Year</value>
+  </data>
+  <data name="SelectMonth" xml:space="preserve">
+    <value>Select Month</value>
+  </data>
+  <data name="SelectYear" xml:space="preserve">
+    <value>Select Year</value>
+  </data>
   <data name="TodayLabel" xml:space="preserve">
     <value>Today:</value>
   </data>

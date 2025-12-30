@@ -60,6 +60,11 @@ public partial class CalendarViewModel : BaseViewModel
 
     public string UpcomingHolidaysTitle => string.Format(AppResources.UpcomingHolidaysFormat, UpcomingHolidaysDays);
 
+    partial void OnUpcomingHolidaysDaysChanged(int value)
+    {
+        OnPropertyChanged(nameof(UpcomingHolidaysTitle));
+    }
+
     [ObservableProperty]
     private ObservableCollection<int> _availableYears = new();
 
@@ -455,6 +460,62 @@ public partial class CalendarViewModel : BaseViewModel
         // Update current month based on selected year and month
         CurrentMonth = new DateTime(SelectedCalendarYear, SelectedCalendarMonth, 1);
         await LoadCalendarAsync();
+    }
+
+    [RelayCommand]
+    async Task ShowMonthYearPickerAsync()
+    {
+        _hapticService.PerformClick();
+        
+        // Create a simple action sheet to let user choose what to change
+        var action = await Shell.Current.DisplayActionSheet(
+            AppResources.SelectMonthYear ?? "Select Month & Year",
+            AppResources.Cancel ?? "Cancel",
+            null,
+            AppResources.SelectMonth ?? "Select Month",
+            AppResources.SelectYear ?? "Select Year",
+            AppResources.GoToToday ?? "Go to Today");
+
+        if (action == (AppResources.SelectMonth ?? "Select Month"))
+        {
+            // Show month selection
+            var months = AvailableMonths.ToArray();
+            var selectedMonth = await Shell.Current.DisplayActionSheet(
+                AppResources.SelectMonth ?? "Select Month",
+                AppResources.Cancel ?? "Cancel",
+                null,
+                months);
+            
+            if (selectedMonth != (AppResources.Cancel ?? "Cancel") && !string.IsNullOrEmpty(selectedMonth))
+            {
+                var monthIndex = Array.IndexOf(months, selectedMonth);
+                if (monthIndex >= 0)
+                {
+                    SelectedCalendarMonth = monthIndex + 1;
+                    await JumpToMonthAsync();
+                }
+            }
+        }
+        else if (action == (AppResources.SelectYear ?? "Select Year"))
+        {
+            // Show year selection
+            var years = AvailableCalendarYears.Select(y => y.ToString()).ToArray();
+            var selectedYear = await Shell.Current.DisplayActionSheet(
+                AppResources.SelectYear ?? "Select Year",
+                AppResources.Cancel ?? "Cancel",
+                null,
+                years);
+            
+            if (selectedYear != (AppResources.Cancel ?? "Cancel") && !string.IsNullOrEmpty(selectedYear) && int.TryParse(selectedYear, out var year))
+            {
+                SelectedCalendarYear = year;
+                await JumpToMonthAsync();
+            }
+        }
+        else if (action == (AppResources.GoToToday ?? "Go to Today"))
+        {
+            await TodayAsync();
+        }
     }
 
     [RelayCommand]

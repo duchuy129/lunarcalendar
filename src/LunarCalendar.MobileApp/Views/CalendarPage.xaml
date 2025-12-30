@@ -18,16 +18,16 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <RefreshView Grid.Row="0" Grid.RowSpan="9"
+    <RefreshView Grid.Row="0" Grid.RowSpan="8"
                  IsRefreshing="{Binding IsRefreshing}"
                  Command="{Binding RefreshCommand}"
                  RefreshColor="{DynamicResource Primary}">
         <ScrollView>
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                   BackgroundColor="Transparent">
 
             <!-- Cultural Background Image -->
-        <Image Grid.RowSpan="9"
+        <Image Grid.RowSpan="8"
                Source="cultural_background.png"
                Aspect="AspectFill"
                Opacity="0.08"
@@ -72,12 +72,16 @@
             <StackLayout Grid.Row="0" Grid.Column="1"
                         VerticalOptions="Center"
                         HorizontalOptions="Center">
-                <Label Text="{Binding MonthYearDisplay}"
-                       FontSize="18"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       SemanticProperties.Description="Current month and year"/>
+                <Button Text="{Binding MonthYearDisplay}"
+                        Command="{Binding ShowMonthYearPickerCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        Padding="12,4"
+                        HorizontalOptions="Center"
+                        SemanticProperties.Description="Current month and year - tap to change"
+                        SemanticProperties.Hint="Tap to select a different month and year"/>
 
                 <!-- Online/Offline Status -->
                 <Label Text="{Binding SyncStatus}"
@@ -119,65 +123,8 @@
                              Margin="0,4,0,0"/>
         </Grid>
 
-        <!-- Month/Year Picker -->
-        <Border Grid.Row="1"
-                Margin="12,8"
-                Padding="16,12"
-                Background="{DynamicResource CardGradient}"
-                StrokeThickness="0">
-            <Border.Shadow>
-                <Shadow Brush="Black"
-                        Opacity="0.1"
-                        Radius="12"
-                        Offset="0,4"/>
-            </Border.Shadow>
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="16"/>
-            </Border.StrokeShape>
-        <Grid ColumnDefinitions="Auto,*,Auto,Auto"
-              ColumnSpacing="8"
-              MinimumHeightRequest="56">
-
-            <Label Grid.Column="0"
-                   Text="{ext:Translate Month}"
-                   FontSize="14"
-                   TextColor="{DynamicResource Gray900}"
-                   VerticalOptions="Center"
-                   FontAttributes="Bold"/>
-
-            <Picker Grid.Column="1"
-                    ItemsSource="{Binding AvailableMonths}"
-                    SelectedIndex="{Binding SelectedCalendarMonth, Converter={StaticResource MonthIndexConverter}}"
-                    FontSize="14"
-                    TextColor="{DynamicResource Gray900}"
-                    VerticalOptions="Center"
-                    Margin="0,2,0,2"
-                    SelectedIndexChanged="OnMonthPickerSelectedIndexChanged"/>
-
-            <Picker Grid.Column="2"
-                    ItemsSource="{Binding AvailableCalendarYears}"
-                    SelectedItem="{Binding SelectedCalendarYear}"
-                    FontSize="14"
-                    TextColor="{DynamicResource Gray900}"
-                    VerticalOptions="Center"
-                    WidthRequest="85"
-                    Margin="0,2,0,2"
-                    SelectedIndexChanged="OnYearPickerSelectedIndexChanged"/>
-
-            <Button Grid.Column="3"
-                    Text="{ext:Translate Go}"
-                    Command="{Binding JumpToMonthCommand}"
-                    BackgroundColor="{DynamicResource Primary}"
-                    TextColor="White"
-                    FontSize="14"
-                    Padding="12,8"
-                    CornerRadius="12"
-                    VerticalOptions="Center"/>
-        </Grid>
-        </Border>
-
         <!-- Today's Date Display -->
-        <Border Grid.Row="2"
+        <Border Grid.Row="1"
                 Margin="12,8"
                 Padding="16,12"
                 Background="{DynamicResource TodayGreen}"
@@ -215,7 +162,7 @@
         </Border>
 
         <!-- Day of Week Header -->
-        <Grid Grid.Row="3"
+        <Grid Grid.Row="2"
               BackgroundColor="Transparent"
               Padding="12,8,12,4">
             <Grid.ColumnDefinitions>
@@ -238,7 +185,7 @@
         </Grid>
 
         <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="5"
+        <ActivityIndicator Grid.Row="4"
                           IsVisible="{Binding IsBusy}"
                           IsRunning="{Binding IsBusy}"
                           Color="{DynamicResource Primary}"
@@ -246,7 +193,7 @@
                           HorizontalOptions="Center"/>
 
         <!-- Calendar Grid -->
-        <CollectionView Grid.Row="5"
+        <CollectionView Grid.Row="4"
                        ItemsSource="{Binding CalendarDays}"
                        IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                        SelectionMode="None"
@@ -370,7 +317,7 @@
         </CollectionView>
 
         <!-- Upcoming Holidays Section -->
-        <VerticalStackLayout Grid.Row="6"
+        <VerticalStackLayout Grid.Row="5"
                             BackgroundColor="Transparent"
                             Padding="16,12">
 
@@ -491,7 +438,7 @@
         </VerticalStackLayout>
 
         <!-- Year Holidays Section -->
-        <Border Grid.Row="7"
+        <Border Grid.Row="6"
                 Margin="12,8"
                 StrokeThickness="0"
                 Background="{DynamicResource CardGradient}">
@@ -552,7 +499,6 @@
                     <Picker Grid.Column="1"
                             ItemsSource="{Binding AvailableYears}"
                             SelectedItem="{Binding SelectedYear}"
-                            SelectedIndexChanged="OnYearPickerSelectedIndexChanged"
                             FontSize="16"
                             FontAttributes="Bold"
                             TextColor="{DynamicResource Primary}"
