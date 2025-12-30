@@ -47,11 +47,8 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
 
             var lunarText = $"{AppResources.LunarLabel} {Holiday.LunarDay}/{Holiday.LunarMonth}";
 
-            // Add animal sign for Tet holidays (1/1, 1/2, 1/3)
-            if (!string.IsNullOrEmpty(AnimalSign) &&
-                Holiday.LunarMonth == 1 &&
-                Holiday.LunarDay >= 1 &&
-                Holiday.LunarDay <= 3)
+            // Add animal sign for all lunar holidays
+            if (!string.IsNullOrEmpty(AnimalSign))
             {
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(AnimalSign);
                 lunarText += $" - {AppResources.YearOfThe} {localizedAnimalSign}";

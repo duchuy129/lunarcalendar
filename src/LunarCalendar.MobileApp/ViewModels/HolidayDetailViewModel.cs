@@ -142,12 +142,9 @@ public partial class HolidayDetailViewModel : BaseViewModel
             _ => string.Empty
         };
 
-        // Set animal sign display for Tet holidays (1/1, 1/2, 1/3) - localized version
+        // Set animal sign display for all lunar holidays - localized version
         if (!string.IsNullOrEmpty(holidayOccurrence.AnimalSign) &&
-            holidayOccurrence.Holiday.HasLunarDate &&
-            holidayOccurrence.Holiday.LunarMonth == 1 &&
-            holidayOccurrence.Holiday.LunarDay >= 1 &&
-            holidayOccurrence.Holiday.LunarDay <= 3)
+            holidayOccurrence.Holiday.HasLunarDate)
         {
             var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(holidayOccurrence.AnimalSign);
             AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";
@@ -218,11 +215,8 @@ public partial class HolidayDetailViewModel : BaseViewModel
             }
             LunarDateFormatted = lunarText;
 
-            // Update animal sign with localized version
-            if (!string.IsNullOrEmpty(HolidayOccurrence.AnimalSign) &&
-                HolidayOccurrence.Holiday.LunarMonth == 1 &&
-                HolidayOccurrence.Holiday.LunarDay >= 1 &&
-                HolidayOccurrence.Holiday.LunarDay <= 3)
+            // Update animal sign with localized version for all lunar holidays
+            if (!string.IsNullOrEmpty(HolidayOccurrence.AnimalSign))
             {
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(HolidayOccurrence.AnimalSign);
                 AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";

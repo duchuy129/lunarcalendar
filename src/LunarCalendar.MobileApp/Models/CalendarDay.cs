@@ -1,4 +1,5 @@
 using LunarCalendar.Core.Models;
+using LunarCalendar.MobileApp.Services;
 
 namespace LunarCalendar.MobileApp.Models;
 
@@ -24,4 +25,11 @@ public class CalendarDay
     public Color HolidayColor => Holiday != null
         ? Color.FromArgb(Holiday.ColorHex)
         : Colors.Transparent;
+
+    // Localized holiday name
+    public string HolidayName => Holiday != null
+        ? LocalizationHelper.GetLocalizedHolidayName(
+            Holiday.NameResourceKey,
+            Holiday.Name)
+        : string.Empty;
 }

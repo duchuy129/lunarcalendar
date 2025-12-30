@@ -325,6 +325,7 @@
                                   TextColor="{DynamicResource LunarRed}"
                                   HorizontalOptions="Center"
                                   LineBreakMode="NoWrap"
+                                  MinimumHeightRequest="14"
                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ShowLunarDates}">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label"
@@ -340,13 +341,13 @@
                                     <DataTrigger TargetType="Label"
                                                Binding="{Binding LunarDateDisplay}"
                                                Value="">
-                                        <Setter Property="IsVisible" Value="False"/>
+                                        <Setter Property="Opacity" Value="0"/>
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
 
                             <!-- Holiday Name (if exists) -->
-                            <Label Text="{Binding Holiday.Name}"
+                            <Label Text="{Binding HolidayName}"
                                   FontSize="8"
                                   FontAttributes="Bold"
                                   TextColor="{Binding HolidayColor}"
