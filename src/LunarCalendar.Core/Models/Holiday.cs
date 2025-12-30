@@ -79,5 +79,6 @@ public enum HolidayType
 {
     MajorHoliday = 1,
     TraditionalFestival = 2,
-    SeasonalCelebration = 3
+    SeasonalCelebration = 3,
+    LunarSpecialDay = 4  // For 1st and 15th of lunar months (Mùng 1 and Rằm)
 }

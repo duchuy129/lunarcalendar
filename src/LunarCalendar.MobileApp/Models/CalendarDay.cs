@@ -21,10 +21,14 @@ public class CalendarDay
     // Holiday indicator
     public bool HasHoliday => Holiday != null;
 
-    // Holiday color for background
+    // Lunar special day indicator (1st and 15th of lunar month)
+    public bool IsLunarSpecialDay => LunarInfo != null && 
+        (LunarInfo.LunarDay == 1 || LunarInfo.LunarDay == 15);
+
+    // Priority: Show holiday color if exists, otherwise show lunar special day color
     public Color HolidayColor => Holiday != null
         ? Color.FromArgb(Holiday.ColorHex)
-        : Colors.Transparent;
+        : (IsLunarSpecialDay ? Color.FromArgb("#4169E1") : Colors.Transparent);
 
     // Localized holiday name
     public string HolidayName => Holiday != null

@@ -54,6 +54,9 @@ public class HolidayCalculationService : IHolidayCalculationService
             }
         }
 
+        // Add lunar special days (1st and 15th of each lunar month)
+        AddLunarSpecialDays(occurrences, year);
+
         return occurrences.OrderBy(h => h.GregorianDate).ToList();
     }
 
@@ -142,5 +145,80 @@ public class HolidayCalculationService : IHolidayCalculationService
         var monthHolidays = GetHolidaysForMonth(date.Year, date.Month);
         var occurrence = monthHolidays.FirstOrDefault(h => h.GregorianDate.Date == date.Date);
         return occurrence?.Holiday;
+    }
+
+    /// <summary>
+    /// Adds lunar special days (1st and 15th of each lunar month) to the occurrences list
+    /// </summary>
+    private void AddLunarSpecialDays(List<HolidayOccurrence> occurrences, int targetGregorianYear)
+    {
+        // For each month of the lunar year
+        for (int lunarMonth = 1; lunarMonth <= 12; lunarMonth++)
+        {
+            // Try current lunar year
+            TryAddLunarSpecialDay(occurrences, targetGregorianYear, lunarMonth, 1, targetGregorianYear);
+            TryAddLunarSpecialDay(occurrences, targetGregorianYear, lunarMonth, 15, targetGregorianYear);
+
+            // Try previous lunar year (for dates that fall early in Gregorian year)
+            TryAddLunarSpecialDay(occurrences, targetGregorianYear - 1, lunarMonth, 1, targetGregorianYear);
+            TryAddLunarSpecialDay(occurrences, targetGregorianYear - 1, lunarMonth, 15, targetGregorianYear);
+        }
+    }
+
+    /// <summary>
+    /// Attempts to add a lunar special day (1st or 15th) to the occurrences list
+    /// </summary>
+    private void TryAddLunarSpecialDay(List<HolidayOccurrence> occurrences, int lunarYear, int lunarMonth, int lunarDay, int targetGregorianYear)
+    {
+        try
+        {
+            var gregorianDate = _lunarCalculationService.ConvertToGregorian(lunarYear, lunarMonth, lunarDay, false);
+
+            // Only add if it falls in the target Gregorian year
+            if (gregorianDate.Year == targetGregorianYear)
+            {
+                // Check if this date already has a regular holiday (avoid duplicates)
+                var existingHoliday = occurrences.FirstOrDefault(o => 
+                    o.GregorianDate.Date == gregorianDate.Date &&
+                    o.Holiday.Type != HolidayType.LunarSpecialDay);
+
+                // Only add if there's no existing major/traditional/seasonal holiday on this date
+                if (existingHoliday == null)
+                {
+                    var lunarInfo = _lunarCalculationService.ConvertToLunar(gregorianDate);
+
+                    // Create a holiday instance for this lunar special day
+                    var holiday = new Holiday
+                    {
+                        // Use negative IDs to avoid conflicts with regular holidays
+                        Id = -(lunarMonth * 100 + lunarDay),
+                        Name = lunarDay == 1 ? "Mùng 1" : "Rằm",
+                        Description = lunarDay == 1 
+                            ? $"First day of lunar month {lunarMonth}" 
+                            : $"Full moon day of lunar month {lunarMonth}",
+                        NameResourceKey = lunarDay == 1 ? "LunarSpecialDay_FirstDay_Name" : "LunarSpecialDay_FullMoon_Name",
+                        DescriptionResourceKey = lunarDay == 1 ? "LunarSpecialDay_FirstDay_Description" : "LunarSpecialDay_FullMoon_Description",
+                        LunarMonth = lunarMonth,
+                        LunarDay = lunarDay,
+                        IsLeapMonth = false,
+                        Type = HolidayType.LunarSpecialDay,
+                        ColorHex = "#4169E1",  // Royal Blue - distinct from other holiday colors
+                        IsPublicHoliday = false,
+                        Culture = "Vietnamese"
+                    };
+
+                    occurrences.Add(new HolidayOccurrence
+                    {
+                        Holiday = holiday,
+                        GregorianDate = gregorianDate,
+                        AnimalSign = lunarInfo.AnimalSign
+                    });
+                }
+            }
+        }
+        catch (Exception)
+        {
+            // Skip if conversion fails (e.g., invalid lunar date)
+        }
     }
 }

@@ -699,6 +699,36 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
             }
         }
 
+        public static string LunarSpecialDay {
+            get {
+                return ResourceManager.GetString("LunarSpecialDay", resourceCulture);
+            }
+        }
+
+        public static string LunarSpecialDay_FirstDay_Name {
+            get {
+                return ResourceManager.GetString("LunarSpecialDay_FirstDay_Name", resourceCulture);
+            }
+        }
+
+        public static string LunarSpecialDay_FirstDay_Description {
+            get {
+                return ResourceManager.GetString("LunarSpecialDay_FirstDay_Description", resourceCulture);
+            }
+        }
+
+        public static string LunarSpecialDay_FullMoon_Name {
+            get {
+                return ResourceManager.GetString("LunarSpecialDay_FullMoon_Name", resourceCulture);
+            }
+        }
+
+        public static string LunarSpecialDay_FullMoon_Description {
+            get {
+                return ResourceManager.GetString("LunarSpecialDay_FullMoon_Description", resourceCulture);
+            }
+        }
+
         // Holiday Names
         public static string Holiday_TetNguyenDan1_Name {
             get {

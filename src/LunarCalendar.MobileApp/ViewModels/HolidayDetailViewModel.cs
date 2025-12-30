@@ -139,6 +139,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
             HolidayType.MajorHoliday => AppResources.MajorDay,
             HolidayType.TraditionalFestival => AppResources.TraditionalFestival,
             HolidayType.SeasonalCelebration => AppResources.SeasonalCelebration,
+            HolidayType.LunarSpecialDay => AppResources.LunarSpecialDay,
             _ => string.Empty
         };
 
@@ -198,6 +199,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
             HolidayType.MajorHoliday => AppResources.MajorDay,
             HolidayType.TraditionalFestival => AppResources.TraditionalFestival,
             HolidayType.SeasonalCelebration => AppResources.SeasonalCelebration,
+            HolidayType.LunarSpecialDay => AppResources.LunarSpecialDay,
             _ => string.Empty
         };
 

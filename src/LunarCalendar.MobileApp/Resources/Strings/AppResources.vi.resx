@@ -607,4 +607,21 @@
   <data name="Holiday_NewYearsEve_Description" xml:space="preserve">
     <value>Đêm giao thừa - Đoàn tụ gia đình và đón năm mới</value>
   </data>
+
+  <!-- Lunar Special Days (Mùng 1 và Rằm) -->
+  <data name="LunarSpecialDay_FirstDay_Name" xml:space="preserve">
+    <value>Mùng 1</value>
+  </data>
+  <data name="LunarSpecialDay_FirstDay_Description" xml:space="preserve">
+    <value>Ngày đầu tháng âm lịch - Thời điểm khởi đầu mới và những khởi sự tốt lành</value>
+  </data>
+  <data name="LunarSpecialDay_FullMoon_Name" xml:space="preserve">
+    <value>Rằm</value>
+  </data>
+  <data name="LunarSpecialDay_FullMoon_Description" xml:space="preserve">
+    <value>Ngày 15 tháng âm lịch - Ngày trăng tròn, truyền thống là thời gian cầu nguyện và dâng lễ</value>
+  </data>
+  <data name="LunarSpecialDay" xml:space="preserve">
+    <value>Ngày Đặc Biệt Âm Lịch</value>
+  </data>
 </root>

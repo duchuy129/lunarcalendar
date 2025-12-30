@@ -607,4 +607,21 @@ A beautiful calendar app that displays both Gregorian and Vietnamese Lunar dates
   <data name="Holiday_NewYearsEve_Description" xml:space="preserve">
     <value>The eve of Lunar New Year - Family reunion and welcoming the new year</value>
   </data>
+
+  <!-- Lunar Special Days (1st and 15th of each lunar month) -->
+  <data name="LunarSpecialDay_FirstDay_Name" xml:space="preserve">
+    <value>First Day</value>
+  </data>
+  <data name="LunarSpecialDay_FirstDay_Description" xml:space="preserve">
+    <value>The first day of the lunar month - A time for new beginnings and fresh starts</value>
+  </data>
+  <data name="LunarSpecialDay_FullMoon_Name" xml:space="preserve">
+    <value>Full Moon Day</value>
+  </data>
+  <data name="LunarSpecialDay_FullMoon_Description" xml:space="preserve">
+    <value>The 15th day of the lunar month - Full moon day, traditionally a time for prayers and offerings</value>
+  </data>
+  <data name="LunarSpecialDay" xml:space="preserve">
+    <value>Lunar Special Day</value>
+  </data>
 </root>

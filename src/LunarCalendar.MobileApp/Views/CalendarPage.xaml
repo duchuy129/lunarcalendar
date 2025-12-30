@@ -241,6 +241,18 @@
                                 <Setter Property="Stroke" Value="{Binding HolidayColor}"/>
                                 <Setter Property="StrokeThickness" Value="2"/>
                             </DataTrigger>
+                            <DataTrigger TargetType="Border"
+                                       Binding="{Binding IsLunarSpecialDay}"
+                                       Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#F0F8FF" Offset="0.0"/>
+                                            <GradientStop Color="White" Offset="1.0"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
                         </Border.Triggers>
 
                         <VerticalStackLayout Spacing="2"
