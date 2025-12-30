@@ -56,6 +56,9 @@ public partial class CalendarViewModel : BaseViewModel
     private ObservableCollection<LocalizedHolidayOccurrence> _upcomingHolidays = new();
 
     [ObservableProperty]
+    private bool _isLoadingHolidays = false;
+
+    [ObservableProperty]
     private int _upcomingHolidaysDays = 30;
 
     public string UpcomingHolidaysTitle => string.Format(AppResources.UpcomingHolidaysFormat, UpcomingHolidaysDays);
@@ -95,6 +98,10 @@ public partial class CalendarViewModel : BaseViewModel
 
     [ObservableProperty]
     private double _calendarHeight = 380;
+
+    // Synchronization for collection updates
+    private readonly SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
+    private bool _isUpdatingHolidays = false;
 
     public CalendarViewModel(
         ICalendarService calendarService,
@@ -163,14 +170,19 @@ public partial class CalendarViewModel : BaseViewModel
 
     private void RefreshLocalizedHolidayProperties()
     {
+        // Create snapshots to avoid enumeration issues during concurrent updates
+        // This is defensive programming to prevent rare race conditions
+        var upcomingSnapshot = UpcomingHolidays.ToList();
+        var yearSnapshot = YearHolidays.ToList();
+        
         // Refresh all localized holiday occurrences in upcoming holidays
-        foreach (var holiday in UpcomingHolidays)
+        foreach (var holiday in upcomingSnapshot)
         {
             holiday.RefreshLocalizedProperties();
         }
 
         // Refresh all localized holiday occurrences in year holidays
-        foreach (var holiday in YearHolidays)
+        foreach (var holiday in yearSnapshot)
         {
             holiday.RefreshLocalizedProperties();
         }
@@ -221,15 +233,20 @@ public partial class CalendarViewModel : BaseViewModel
         }
     }
 
-    public async void RefreshSettings()
+    public async Task RefreshSettingsAsync()
     {
+        // CRITICAL: This MUST be async Task, not async void
+        // iOS crashes if collection updates aren't complete before page renders
+        
         // Refresh settings when returning to calendar page
         ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
         ShowLunarDates = SettingsViewModel.GetShowLunarDates();
         var newDays = SettingsViewModel.GetUpcomingHolidaysDays();
+        
         if (UpcomingHolidaysDays != newDays)
         {
             UpcomingHolidaysDays = newDays;
+            // MUST await to ensure collection update completes before page renders
             await LoadUpcomingHolidaysAsync();
         }
     }
@@ -573,8 +590,27 @@ public partial class CalendarViewModel : BaseViewModel
 
     private async Task LoadUpcomingHolidaysAsync()
     {
+        // Prevent concurrent updates that can cause iOS crashes
+        if (_isUpdatingHolidays)
+        {
+            System.Diagnostics.Debug.WriteLine("=== Skipping concurrent holiday update ===");
+            return;
+        }
+
+        await _updateSemaphore.WaitAsync();
+        
         try
         {
+            _isUpdatingHolidays = true;
+            
+            System.Diagnostics.Debug.WriteLine($"=== Loading holidays for {UpcomingHolidaysDays} days ===");
+            
+            // CRITICAL iOS FIX: Hide CollectionView BEFORE modifying collection
+            IsLoadingHolidays = true;
+            
+            // Small delay to ensure UI has hidden the CollectionView
+            await Task.Delay(50);
+            
             var today = DateTime.Today;
             var endDate = today.AddDays(UpcomingHolidaysDays);
             var upcomingHolidays = new List<HolidayOccurrence>();
@@ -595,12 +631,52 @@ public partial class CalendarViewModel : BaseViewModel
                 .OrderBy(h => h.GregorianDate)
                 .ToList();
 
-            UpcomingHolidays = new ObservableCollection<LocalizedHolidayOccurrence>(
-                upcomingHolidays.Select(h => new LocalizedHolidayOccurrence(h)));
+            System.Diagnostics.Debug.WriteLine($"=== Found {upcomingHolidays.Count} holidays, current collection has {UpcomingHolidays.Count} ===");
+
+            // Update collection on UI thread
+            if (Application.Current?.Dispatcher != null)
+            {
+                await Application.Current.Dispatcher.DispatchAsync(() =>
+                {
+                    try
+                    {
+                        System.Diagnostics.Debug.WriteLine("=== Updating collection on UI thread ===");
+                        
+                        // Simple Clear/Add since CollectionView is hidden
+                        UpcomingHolidays.Clear();
+                        
+                        foreach (var holiday in upcomingHolidays)
+                        {
+                            UpcomingHolidays.Add(new LocalizedHolidayOccurrence(holiday));
+                        }
+                        
+                        System.Diagnostics.Debug.WriteLine($"=== Collection updated: {UpcomingHolidays.Count} items ===");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"=== Error updating collection: {ex.Message} ===");
+                        System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+                    }
+                });
+            }
+            
+            // Small delay to ensure collection binding completes
+            await Task.Delay(50);
+            
+            // Show CollectionView again
+            IsLoadingHolidays = false;
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error loading upcoming holidays: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"=== Error loading upcoming holidays: {ex.Message} ===");
+            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+            IsLoadingHolidays = false;
+        }
+        finally
+        {
+            System.Diagnostics.Debug.WriteLine("=== Releasing update semaphore ===");
+            _isUpdatingHolidays = false;
+            _updateSemaphore.Release();
         }
     }
 }

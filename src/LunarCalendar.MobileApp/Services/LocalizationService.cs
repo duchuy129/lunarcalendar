@@ -15,7 +15,7 @@ public class LocalizationService : ILocalizationService
             "LunarCalendar.MobileApp.Resources.Strings.AppResources",
             typeof(LocalizationService).Assembly);
 
-        // Load saved language preference or use system default
+        // Load saved language preference or default to Vietnamese
         var savedLanguage = Preferences.Get(LanguagePreferenceKey, string.Empty);
         if (!string.IsNullOrEmpty(savedLanguage))
         {
@@ -23,9 +23,8 @@ public class LocalizationService : ILocalizationService
         }
         else
         {
-            // Use system language if available, otherwise default to English
-            var systemLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            SetLanguage(systemLanguage);
+            // Default to Vietnamese
+            SetLanguage("vi");
         }
     }
 
@@ -62,12 +61,12 @@ public class LocalizationService : ILocalizationService
 
             switch (languageCode.ToLower())
             {
-                case "vi":
-                    culture = new CultureInfo("vi-VN");
-                    break;
                 case "en":
-                default:
                     culture = new CultureInfo("en-US");
+                    break;
+                case "vi":
+                default:
+                    culture = new CultureInfo("vi-VN");
                     break;
             }
 
@@ -87,8 +86,8 @@ public class LocalizationService : ILocalizationService
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error setting language: {ex.Message}");
-            // Fallback to English
-            var fallbackCulture = new CultureInfo("en-US");
+            // Fallback to Vietnamese
+            var fallbackCulture = new CultureInfo("vi-VN");
             CultureInfo.CurrentCulture = fallbackCulture;
             CultureInfo.CurrentUICulture = fallbackCulture;
         }
@@ -109,6 +108,6 @@ public class LocalizationService : ILocalizationService
 
     public static string GetSavedLanguage()
     {
-        return Preferences.Get(LanguagePreferenceKey, "en");
+        return Preferences.Get(LanguagePreferenceKey, "vi");
     }
 }

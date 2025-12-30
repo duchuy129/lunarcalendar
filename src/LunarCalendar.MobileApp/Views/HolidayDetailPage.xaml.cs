@@ -14,8 +14,8 @@ public partial class HolidayDetailPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    public void SetHoliday(HolidayOccurrence holidayOccurrence)
+    public async void SetHoliday(HolidayOccurrence holidayOccurrence)
     {
-        _viewModel.Initialize(holidayOccurrence);
+        await _viewModel.InitializeAsync(holidayOccurrence);
     }
 }

@@ -22,20 +22,20 @@ public partial class App : Application
 
 		if (string.IsNullOrEmpty(savedLanguage))
 		{
-			// Use system language if available
-			savedLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+			// Default to Vietnamese
+			savedLanguage = "vi";
 		}
 
 		// Set the culture
 		CultureInfo culture;
 		switch (savedLanguage.ToLower())
 		{
-			case "vi":
-				culture = new CultureInfo("vi-VN");
-				break;
 			case "en":
-			default:
 				culture = new CultureInfo("en-US");
+				break;
+			case "vi":
+			default:
+				culture = new CultureInfo("vi-VN");
 				break;
 		}
 

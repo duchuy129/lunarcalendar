@@ -69,10 +69,10 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
     public HolidayOccurrence Holiday
     {
-        set => Initialize(value);
+        set => _ = InitializeAsync(value); // Fire and forget for property setter
     }
 
-    public async void Initialize(HolidayOccurrence holidayOccurrence)
+    public async Task InitializeAsync(HolidayOccurrence holidayOccurrence)
     {
         HolidayOccurrence = holidayOccurrence;
         Title = LocalizationHelper.GetLocalizedHolidayName(

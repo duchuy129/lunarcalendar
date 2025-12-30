@@ -336,9 +336,16 @@
                    Margin="0,20,0,20"
                    IsVisible="{Binding UpcomingHolidays.Count, Converter={StaticResource IntToBoolConverter}, ConverterParameter=inverse}"/>
 
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoadingHolidays}"
+                              IsVisible="{Binding IsLoadingHolidays}"
+                              Color="{DynamicResource Primary}"
+                              HeightRequest="50"
+                              Margin="0,20,0,20"/>
+
             <!-- Upcoming Holidays List -->
             <CollectionView ItemsSource="{Binding UpcomingHolidays}"
-                           IsVisible="{Binding UpcomingHolidays.Count, Converter={StaticResource IntToBoolConverter}}">
+                           IsVisible="{Binding IsLoadingHolidays, Converter={StaticResource InvertedBoolConverter}}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="16"
