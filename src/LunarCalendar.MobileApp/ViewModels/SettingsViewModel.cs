@@ -89,6 +89,12 @@ public partial class SettingsViewModel : BaseViewModel
         {
             _syncService.SyncStatusChanged += OnSyncStatusChanged;
         }
+
+        // Subscribe to language changes
+        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
+        {
+            Title = AppResources.Settings; // Update title with new language
+        });
     }
 
     private void OnConnectivityChanged(object? sender, bool isConnected)

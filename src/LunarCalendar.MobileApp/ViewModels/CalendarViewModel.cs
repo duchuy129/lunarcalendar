@@ -134,13 +134,14 @@ public partial class CalendarViewModel : BaseViewModel
         _syncService.SyncStatusChanged += OnSyncStatusChanged;
 
         // Subscribe to language changes
-        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
+        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, async (r, m) =>
         {
             LoadMonthNames();
             Title = AppResources.Calendar; // Update title with new language
             OnPropertyChanged(nameof(UpcomingHolidaysTitle));
             RefreshLocalizedHolidayProperties();
-            _ = LoadCalendarAsync(); // Refresh today section and all date displays
+            await LoadCalendarAsync(); // Refresh today section and all date displays
+            await LoadUpcomingHolidaysAsync(); // Refresh upcoming holidays to update localized strings
         });
     }
 
@@ -346,7 +347,10 @@ public partial class CalendarViewModel : BaseViewModel
                 // Show only Lunar day and Sexagenary year (e.g., "15/12 - Dragon")
                 TodayGregorianDisplay = $"{todayLunar.LunarDay}/{todayLunar.LunarMonth}";
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
-                TodayLunarDisplay = $"{AppResources.YearOfThe} {localizedAnimalSign}";
+                var yearOfTheText = AppResources.YearOfThe;
+                TodayLunarDisplay = $"{yearOfTheText} {localizedAnimalSign}";
+                
+                System.Diagnostics.Debug.WriteLine($"=== Today Display Updated: Culture={CultureInfo.CurrentUICulture.Name}, YearOfThe={yearOfTheText}, Animal={localizedAnimalSign} ===");
             }
 
             // Create calendar days
