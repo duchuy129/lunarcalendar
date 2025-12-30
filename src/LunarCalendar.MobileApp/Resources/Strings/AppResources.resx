@@ -449,4 +449,153 @@ A beautiful calendar app that displays both Gregorian and Vietnamese Lunar dates
   <data name="SeasonalCelebration" xml:space="preserve">
     <value>Seasonal Celebration</value>
   </data>
+
+  <!-- Holiday Names and Descriptions -->
+  <!-- Tết Nguyên Đán (3 days) -->
+  <data name="Holiday_TetNguyenDan1_Name" xml:space="preserve">
+    <value>Lunar New Year (Day 1)</value>
+  </data>
+  <data name="Holiday_TetNguyenDan1_Description" xml:space="preserve">
+    <value>Lunar New Year - The most important Vietnamese holiday celebrating the beginning of spring and the new lunar year</value>
+  </data>
+  <data name="Holiday_TetNguyenDan2_Name" xml:space="preserve">
+    <value>Lunar New Year (Day 2)</value>
+  </data>
+  <data name="Holiday_TetNguyenDan2_Description" xml:space="preserve">
+    <value>Second day of Lunar New Year - Continuation of family celebrations and ancestral worship</value>
+  </data>
+  <data name="Holiday_TetNguyenDan3_Name" xml:space="preserve">
+    <value>Lunar New Year (Day 3)</value>
+  </data>
+  <data name="Holiday_TetNguyenDan3_Description" xml:space="preserve">
+    <value>Third day of Lunar New Year - Final day of the main Tet celebrations</value>
+  </data>
+
+  <!-- Giỗ Tổ Hùng Vương -->
+  <data name="Holiday_HungKings_Name" xml:space="preserve">
+    <value>Hung Kings' Commemoration Day</value>
+  </data>
+  <data name="Holiday_HungKings_Description" xml:space="preserve">
+    <value>Commemorating the Hung Kings, the legendary founders of Vietnam</value>
+  </data>
+
+  <!-- Tết Dương Lịch -->
+  <data name="Holiday_NewYear_Name" xml:space="preserve">
+    <value>New Year's Day</value>
+  </data>
+  <data name="Holiday_NewYear_Description" xml:space="preserve">
+    <value>International New Year's Day - The first day of the Gregorian calendar year</value>
+  </data>
+
+  <!-- Ngày Giải Phóng Miền Nam -->
+  <data name="Holiday_ReunificationDay_Name" xml:space="preserve">
+    <value>Reunification Day</value>
+  </data>
+  <data name="Holiday_ReunificationDay_Description" xml:space="preserve">
+    <value>Celebrating the reunification of Vietnam on April 30, 1975</value>
+  </data>
+
+  <!-- Ngày Quốc Tế Lao Động -->
+  <data name="Holiday_LaborDay_Name" xml:space="preserve">
+    <value>International Labor Day</value>
+  </data>
+  <data name="Holiday_LaborDay_Description" xml:space="preserve">
+    <value>Honoring workers and the labor movement worldwide</value>
+  </data>
+
+  <!-- Quốc Khánh -->
+  <data name="Holiday_NationalDay_Name" xml:space="preserve">
+    <value>National Day</value>
+  </data>
+  <data name="Holiday_NationalDay_Description" xml:space="preserve">
+    <value>Celebrating Vietnam's Declaration of Independence on September 2, 1945</value>
+  </data>
+
+  <!-- Tết Nguyên Tiêu -->
+  <data name="Holiday_LanternFestival_Name" xml:space="preserve">
+    <value>Lantern Festival</value>
+  </data>
+  <data name="Holiday_LanternFestival_Description" xml:space="preserve">
+    <value>First full moon of the lunar year - A time for lantern displays and family gatherings</value>
+  </data>
+
+  <!-- Tết Hàn Thực -->
+  <data name="Holiday_ColdFood_Name" xml:space="preserve">
+    <value>Cold Food Festival</value>
+  </data>
+  <data name="Holiday_ColdFood_Description" xml:space="preserve">
+    <value>Traditional festival honoring ancestors, observed by eating cold food</value>
+  </data>
+
+  <!-- Tết Đoan Ngọ -->
+  <data name="Holiday_DragonBoat_Name" xml:space="preserve">
+    <value>Dragon Boat Festival</value>
+  </data>
+  <data name="Holiday_DragonBoat_Description" xml:space="preserve">
+    <value>Festival to ward off evil spirits and diseases, celebrated with special foods</value>
+  </data>
+
+  <!-- Vu Lan -->
+  <data name="Holiday_Ullambana_Name" xml:space="preserve">
+    <value>Vu Lan Festival</value>
+  </data>
+  <data name="Holiday_Ullambana_Description" xml:space="preserve">
+    <value>Buddhist festival honoring parents and ancestors, especially mothers</value>
+  </data>
+
+  <!-- Tết Trung Thu -->
+  <data name="Holiday_MidAutumn_Name" xml:space="preserve">
+    <value>Mid-Autumn Festival</value>
+  </data>
+  <data name="Holiday_MidAutumn_Description" xml:space="preserve">
+    <value>Children's festival celebrating the harvest moon with lanterns and mooncakes</value>
+  </data>
+
+  <!-- Tết Trùng Cửu -->
+  <data name="Holiday_DoubleNinth_Name" xml:space="preserve">
+    <value>Double Ninth Festival</value>
+  </data>
+  <data name="Holiday_DoubleNinth_Description" xml:space="preserve">
+    <value>Traditional festival on the ninth day of the ninth lunar month, honoring elders</value>
+  </data>
+
+  <!-- Rằm Tháng Giêng -->
+  <data name="Holiday_FirstFullMoon_Name" xml:space="preserve">
+    <value>First Full Moon</value>
+  </data>
+  <data name="Holiday_FirstFullMoon_Description" xml:space="preserve">
+    <value>First full moon of the lunar year - A time for lantern displays and family gatherings</value>
+  </data>
+
+  <!-- Tết Thanh Minh -->
+  <data name="Holiday_TombSweeping_Name" xml:space="preserve">
+    <value>Tomb Sweeping Festival</value>
+  </data>
+  <data name="Holiday_TombSweeping_Description" xml:space="preserve">
+    <value>Time to visit and clean ancestral graves, honoring deceased family members</value>
+  </data>
+
+  <!-- Rằm Tháng Bảy -->
+  <data name="Holiday_GhostFestival_Name" xml:space="preserve">
+    <value>Ghost Festival</value>
+  </data>
+  <data name="Holiday_GhostFestival_Description" xml:space="preserve">
+    <value>Festival for wandering souls and ancestral spirits during the seventh lunar month</value>
+  </data>
+
+  <!-- Tết Ông Công Ông Táo -->
+  <data name="Holiday_KitchenGods_Name" xml:space="preserve">
+    <value>Kitchen Gods Festival</value>
+  </data>
+  <data name="Holiday_KitchenGods_Description" xml:space="preserve">
+    <value>Sending the Kitchen Gods to heaven to report on the family's year</value>
+  </data>
+
+  <!-- Giao Thừa -->
+  <data name="Holiday_NewYearsEve_Name" xml:space="preserve">
+    <value>Lunar New Year's Eve</value>
+  </data>
+  <data name="Holiday_NewYearsEve_Description" xml:space="preserve">
+    <value>The eve of Lunar New Year - Family reunion and welcoming the new year</value>
+  </data>
 </root>

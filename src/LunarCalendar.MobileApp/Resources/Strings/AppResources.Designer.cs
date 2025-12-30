@@ -698,5 +698,235 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
                 return ResourceManager.GetString("SeasonalCelebration", resourceCulture);
             }
         }
+
+        // Holiday Names
+        public static string Holiday_TetNguyenDan1_Name {
+            get {
+                return ResourceManager.GetString("Holiday_TetNguyenDan1_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_TetNguyenDan2_Name {
+            get {
+                return ResourceManager.GetString("Holiday_TetNguyenDan2_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_TetNguyenDan3_Name {
+            get {
+                return ResourceManager.GetString("Holiday_TetNguyenDan3_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_HungKings_Name {
+            get {
+                return ResourceManager.GetString("Holiday_HungKings_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_NewYear_Name {
+            get {
+                return ResourceManager.GetString("Holiday_NewYear_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_ReunificationDay_Name {
+            get {
+                return ResourceManager.GetString("Holiday_ReunificationDay_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_LaborDay_Name {
+            get {
+                return ResourceManager.GetString("Holiday_LaborDay_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_NationalDay_Name {
+            get {
+                return ResourceManager.GetString("Holiday_NationalDay_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_LanternFestival_Name {
+            get {
+                return ResourceManager.GetString("Holiday_LanternFestival_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_ColdFood_Name {
+            get {
+                return ResourceManager.GetString("Holiday_ColdFood_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_DragonBoat_Name {
+            get {
+                return ResourceManager.GetString("Holiday_DragonBoat_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_Ullambana_Name {
+            get {
+                return ResourceManager.GetString("Holiday_Ullambana_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_MidAutumn_Name {
+            get {
+                return ResourceManager.GetString("Holiday_MidAutumn_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_DoubleNinth_Name {
+            get {
+                return ResourceManager.GetString("Holiday_DoubleNinth_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_FirstFullMoon_Name {
+            get {
+                return ResourceManager.GetString("Holiday_FirstFullMoon_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_TombSweeping_Name {
+            get {
+                return ResourceManager.GetString("Holiday_TombSweeping_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_GhostFestival_Name {
+            get {
+                return ResourceManager.GetString("Holiday_GhostFestival_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_KitchenGods_Name {
+            get {
+                return ResourceManager.GetString("Holiday_KitchenGods_Name", resourceCulture);
+            }
+        }
+
+        public static string Holiday_NewYearsEve_Name {
+            get {
+                return ResourceManager.GetString("Holiday_NewYearsEve_Name", resourceCulture);
+            }
+        }
+
+        // Holiday Descriptions
+        public static string Holiday_TetNguyenDan1_Description {
+            get {
+                return ResourceManager.GetString("Holiday_TetNguyenDan1_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_TetNguyenDan2_Description {
+            get {
+                return ResourceManager.GetString("Holiday_TetNguyenDan2_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_TetNguyenDan3_Description {
+            get {
+                return ResourceManager.GetString("Holiday_TetNguyenDan3_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_HungKings_Description {
+            get {
+                return ResourceManager.GetString("Holiday_HungKings_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_NewYear_Description {
+            get {
+                return ResourceManager.GetString("Holiday_NewYear_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_ReunificationDay_Description {
+            get {
+                return ResourceManager.GetString("Holiday_ReunificationDay_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_LaborDay_Description {
+            get {
+                return ResourceManager.GetString("Holiday_LaborDay_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_NationalDay_Description {
+            get {
+                return ResourceManager.GetString("Holiday_NationalDay_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_LanternFestival_Description {
+            get {
+                return ResourceManager.GetString("Holiday_LanternFestival_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_ColdFood_Description {
+            get {
+                return ResourceManager.GetString("Holiday_ColdFood_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_DragonBoat_Description {
+            get {
+                return ResourceManager.GetString("Holiday_DragonBoat_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_Ullambana_Description {
+            get {
+                return ResourceManager.GetString("Holiday_Ullambana_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_MidAutumn_Description {
+            get {
+                return ResourceManager.GetString("Holiday_MidAutumn_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_DoubleNinth_Description {
+            get {
+                return ResourceManager.GetString("Holiday_DoubleNinth_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_FirstFullMoon_Description {
+            get {
+                return ResourceManager.GetString("Holiday_FirstFullMoon_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_TombSweeping_Description {
+            get {
+                return ResourceManager.GetString("Holiday_TombSweeping_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_GhostFestival_Description {
+            get {
+                return ResourceManager.GetString("Holiday_GhostFestival_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_KitchenGods_Description {
+            get {
+                return ResourceManager.GetString("Holiday_KitchenGods_Description", resourceCulture);
+            }
+        }
+
+        public static string Holiday_NewYearsEve_Description {
+            get {
+                return ResourceManager.GetString("Holiday_NewYearsEve_Description", resourceCulture);
+            }
+        }
     }
 }

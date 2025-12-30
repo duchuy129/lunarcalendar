@@ -1,4 +1,5 @@
 using LunarCalendar.MobileApp.Resources.Strings;
+using System.Globalization;
 
 namespace LunarCalendar.MobileApp.Services;
 
@@ -28,5 +29,43 @@ public static class LocalizationHelper
             "Pig" => AppResources.AnimalPig,
             _ => englishAnimalSign
         };
+    }
+
+    /// <summary>
+    /// Gets the localized holiday name from a resource key
+    /// </summary>
+    public static string GetLocalizedHolidayName(string resourceKey, string fallbackName)
+    {
+        if (string.IsNullOrEmpty(resourceKey))
+            return fallbackName;
+
+        try
+        {
+            var value = AppResources.ResourceManager.GetString(resourceKey, CultureInfo.CurrentUICulture);
+            return value ?? fallbackName;
+        }
+        catch
+        {
+            return fallbackName;
+        }
+    }
+
+    /// <summary>
+    /// Gets the localized holiday description from a resource key
+    /// </summary>
+    public static string GetLocalizedHolidayDescription(string resourceKey, string fallbackDescription)
+    {
+        if (string.IsNullOrEmpty(resourceKey))
+            return fallbackDescription;
+
+        try
+        {
+            var value = AppResources.ResourceManager.GetString(resourceKey, CultureInfo.CurrentUICulture);
+            return value ?? fallbackDescription;
+        }
+        catch
+        {
+            return fallbackDescription;
+        }
     }
 }

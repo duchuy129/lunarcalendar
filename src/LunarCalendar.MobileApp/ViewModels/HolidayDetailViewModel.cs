@@ -75,7 +75,9 @@ public partial class HolidayDetailViewModel : BaseViewModel
     public async void Initialize(HolidayOccurrence holidayOccurrence)
     {
         HolidayOccurrence = holidayOccurrence;
-        Title = holidayOccurrence.Holiday.Name;
+        Title = LocalizationHelper.GetLocalizedHolidayName(
+            holidayOccurrence.Holiday.NameResourceKey,
+            holidayOccurrence.Holiday.Name);
 
         // DEBUG: Log holiday data to verify what we're receiving
         System.Diagnostics.Debug.WriteLine($"========== HOLIDAY DETAIL DEBUG ==========");
@@ -160,7 +162,9 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
         // Set visibility flags and description for iOS compatibility
         IsPublicHoliday = holidayOccurrence.Holiday.IsPublicHoliday;
-        HolidayDescription = holidayOccurrence.Holiday.Description ?? string.Empty;
+        HolidayDescription = LocalizationHelper.GetLocalizedHolidayDescription(
+            holidayOccurrence.Holiday.DescriptionResourceKey,
+            holidayOccurrence.Holiday.Description ?? string.Empty);
         HasDescription = !string.IsNullOrWhiteSpace(HolidayDescription);
 
         // Set additional properties for iOS compatibility (avoid nested bindings)
@@ -180,6 +184,17 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
     private void UpdateLocalizedStrings()
     {
+        // Update holiday title with current language
+        Title = LocalizationHelper.GetLocalizedHolidayName(
+            HolidayOccurrence.Holiday.NameResourceKey,
+            HolidayOccurrence.Holiday.Name);
+
+        // Update holiday description with current language
+        HolidayDescription = LocalizationHelper.GetLocalizedHolidayDescription(
+            HolidayOccurrence.Holiday.DescriptionResourceKey,
+            HolidayOccurrence.Holiday.Description ?? string.Empty);
+        HasDescription = !string.IsNullOrWhiteSpace(HolidayDescription);
+
         // Update holiday type text
         HolidayTypeText = HolidayOccurrence.Holiday.Type switch
         {

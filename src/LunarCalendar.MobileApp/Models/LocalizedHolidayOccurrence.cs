@@ -22,8 +22,18 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
     public DateTime GregorianDate => HolidayOccurrence.GregorianDate;
     public string AnimalSign => HolidayOccurrence.AnimalSign;
     public bool HasLunarDate => HolidayOccurrence.HasLunarDate;
-    public string HolidayName => HolidayOccurrence.HolidayName;
-    public string HolidayDescription => HolidayOccurrence.HolidayDescription;
+
+    // Localized properties - override to use resource keys
+    public string HolidayName =>
+        LocalizationHelper.GetLocalizedHolidayName(
+            Holiday.NameResourceKey,
+            Holiday.Name);
+
+    public string HolidayDescription =>
+        LocalizationHelper.GetLocalizedHolidayDescription(
+            Holiday.DescriptionResourceKey,
+            Holiday.Description);
+
     public string ColorHex => HolidayOccurrence.ColorHex;
     public bool IsPublicHoliday => HolidayOccurrence.IsPublicHoliday;
     public string GregorianDateFormatted => HolidayOccurrence.GregorianDateFormatted;
@@ -56,5 +66,7 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
     {
         OnPropertyChanged(nameof(LunarDateDisplay));
         OnPropertyChanged(nameof(GregorianDateFormatted));
+        OnPropertyChanged(nameof(HolidayName));
+        OnPropertyChanged(nameof(HolidayDescription));
     }
 }

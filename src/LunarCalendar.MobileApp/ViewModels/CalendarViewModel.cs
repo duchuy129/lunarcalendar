@@ -50,7 +50,7 @@ public partial class CalendarViewModel : BaseViewModel
     private int _selectedYear;
 
     [ObservableProperty]
-    private ObservableCollection<HolidayOccurrence> _yearHolidays = new();
+    private ObservableCollection<LocalizedHolidayOccurrence> _yearHolidays = new();
 
     [ObservableProperty]
     private ObservableCollection<LocalizedHolidayOccurrence> _upcomingHolidays = new();
@@ -157,8 +157,14 @@ public partial class CalendarViewModel : BaseViewModel
 
     private void RefreshLocalizedHolidayProperties()
     {
-        // Refresh all localized holiday occurrences
+        // Refresh all localized holiday occurrences in upcoming holidays
         foreach (var holiday in UpcomingHolidays)
+        {
+            holiday.RefreshLocalizedProperties();
+        }
+
+        // Refresh all localized holiday occurrences in year holidays
+        foreach (var holiday in YearHolidays)
         {
             holiday.RefreshLocalizedProperties();
         }
@@ -490,8 +496,9 @@ public partial class CalendarViewModel : BaseViewModel
                 }
             }
 
-            YearHolidays = new ObservableCollection<HolidayOccurrence>(
-                holidays.OrderBy(h => h.GregorianDate));
+            YearHolidays = new ObservableCollection<LocalizedHolidayOccurrence>(
+                holidays.OrderBy(h => h.GregorianDate)
+                    .Select(h => new LocalizedHolidayOccurrence(h)));
         }
         catch (Exception ex)
         {

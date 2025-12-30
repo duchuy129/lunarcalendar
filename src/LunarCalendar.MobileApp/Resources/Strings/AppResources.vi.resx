@@ -449,4 +449,153 @@
   <data name="SeasonalCelebration" xml:space="preserve">
     <value>Lễ Kỷ Niệm Theo Mùa</value>
   </data>
+
+  <!-- Holiday Names and Descriptions -->
+  <!-- Tết Nguyên Đán (3 days) -->
+  <data name="Holiday_TetNguyenDan1_Name" xml:space="preserve">
+    <value>Tết Nguyên Đán (Mùng 1)</value>
+  </data>
+  <data name="Holiday_TetNguyenDan1_Description" xml:space="preserve">
+    <value>Tết Âm Lịch - Ngày lễ quan trọng nhất của người Việt Nam, đánh dấu sự khởi đầu của mùa xuân và năm âm lịch mới</value>
+  </data>
+  <data name="Holiday_TetNguyenDan2_Name" xml:space="preserve">
+    <value>Tết Nguyên Đán (Mùng 2)</value>
+  </data>
+  <data name="Holiday_TetNguyenDan2_Description" xml:space="preserve">
+    <value>Ngày thứ hai của Tết Nguyên Đán - Tiếp tục các buổi họp mặt gia đình và thờ cúng tổ tiên</value>
+  </data>
+  <data name="Holiday_TetNguyenDan3_Name" xml:space="preserve">
+    <value>Tết Nguyên Đán (Mùng 3)</value>
+  </data>
+  <data name="Holiday_TetNguyenDan3_Description" xml:space="preserve">
+    <value>Ngày thứ ba của Tết Nguyên Đán - Ngày cuối cùng của các ngày Tết chính</value>
+  </data>
+
+  <!-- Giỗ Tổ Hùng Vương -->
+  <data name="Holiday_HungKings_Name" xml:space="preserve">
+    <value>Giỗ Tổ Hùng Vương</value>
+  </data>
+  <data name="Holiday_HungKings_Description" xml:space="preserve">
+    <value>Tưởng nhớ các vua Hùng, những người sáng lập huyền thoại của Việt Nam</value>
+  </data>
+
+  <!-- Tết Dương Lịch -->
+  <data name="Holiday_NewYear_Name" xml:space="preserve">
+    <value>Tết Dương Lịch</value>
+  </data>
+  <data name="Holiday_NewYear_Description" xml:space="preserve">
+    <value>Ngày đầu tiên của năm dương lịch quốc tế</value>
+  </data>
+
+  <!-- Ngày Giải Phóng Miền Nam -->
+  <data name="Holiday_ReunificationDay_Name" xml:space="preserve">
+    <value>Ngày Giải Phóng Miền Nam</value>
+  </data>
+  <data name="Holiday_ReunificationDay_Description" xml:space="preserve">
+    <value>Kỷ niệm ngày thống nhất đất nước vào ngày 30 tháng 4 năm 1975</value>
+  </data>
+
+  <!-- Ngày Quốc Tế Lao Động -->
+  <data name="Holiday_LaborDay_Name" xml:space="preserve">
+    <value>Ngày Quốc Tế Lao Động</value>
+  </data>
+  <data name="Holiday_LaborDay_Description" xml:space="preserve">
+    <value>Tôn vinh người lao động và phong trào lao động trên toàn thế giới</value>
+  </data>
+
+  <!-- Quốc Khánh -->
+  <data name="Holiday_NationalDay_Name" xml:space="preserve">
+    <value>Quốc Khánh</value>
+  </data>
+  <data name="Holiday_NationalDay_Description" xml:space="preserve">
+    <value>Kỷ niệm Tuyên Ngôn Độc Lập của Việt Nam vào ngày 2 tháng 9 năm 1945</value>
+  </data>
+
+  <!-- Tết Nguyên Tiêu -->
+  <data name="Holiday_LanternFestival_Name" xml:space="preserve">
+    <value>Tết Nguyên Tiêu</value>
+  </data>
+  <data name="Holiday_LanternFestival_Description" xml:space="preserve">
+    <value>Rằm tháng Giêng âm lịch - Thời gian trưng bày đèn lồng và sum họp gia đình</value>
+  </data>
+
+  <!-- Tết Hàn Thực -->
+  <data name="Holiday_ColdFood_Name" xml:space="preserve">
+    <value>Tết Hàn Thực</value>
+  </data>
+  <data name="Holiday_ColdFood_Description" xml:space="preserve">
+    <value>Lễ hội truyền thống tưởng nhớ tổ tiên, được tổ chức bằng cách ăn đồ ăn lạnh</value>
+  </data>
+
+  <!-- Tết Đoan Ngọ -->
+  <data name="Holiday_DragonBoat_Name" xml:space="preserve">
+    <value>Tết Đoan Ngọ</value>
+  </data>
+  <data name="Holiday_DragonBoat_Description" xml:space="preserve">
+    <value>Lễ hội xua đuổi tà ma và bệnh tật, được tổ chức với các món ăn đặc biệt</value>
+  </data>
+
+  <!-- Vu Lan -->
+  <data name="Holiday_Ullambana_Name" xml:space="preserve">
+    <value>Vu Lan</value>
+  </data>
+  <data name="Holiday_Ullambana_Description" xml:space="preserve">
+    <value>Lễ hội Phật giáo tôn vinh cha mẹ và tổ tiên, đặc biệt là mẹ</value>
+  </data>
+
+  <!-- Tết Trung Thu -->
+  <data name="Holiday_MidAutumn_Name" xml:space="preserve">
+    <value>Tết Trung Thu</value>
+  </data>
+  <data name="Holiday_MidAutumn_Description" xml:space="preserve">
+    <value>Lễ hội của thiếu nhi, kỷ niệm trăng thu với đèn lồng và bánh trung thu</value>
+  </data>
+
+  <!-- Tết Trùng Cửu -->
+  <data name="Holiday_DoubleNinth_Name" xml:space="preserve">
+    <value>Tết Trùng Cửu</value>
+  </data>
+  <data name="Holiday_DoubleNinth_Description" xml:space="preserve">
+    <value>Lễ hội truyền thống vào ngày chín tháng chín âm lịch, tôn vinh người cao tuổi</value>
+  </data>
+
+  <!-- Rằm Tháng Giêng -->
+  <data name="Holiday_FirstFullMoon_Name" xml:space="preserve">
+    <value>Rằm Tháng Giêng</value>
+  </data>
+  <data name="Holiday_FirstFullMoon_Description" xml:space="preserve">
+    <value>Rằm đầu tiên của năm âm lịch - Thời gian trưng bày đèn lồng và sum họp gia đình</value>
+  </data>
+
+  <!-- Tết Thanh Minh -->
+  <data name="Holiday_TombSweeping_Name" xml:space="preserve">
+    <value>Tết Thanh Minh</value>
+  </data>
+  <data name="Holiday_TombSweeping_Description" xml:space="preserve">
+    <value>Thời gian viếng và dọn dẹp mộ tổ tiên, tưởng nhớ các thành viên gia đình đã khuất</value>
+  </data>
+
+  <!-- Rằm Tháng Bảy -->
+  <data name="Holiday_GhostFestival_Name" xml:space="preserve">
+    <value>Rằm Tháng Bảy</value>
+  </data>
+  <data name="Holiday_GhostFestival_Description" xml:space="preserve">
+    <value>Lễ hội cho các linh hồn lang thang và tổ tiên trong tháng bảy âm lịch</value>
+  </data>
+
+  <!-- Tết Ông Công Ông Táo -->
+  <data name="Holiday_KitchenGods_Name" xml:space="preserve">
+    <value>Tết Ông Công Ông Táo</value>
+  </data>
+  <data name="Holiday_KitchenGods_Description" xml:space="preserve">
+    <value>Tiễn Ông Táo về trời để báo cáo về năm của gia đình</value>
+  </data>
+
+  <!-- Giao Thừa -->
+  <data name="Holiday_NewYearsEve_Name" xml:space="preserve">
+    <value>Giao Thừa</value>
+  </data>
+  <data name="Holiday_NewYearsEve_Description" xml:space="preserve">
+    <value>Đêm giao thừa - Đoàn tụ gia đình và đón năm mới</value>
+  </data>
 </root>
