@@ -30,14 +30,14 @@
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="CornerRadius" Value="12"/>
-        <Setter Property="Padding" Value="16,12"/>
-        <Setter Property="MinimumHeightRequest" Value="44"/>
-        <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="Padding" Value="20,14"/>
+        <Setter Property="MinimumHeightRequest" Value="48"/>
+        <Setter Property="MinimumWidthRequest" Value="48"/>
         <Setter Property="Shadow">
             <Shadow Brush="Black"
-                    Opacity="0.1"
-                    Radius="8"
-                    Offset="0,3"/>
+                    Opacity="0.08"
+                    Radius="6"
+                    Offset="0,2"/>
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>

@@ -66,6 +66,15 @@ public partial class CalendarViewModel : BaseViewModel
         OnPropertyChanged(nameof(UpcomingHolidaysTitle));
     }
 
+    partial void OnSelectedYearChanged(int value)
+    {
+        // Reload holidays when year changes from picker
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await LoadYearHolidaysAsync();
+        });
+    }
+
     [ObservableProperty]
     private ObservableCollection<int> _availableYears = new();
 

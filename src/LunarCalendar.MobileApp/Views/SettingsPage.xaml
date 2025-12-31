@@ -12,13 +12,13 @@
 
             <!-- Language Settings Section -->
             <Border Padding="0"
-                    Background="{DynamicResource CardGradient}"
+                    Background="{DynamicResource SubtleCardGradient}"
                     StrokeThickness="0">
                 <Border.Shadow>
                     <Shadow Brush="Black"
-                            Opacity="0.1"
-                            Radius="12"
-                            Offset="0,4"/>
+                            Opacity="0.06"
+                            Radius="10"
+                            Offset="0,3"/>
                 </Border.Shadow>
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="16"/>
@@ -56,13 +56,13 @@
 
             <!-- Display Settings Section -->
             <Border Padding="0"
-                    Background="{DynamicResource CardGradient}"
+                    Background="{DynamicResource SubtleCardGradient}"
                     StrokeThickness="0">
                 <Border.Shadow>
                     <Shadow Brush="Black"
-                            Opacity="0.1"
-                            Radius="12"
-                            Offset="0,4"/>
+                            Opacity="0.06"
+                            Radius="10"
+                            Offset="0,3"/>
                 </Border.Shadow>
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="16"/>
@@ -142,12 +142,12 @@
 
             <!-- Interaction Settings Section -->
             <Border Padding="0"
-                    Background="{DynamicResource CardGradient}"
+                    Background="{DynamicResource SubtleCardGradient}"
                     StrokeThickness="0">
                 <Border.Shadow>
                     <Shadow Brush="Black"
-                            Opacity="0.1"
-                            Radius="12"
+                            Opacity="0.06"
+                            Radius="10"
                             Offset="0,4"/>
                 </Border.Shadow>
                 <Border.StrokeShape>

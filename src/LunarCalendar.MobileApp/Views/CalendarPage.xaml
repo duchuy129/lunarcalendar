@@ -33,13 +33,13 @@
                Opacity="0.08"
                IsVisible="{Binding ShowCulturalBackground}"/>
 
-        <!-- Month Navigation Header -->
+        <!-- Month Navigation Header - IMPROVED: Softer gradient -->
         <Grid Grid.Row="0"
-              Background="{DynamicResource PrimaryGradientVertical}">
+              Background="{DynamicResource PrimaryGradient}">
             <Grid.Shadow>
                 <Shadow Brush="{DynamicResource Primary}"
-                        Opacity="0.3"
-                        Radius="8"
+                        Opacity="0.2"
+                        Radius="6"
                         Offset="0,2"/>
             </Grid.Shadow>
             <Grid.Padding>
@@ -244,42 +244,48 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!-- PERFORMANCE OPTIMIZATION: Minimal default shadow for iOS compatibility, enhanced on special cells -->
-                    <Border Padding="4"
-                           Margin="3"
-                           Background="White"
+                    <!-- IMPROVED: Better visual hierarchy with softer shadows and hover states -->
+                    <Border Padding="5"
+                           Margin="2"
+                           Background="#FAFBFC"
                            StrokeThickness="0">
-                        <!-- iOS fix: Need default shadow property to avoid rendering issues -->
+                        <!-- Minimal shadow for depth -->
                         <Border.Shadow>
                             <Shadow Brush="Black"
-                                    Opacity="0.02"
-                                    Radius="2"
+                                    Opacity="0.04"
+                                    Radius="3"
                                     Offset="0,1"/>
                         </Border.Shadow>
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="12"/>
+                            <RoundRectangle CornerRadius="10"/>
                         </Border.StrokeShape>
                         <Border.Triggers>
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding IsToday}"
                                        Value="True">
-                                <Setter Property="Background" Value="{DynamicResource PrimaryGradient}"/>
+                                <!-- Softer gradient for today -->
+                                <Setter Property="Background">
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#4DA8DA" Offset="0.0"/>
+                                        <GradientStop Color="#0088CC" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Setter>
                                 <Setter Property="Shadow">
-                                    <Shadow Brush="{DynamicResource Primary}"
-                                            Opacity="0.3"
-                                            Radius="10"
-                                            Offset="0,3"/>
+                                    <Shadow Brush="#0088CC"
+                                            Opacity="0.25"
+                                            Radius="8"
+                                            Offset="0,2"/>
                                 </Setter>
                             </DataTrigger>
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding HasHoliday}"
                                        Value="True">
+                                <Setter Property="Background" Value="White"/>
                                 <Setter Property="Stroke" Value="{Binding HolidayColor}"/>
                                 <Setter Property="StrokeThickness" Value="2"/>
-                                <!-- Add subtle shadow only for holidays -->
                                 <Setter Property="Shadow">
                                     <Shadow Brush="Black"
-                                            Opacity="0.08"
+                                            Opacity="0.06"
                                             Radius="4"
                                             Offset="0,1"/>
                                 </Setter>
@@ -287,8 +293,8 @@
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding IsLunarSpecialDay}"
                                        Value="True">
-                                <!-- PERFORMANCE: Use solid color instead of gradient -->
-                                <Setter Property="Background" Value="#F0F8FF"/>
+                                <!-- Softer special day background -->
+                                <Setter Property="Background" Value="#F0F7FB"/>
                             </DataTrigger>
                         </Border.Triggers>
 

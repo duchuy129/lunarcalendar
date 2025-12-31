@@ -6,13 +6,15 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <!-- Modern Ocean Gradient Theme - 2025 Trending Colors -->
+    <!-- Modern Ocean Gradient Theme - Refined 2025 Colors -->
+    <!-- UPDATED: Softer, more sophisticated palette for better eye comfort -->
 
-    <!-- Primary Colors - Ocean Blue Gradient -->
-    <Color x:Key="Primary">#0077B6</Color>
-    <Color x:Key="PrimaryLight">#00B4D8</Color>
-    <Color x:Key="PrimaryDark">#023E8A</Color>
+    <!-- Primary Colors - Refined Ocean Blue Gradient -->
+    <Color x:Key="Primary">#0088CC</Color><!-- Slightly softer than before -->
+    <Color x:Key="PrimaryLight">#4DA8DA</Color><!-- Less saturated -->
+    <Color x:Key="PrimaryDark">#005A8C</Color><!-- More muted -->
     <Color x:Key="PrimaryDarkText">#E8F4F8</Color>
+    <Color x:Key="PrimarySoft">#EBF5FB</Color><!-- New: Ultra-light for subtle backgrounds -->
 
     <!-- Secondary Colors - Coral Accents -->
     <Color x:Key="Secondary">#FF6B6B</Color>
@@ -41,13 +43,14 @@
     <Color x:Key="Gray950">#0D1117</Color>
 
     <!-- Accent Colors for Lunar Elements -->
-    <Color x:Key="LunarRed">#EF476F</Color>
-    <Color x:Key="LunarGold">#FFD60A</Color>
-    <Color x:Key="TodayGreen">#06D6A0</Color>
+    <Color x:Key="LunarRed">#DC5A7A</Color><!-- Softer red for better readability -->
+    <Color x:Key="LunarGold">#F5C842</Color><!-- Less aggressive yellow -->
+    <Color x:Key="TodayGreen">#10C993</Color><!-- Slightly muted green -->
 
-    <!-- Background Gradients -->
+    <!-- Background Gradients - Improved for eye comfort -->
     <Color x:Key="BackgroundLight">#FFFFFF</Color>
-    <Color x:Key="BackgroundLightGradient">#F0F9FF</Color>
+    <Color x:Key="BackgroundLightGradient">#F7FBFF</Color><!-- More subtle gradient -->
+    <Color x:Key="BackgroundMedium">#F8FAFC</Color><!-- New: Alternative light background -->
     <Color x:Key="BackgroundDark">#0D1117</Color>
 
     <!-- Solid Color Brushes -->
@@ -84,6 +87,12 @@
 
     <LinearGradientBrush x:Key="CardGradient" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="#FFFFFF" Offset="0.0"/>
-        <GradientStop Color="#F8FBFF" Offset="1.0"/>
+        <GradientStop Color="#FBFCFD" Offset="1.0"/>
+    </LinearGradientBrush>
+    
+    <!-- New: Soft shadow for cards -->
+    <LinearGradientBrush x:Key="SubtleCardGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FFFFFF" Offset="0.0"/>
+        <GradientStop Color="#F9FAFB" Offset="1.0"/>
     </LinearGradientBrush>
 </ResourceDictionary>
