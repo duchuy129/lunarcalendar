@@ -567,8 +567,11 @@ public partial class CalendarViewModel : BaseViewModel
         {
             var holidays = await _holidayService.GetHolidaysForYearAsync(SelectedYear);
 
+            // Filter out Lunar Special Days (Mùng 1 and Rằm) - keep them only in Upcoming Holidays
+            var filteredHolidays = holidays.Where(h => h.Holiday.Type != HolidayType.LunarSpecialDay).ToList();
+
             // Get lunar info for each holiday to display both dates
-            foreach (var holiday in holidays)
+            foreach (var holiday in filteredHolidays)
             {
                 // For lunar-based holidays, get the lunar date from the holiday definition
                 if (holiday.Holiday.LunarMonth > 0 && holiday.Holiday.LunarDay > 0)
@@ -579,7 +582,7 @@ public partial class CalendarViewModel : BaseViewModel
             }
 
             YearHolidays = new ObservableCollection<LocalizedHolidayOccurrence>(
-                holidays.OrderBy(h => h.GregorianDate)
+                filteredHolidays.OrderBy(h => h.GregorianDate)
                     .Select(h => new LocalizedHolidayOccurrence(h)));
         }
         catch (Exception ex)

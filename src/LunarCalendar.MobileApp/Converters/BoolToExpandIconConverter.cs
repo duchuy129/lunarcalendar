@@ -8,9 +8,10 @@ public class BoolToExpandIconConverter : IValueConverter
     {
         if (value is bool isExpanded)
         {
-            return isExpanded ? "▼" : "▶";
+            // Using clean chevron icons: down chevron when expanded, right chevron when collapsed
+            return isExpanded ? "⌄" : "›";
         }
-        return "▶";
+        return "›";
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
