@@ -244,15 +244,17 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
+                    <!-- PERFORMANCE OPTIMIZATION: Minimal default shadow for iOS compatibility, enhanced on special cells -->
                     <Border Padding="4"
                            Margin="3"
                            Background="White"
                            StrokeThickness="0">
+                        <!-- iOS fix: Need default shadow property to avoid rendering issues -->
                         <Border.Shadow>
                             <Shadow Brush="Black"
-                                    Opacity="0.08"
-                                    Radius="6"
-                                    Offset="0,2"/>
+                                    Opacity="0.02"
+                                    Radius="2"
+                                    Offset="0,1"/>
                         </Border.Shadow>
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="12"/>
@@ -274,18 +276,19 @@
                                        Value="True">
                                 <Setter Property="Stroke" Value="{Binding HolidayColor}"/>
                                 <Setter Property="StrokeThickness" Value="2"/>
+                                <!-- Add subtle shadow only for holidays -->
+                                <Setter Property="Shadow">
+                                    <Shadow Brush="Black"
+                                            Opacity="0.08"
+                                            Radius="4"
+                                            Offset="0,1"/>
+                                </Setter>
                             </DataTrigger>
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding IsLunarSpecialDay}"
                                        Value="True">
-                                <Setter Property="Background">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#F0F8FF" Offset="0.0"/>
-                                            <GradientStop Color="White" Offset="1.0"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
+                                <!-- PERFORMANCE: Use solid color instead of gradient -->
+                                <Setter Property="Background" Value="#F0F8FF"/>
                             </DataTrigger>
                         </Border.Triggers>
 

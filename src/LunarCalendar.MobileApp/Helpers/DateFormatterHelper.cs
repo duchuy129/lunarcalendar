@@ -82,17 +82,27 @@ public static class DateFormatterHelper
     public static string FormatLunarDateWithYear(int lunarDay, int lunarMonth, string animalSign)
     {
         var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        
+        System.Diagnostics.Debug.WriteLine($"=== FormatLunarDateWithYear called ===");
+        System.Diagnostics.Debug.WriteLine($"=== CurrentUICulture: {CultureInfo.CurrentUICulture.Name} ===");
+        System.Diagnostics.Debug.WriteLine($"=== TwoLetterISO: {currentCulture} ===");
+        System.Diagnostics.Debug.WriteLine($"=== Input: {lunarDay}/{lunarMonth}, {animalSign} ===");
 
+        string result;
         if (currentCulture == "vi")
         {
             // Vietnamese format: Ngày X Tháng Y, Năm [Con Giáp]
-            return $"Ngày {lunarDay} Tháng {lunarMonth}, Năm {animalSign}";
+            result = $"Ngày {lunarDay} Tháng {lunarMonth}, Năm {animalSign}";
+            System.Diagnostics.Debug.WriteLine($"=== Vietnamese format: {result} ===");
         }
         else
         {
             // English format: X/Y Year of the [Animal]
-            return $"{lunarDay}/{lunarMonth} Year of the {animalSign}";
+            result = $"{lunarDay}/{lunarMonth} Year of the {animalSign}";
+            System.Diagnostics.Debug.WriteLine($"=== English format: {result} ===");
         }
+        
+        return result;
     }
 
     /// <summary>

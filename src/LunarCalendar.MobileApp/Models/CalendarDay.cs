@@ -5,6 +5,10 @@ namespace LunarCalendar.MobileApp.Models;
 
 public class CalendarDay
 {
+    // PERFORMANCE FIX: Cache localized holiday name to avoid repeated resource lookups
+    private string? _cachedHolidayName;
+    private int? _lastHolidayId;
+    
     public DateTime Date { get; set; }
     public int Day { get; set; }
     public bool IsCurrentMonth { get; set; }
@@ -30,10 +34,53 @@ public class CalendarDay
         ? Color.FromArgb(Holiday.ColorHex)
         : (IsLunarSpecialDay ? Color.FromArgb("#4169E1") : Colors.Transparent);
 
-    // Localized holiday name
-    public string HolidayName => Holiday != null
-        ? LocalizationHelper.GetLocalizedHolidayName(
-            Holiday.NameResourceKey,
-            Holiday.Name)
-        : string.Empty;
+    // PERFORMANCE FIX: Cached localized holiday name with smart invalidation
+    public string HolidayName
+    {
+        get
+        {
+            if (Holiday == null)
+            {
+                return string.Empty;
+            }
+
+            // Check if we need to recalculate (holiday changed or cache is empty)
+            if (_cachedHolidayName == null || _lastHolidayId != Holiday.Id)
+            {
+                _cachedHolidayName = LocalizationHelper.GetLocalizedHolidayName(
+                    Holiday.NameResourceKey,
+                    Holiday.Name);
+                _lastHolidayId = Holiday.Id;
+            }
+
+            return _cachedHolidayName;
+        }
+    }
+
+    // Method to invalidate cache when language changes
+    public void InvalidateLocalizedCache()
+    {
+        _cachedHolidayName = null;
+        _lastHolidayId = null;
+    }
+
+    // PERFORMANCE FIX: Equals method for efficient comparison during collection updates
+    public override bool Equals(object? obj)
+    {
+        if (obj is not CalendarDay other) return false;
+        
+        return Date.Date == other.Date.Date &&
+               Day == other.Day &&
+               IsCurrentMonth == other.IsCurrentMonth &&
+               IsToday == other.IsToday &&
+               HasEvents == other.HasEvents &&
+               Holiday?.Id == other.Holiday?.Id &&
+               LunarInfo?.LunarDay == other.LunarInfo?.LunarDay &&
+               LunarInfo?.LunarMonth == other.LunarInfo?.LunarMonth;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Date.Date, Day, IsCurrentMonth, IsToday);
+    }
 }
