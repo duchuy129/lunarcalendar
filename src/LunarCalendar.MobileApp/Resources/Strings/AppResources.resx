@@ -118,7 +118,7 @@ Sign up to create and sync events.</value>
     <value>Select Year</value>
   </data>
   <data name="TodayLabel" xml:space="preserve">
-    <value>Today:</value>
+    <value>Today: </value>
   </data>
 
   <!-- Days of Week -->

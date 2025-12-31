@@ -118,7 +118,7 @@
     <value>Chọn Năm</value>
   </data>
   <data name="TodayLabel" xml:space="preserve">
-    <value>Hôm nay:</value>
+    <value>Hôm nay: </value>
   </data>
 
   <!-- Days of Week -->

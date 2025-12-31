@@ -186,13 +186,6 @@
                               FontSize="19"
                               FontAttributes="Bold"
                               TextColor="White"/>
-                        <Span Text="{Binding TodayGregorianDisplay}"
-                              FontSize="19"
-                              FontAttributes="Bold"
-                              TextColor="White"/>
-                        <Span Text=" • "
-                              FontSize="19"
-                              TextColor="White"/>
                         <Span Text="{Binding TodayLunarDisplay}"
                               FontSize="19"
                               FontAttributes="Bold"

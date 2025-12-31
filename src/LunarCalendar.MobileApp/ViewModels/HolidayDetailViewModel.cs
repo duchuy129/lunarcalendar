@@ -4,6 +4,7 @@ using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.Resources.Strings;
+using LunarCalendar.MobileApp.Helpers;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -89,15 +90,17 @@ public partial class HolidayDetailViewModel : BaseViewModel
         System.Diagnostics.Debug.WriteLine($"ColorHex: {holidayOccurrence.Holiday.ColorHex}");
         System.Diagnostics.Debug.WriteLine($"==========================================");
 
-        // Format Gregorian date
-        GregorianDateFormatted = holidayOccurrence.GregorianDate.ToString("MMMM dd, yyyy (dddd)");
+        // Format Gregorian date using culture-aware formatter
+        GregorianDateFormatted = DateFormatterHelper.FormatGregorianDateLong(holidayOccurrence.GregorianDate);
 
         // Always get lunar date for the Gregorian date
         string lunarDateText;
         if (holidayOccurrence.Holiday.HasLunarDate)
         {
-            // This is a lunar-based holiday, use the holiday's lunar date
-            lunarDateText = $"{AppResources.LunarLabel} {holidayOccurrence.Holiday.LunarDay}/{holidayOccurrence.Holiday.LunarMonth}";
+            // This is a lunar-based holiday, use the holiday's lunar date with formatter
+            lunarDateText = DateFormatterHelper.FormatLunarDateWithLabel(
+                holidayOccurrence.Holiday.LunarDay, 
+                holidayOccurrence.Holiday.LunarMonth);
             if (holidayOccurrence.Holiday.IsLeapMonth)
             {
                 lunarDateText += " (Leap Month)";
@@ -117,7 +120,9 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
                 if (lunarDate != null)
                 {
-                    lunarDateText = $"{AppResources.LunarLabel} {lunarDate.LunarDay}/{lunarDate.LunarMonth}";
+                    lunarDateText = DateFormatterHelper.FormatLunarDateWithLabel(
+                        lunarDate.LunarDay, 
+                        lunarDate.LunarMonth);
                 }
                 else
                 {
@@ -204,13 +209,15 @@ public partial class HolidayDetailViewModel : BaseViewModel
         };
 
         // Update dates with current culture
-        GregorianDateFormatted = HolidayOccurrence.GregorianDate.ToString("MMMM dd, yyyy (dddd)");
+        GregorianDateFormatted = DateFormatterHelper.FormatGregorianDateLong(HolidayOccurrence.GregorianDate);
         GregorianDateMonth = HolidayOccurrence.GregorianDate.ToString("MMM");
 
         // Update lunar date text and animal sign
         if (HolidayOccurrence.Holiday.HasLunarDate)
         {
-            var lunarText = $"{AppResources.LunarLabel} {HolidayOccurrence.Holiday.LunarDay}/{HolidayOccurrence.Holiday.LunarMonth}";
+            var lunarText = DateFormatterHelper.FormatLunarDateWithLabel(
+                HolidayOccurrence.Holiday.LunarDay,
+                HolidayOccurrence.Holiday.LunarMonth);
             if (HolidayOccurrence.Holiday.IsLeapMonth)
             {
                 lunarText += " (Leap Month)";

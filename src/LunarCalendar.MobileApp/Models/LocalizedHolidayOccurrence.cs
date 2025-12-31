@@ -1,6 +1,7 @@
 using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Resources.Strings;
 using LunarCalendar.MobileApp.Services;
+using LunarCalendar.MobileApp.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace LunarCalendar.MobileApp.Models;
@@ -36,7 +37,10 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
 
     public string ColorHex => HolidayOccurrence.ColorHex;
     public bool IsPublicHoliday => HolidayOccurrence.IsPublicHoliday;
-    public string GregorianDateFormatted => HolidayOccurrence.GregorianDateFormatted;
+    
+    // Culture-aware Gregorian date formatting
+    public string GregorianDateFormatted => 
+        DateFormatterHelper.FormatGregorianDateShort(HolidayOccurrence.GregorianDate);
 
     // Localized lunar date display
     public string LunarDateDisplay
@@ -45,7 +49,9 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
         {
             if (!HasLunarDate) return string.Empty;
 
-            var lunarText = $"{AppResources.LunarLabel} {Holiday.LunarDay}/{Holiday.LunarMonth}";
+            var lunarText = DateFormatterHelper.FormatLunarDateWithLabel(
+                Holiday.LunarDay, 
+                Holiday.LunarMonth);
 
             // Add animal sign for all lunar holidays
             if (!string.IsNullOrEmpty(AnimalSign))

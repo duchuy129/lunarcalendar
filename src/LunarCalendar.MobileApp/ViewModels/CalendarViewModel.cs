@@ -6,6 +6,7 @@ using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.Resources.Strings;
+using LunarCalendar.MobileApp.Helpers;
 using System.Globalization;
 
 namespace LunarCalendar.MobileApp.ViewModels;
@@ -27,9 +28,6 @@ public partial class CalendarViewModel : BaseViewModel
 
     [ObservableProperty]
     private string _todayLunarDisplay = "Loading...";
-
-    [ObservableProperty]
-    private string _todayGregorianDisplay = "Today";
 
     [ObservableProperty]
     private ObservableCollection<CalendarDay> _calendarDays = new();
@@ -366,13 +364,16 @@ public partial class CalendarViewModel : BaseViewModel
             var todayLunar = lunarDates.FirstOrDefault(ld => ld.GregorianDate.Date == DateTime.Today);
             if (todayLunar != null)
             {
-                // Show only Lunar day and Sexagenary year (e.g., "15/12 - Dragon")
-                TodayGregorianDisplay = $"{todayLunar.LunarDay}/{todayLunar.LunarMonth}";
+                // Show lunar date with animal sign
+                // English: "11/15, Year of the Snake"
+                // Vietnamese: "Ngày 11 Tháng 15, Năm Tỵ"
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
-                var yearOfTheText = AppResources.YearOfThe;
-                TodayLunarDisplay = $"{yearOfTheText} {localizedAnimalSign}";
+                TodayLunarDisplay = DateFormatterHelper.FormatLunarDateWithYear(
+                    todayLunar.LunarDay, 
+                    todayLunar.LunarMonth, 
+                    localizedAnimalSign);
                 
-                System.Diagnostics.Debug.WriteLine($"=== Today Display Updated: Culture={CultureInfo.CurrentUICulture.Name}, YearOfThe={yearOfTheText}, Animal={localizedAnimalSign} ===");
+                System.Diagnostics.Debug.WriteLine($"=== Today Display Updated: Culture={CultureInfo.CurrentUICulture.Name}, Display={TodayLunarDisplay} ===");
             }
 
             // Create calendar days
