@@ -477,14 +477,27 @@ public partial class CalendarViewModel : BaseViewModel
             var daysToGenerate = weeksNeeded * 7;
 
             // Adjust calendar height based on number of weeks
-            // iOS needs less height due to tighter spacing
+            // Now using fixed cell heights (60px per cell + margins)
+            // Calculate: (cell height + margins) * rows = (60 + 4) * rows
             if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                CalendarHeight = weeksNeeded == 5 ? 300 : 340;
+                CalendarHeight = weeksNeeded switch
+                {
+                    4 => 256,  // 4 rows: 64 * 4 = 256
+                    5 => 320,  // 5 rows: 64 * 5 = 320
+                    6 => 384,  // 6 rows: 64 * 6 = 384
+                    _ => 320   // Default to 5 rows
+                };
             }
             else
             {
-                CalendarHeight = weeksNeeded == 5 ? 320 : 360;
+                CalendarHeight = weeksNeeded switch
+                {
+                    4 => 256,  // 4 rows: 64 * 4 = 256
+                    5 => 320,  // 5 rows: 64 * 5 = 320
+                    6 => 384,  // 6 rows: 64 * 6 = 384
+                    _ => 320   // Default to 5 rows
+                };
             }
 
             // PERFORMANCE FIX: Create lookup dictionaries for O(1) access instead of O(n) FirstOrDefault
@@ -579,22 +592,60 @@ public partial class CalendarViewModel : BaseViewModel
     [RelayCommand]
     async Task PreviousYearAsync()
     {
+        _hapticService.PerformClick();
         SelectedYear--;
+        EnsureYearInRange(SelectedYear);
         await LoadYearHolidaysAsync();
     }
 
     [RelayCommand]
     async Task NextYearAsync()
     {
+        _hapticService.PerformClick();
         SelectedYear++;
+        EnsureYearInRange(SelectedYear);
         await LoadYearHolidaysAsync();
     }
 
     [RelayCommand]
     async Task CurrentYearAsync()
     {
+        _hapticService.PerformClick();
         SelectedYear = DateTime.Today.Year;
+        EnsureYearInRange(SelectedYear);
         await LoadYearHolidaysAsync();
+    }
+
+    // Helper method to ensure year is in available years list
+    private void EnsureYearInRange(int year)
+    {
+        if (AvailableYears == null || AvailableYears.Count == 0)
+        {
+            return; // Don't try to fix empty collection
+        }
+
+        if (!AvailableYears.Contains(year))
+        {
+            var minYear = AvailableYears.Min();
+            var maxYear = AvailableYears.Max();
+
+            if (year < minYear)
+            {
+                // Add years before
+                for (int y = minYear - 1; y >= year; y--)
+                {
+                    AvailableYears.Insert(0, y);
+                }
+            }
+            else if (year > maxYear)
+            {
+                // Add years after
+                for (int y = maxYear + 1; y <= year; y++)
+                {
+                    AvailableYears.Add(y);
+                }
+            }
+        }
     }
 
     [RelayCommand]
@@ -670,6 +721,9 @@ public partial class CalendarViewModel : BaseViewModel
     [RelayCommand]
     async Task ToggleYearSectionAsync()
     {
+        // Add haptic feedback for better UX
+        _hapticService.PerformClick();
+
         System.Diagnostics.Debug.WriteLine($"!!! ToggleYearSection called - Current state: {IsYearSectionExpanded} !!!");
         IsYearSectionExpanded = !IsYearSectionExpanded;
         System.Diagnostics.Debug.WriteLine($"!!! New state: {IsYearSectionExpanded} !!!");
@@ -687,6 +741,9 @@ public partial class CalendarViewModel : BaseViewModel
     [RelayCommand]
     async Task ViewHolidayDetailAsync(object parameter)
     {
+        // Add haptic feedback for better UX
+        _hapticService.PerformClick();
+
         HolidayOccurrence? holidayOccurrence = parameter switch
         {
             LocalizedHolidayOccurrence localized => localized.HolidayOccurrence,
@@ -741,44 +798,52 @@ public partial class CalendarViewModel : BaseViewModel
 
     private async Task LoadYearHolidaysAsync()
     {
+        // Prevent concurrent updates
+        await _updateSemaphore.WaitAsync();
+
         try
         {
             System.Diagnostics.Debug.WriteLine($"=== LoadYearHolidaysAsync START for year {SelectedYear} ===");
-            Console.WriteLine($"!!! LoadYearHolidaysAsync START for year {SelectedYear} !!!");
             
             var holidays = await _holidayService.GetHolidaysForYearAsync(SelectedYear);
             System.Diagnostics.Debug.WriteLine($"=== Got {holidays.Count} holidays from service ===");
-            Console.WriteLine($"!!! Got {holidays.Count} holidays from service !!!");
 
-            // Filter out Lunar Special Days (Mùng 1 and Rằm) - keep them only in Upcoming Holidays
-            var filteredHolidays = holidays.Where(h => h.Holiday.Type != HolidayType.LunarSpecialDay).ToList();
-            System.Diagnostics.Debug.WriteLine($"=== After filtering: {filteredHolidays.Count} holidays (removed Lunar Special Days) ===");
-            Console.WriteLine($"!!! After filtering: {filteredHolidays.Count} holidays (removed Lunar Special Days) !!!");
-
-            // Get lunar info for each holiday to display both dates
-            foreach (var holiday in filteredHolidays)
-            {
-                // For lunar-based holidays, get the lunar date from the holiday definition
-                if (holiday.Holiday.LunarMonth > 0 && holiday.Holiday.LunarDay > 0)
-                {
-                    // Lunar date is already in the holiday model
-                    continue;
-                }
-            }
-
-            YearHolidays = new ObservableCollection<LocalizedHolidayOccurrence>(
-                filteredHolidays.OrderBy(h => h.GregorianDate)
-                    .Select(h => new LocalizedHolidayOccurrence(h)));
+            // Filter out Lunar Special Days
+            var filteredHolidays = holidays
+                .Where(h => h.Holiday.Type != HolidayType.LunarSpecialDay)
+                .OrderBy(h => h.GregorianDate)
+                .ToList();
             
-            System.Diagnostics.Debug.WriteLine($"=== YearHolidays collection updated with {YearHolidays.Count} items ===");
-            Console.WriteLine($"!!! YearHolidays collection updated with {YearHolidays.Count} items !!!");
+            System.Diagnostics.Debug.WriteLine($"=== After filtering: {filteredHolidays.Count} holidays ===");
+
+            // Update UI on main thread
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                try
+                {
+                    YearHolidays = new ObservableCollection<LocalizedHolidayOccurrence>(
+                        filteredHolidays.Select(h => new LocalizedHolidayOccurrence(h)));
+                    
+                    System.Diagnostics.Debug.WriteLine($"=== YearHolidays updated with {YearHolidays.Count} items ===");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"=== ERROR during UI update: {ex.Message} ===");
+                }
+            });
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"=== ERROR loading year holidays: {ex.Message} ===");
-            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
-            Console.WriteLine($"!!! ERROR loading year holidays: {ex.Message} !!!");
-            Console.WriteLine($"!!! Stack: {ex.StackTrace} !!!");
+            
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                YearHolidays?.Clear();
+            });
+        }
+        finally
+        {
+            _updateSemaphore.Release();
         }
     }
 

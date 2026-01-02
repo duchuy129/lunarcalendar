@@ -245,10 +245,12 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <!-- IMPROVED: Better visual hierarchy with softer shadows and hover states -->
+                    <!-- FIX: Added HeightRequest to ensure consistent cell heights on iOS -->
                     <Border Padding="5"
                            Margin="2"
                            Background="#FAFBFC"
-                           StrokeThickness="0">
+                           StrokeThickness="0"
+                           HeightRequest="60">
                         <!-- Minimal shadow for depth -->
                         <Border.Shadow>
                             <Shadow Brush="Black"
@@ -303,13 +305,15 @@
                         </Border.Triggers>
 
                         <VerticalStackLayout Spacing="2"
-                                           Padding="2">
+                                           Padding="2"
+                                           VerticalOptions="Center">
                             <!-- Gregorian Day -->
                             <Label Text="{Binding Day}"
                                   FontSize="16"
                                   FontAttributes="Bold"
                                   TextColor="{DynamicResource Gray900}"
-                                  HorizontalOptions="Center">
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Start">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label"
                                                Binding="{Binding IsCurrentMonth}"
@@ -332,6 +336,8 @@
                                   HorizontalOptions="Center"
                                   LineBreakMode="NoWrap"
                                   MinimumHeightRequest="14"
+                                  HeightRequest="14"
+                                  VerticalOptions="Start"
                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ShowLunarDates}">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label"
@@ -358,8 +364,10 @@
                                   FontAttributes="Bold"
                                   TextColor="{Binding HolidayColor}"
                                   HorizontalOptions="Center"
-                                  LineBreakMode="WordWrap"
-                                  MaxLines="2"
+                                  LineBreakMode="TailTruncation"
+                                  MaxLines="1"
+                                  HeightRequest="12"
+                                  VerticalOptions="Start"
                                   IsVisible="{Binding HasHoliday}">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label"
@@ -380,12 +388,18 @@
                             BackgroundColor="Transparent"
                             Padding="16,12">
 
-            <!-- Section Header -->
-            <Label Text="{Binding UpcomingHolidaysTitle}"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="{DynamicResource Primary}"
-                   Margin="0,8,0,12"/>
+            <!-- Section Header with Icon -->
+            <HorizontalStackLayout Spacing="8" 
+                                  Margin="0,8,0,12">
+                <Label Text="🎉"
+                       FontSize="20"
+                       VerticalOptions="Center"/>
+                <Label Text="{Binding UpcomingHolidaysTitle}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="{DynamicResource Primary}"
+                       VerticalOptions="Center"/>
+            </HorizontalStackLayout>
 
             <!-- No Upcoming Holidays Message -->
             <Label Text="{ext:Translate NoUpcomingHolidaysMessage}"
@@ -527,18 +541,26 @@
                     <TapGestureRecognizer Command="{Binding ToggleYearSectionCommand}"/>
                 </Grid.GestureRecognizers>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0"
+                       Text="📅"
+                       FontSize="20"
+                       TextColor="White"
+                       VerticalOptions="Center"
+                       Margin="0,0,8,0"/>
+
+                <Label Grid.Column="1"
                        Text="{ext:Translate VietnameseHolidays}"
                        FontSize="18"
                        FontAttributes="Bold"
                        TextColor="White"
                        VerticalOptions="Center"/>
 
-                <Border Grid.Column="1"
+                <Border Grid.Column="2"
                         BackgroundColor="#40FFFFFF"
                         StrokeThickness="0"
                         Padding="0"
