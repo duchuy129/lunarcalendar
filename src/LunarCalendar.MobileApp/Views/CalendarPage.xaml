@@ -260,23 +260,7 @@
                             <RoundRectangle CornerRadius="10"/>
                         </Border.StrokeShape>
                         <Border.Triggers>
-                            <DataTrigger TargetType="Border"
-                                       Binding="{Binding IsToday}"
-                                       Value="True">
-                                <!-- Softer gradient for today -->
-                                <Setter Property="Background">
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#4DA8DA" Offset="0.0"/>
-                                        <GradientStop Color="#0088CC" Offset="1.0"/>
-                                    </LinearGradientBrush>
-                                </Setter>
-                                <Setter Property="Shadow">
-                                    <Shadow Brush="#0088CC"
-                                            Opacity="0.25"
-                                            Radius="8"
-                                            Offset="0,2"/>
-                                </Setter>
-                            </DataTrigger>
+                            <!-- HasHoliday trigger FIRST (will be overridden by IsToday if both are true) -->
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding HasHoliday}"
                                        Value="True">
@@ -295,6 +279,26 @@
                                        Value="True">
                                 <!-- Softer special day background -->
                                 <Setter Property="Background" Value="#F0F7FB"/>
+                            </DataTrigger>
+                            <!-- IsToday trigger LAST (takes priority over holiday/special day styling) -->
+                            <DataTrigger TargetType="Border"
+                                       Binding="{Binding IsToday}"
+                                       Value="True">
+                                <!-- Strong, visible gradient for today -->
+                                <Setter Property="Background">
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#1E88E5" Offset="0.0"/>
+                                        <GradientStop Color="#0D47A1" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Setter>
+                                <Setter Property="Stroke" Value="#0D47A1"/>
+                                <Setter Property="StrokeThickness" Value="2"/>
+                                <Setter Property="Shadow">
+                                    <Shadow Brush="#0D47A1"
+                                            Opacity="0.4"
+                                            Radius="10"
+                                            Offset="0,3"/>
+                                </Setter>
                             </DataTrigger>
                         </Border.Triggers>
 
@@ -398,10 +402,11 @@
                               HeightRequest="50"
                               Margin="0,20,0,20"/>
 
-            <!-- Upcoming Holidays List -->
-            <CollectionView ItemsSource="{Binding UpcomingHolidays}"
-                           IsVisible="{Binding IsLoadingHolidays, Converter={StaticResource InvertedBoolConverter}}">
-                <CollectionView.ItemTemplate>
+            <!-- Upcoming Holidays List - Using BindableLayout for better ScrollView compatibility -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding UpcomingHolidays}"
+                                Spacing="8"
+                                IsVisible="{Binding IsLoadingHolidays, Converter={StaticResource InvertedBoolConverter}}">
+                <BindableLayout.ItemTemplate>
                     <DataTemplate>
                         <Border Padding="16"
                                Margin="0,6"
@@ -417,7 +422,7 @@
                                 <RoundRectangle CornerRadius="16"/>
                             </Border.StrokeShape>
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=ViewHolidayDetailCommand}"
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewHolidayDetailCommand}"
                                                      CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
 
@@ -495,8 +500,8 @@
                             </Grid>
                         </Border>
                     </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
         </VerticalStackLayout>
 
         <!-- Year Holidays Section -->
@@ -664,8 +669,19 @@
 
                 <!-- Holidays List -->
                 <CollectionView ItemsSource="{Binding YearHolidays}"
-                               MaximumHeightRequest="400">
-                    <CollectionView.ItemTemplate>
+                               HeightRequest="400"
+                               Margin="16,8">
+                    <CollectionView.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Padding="20">
+                                <Label Text="No holidays found for this year"
+                                      FontSize="14"
+                                      TextColor="{DynamicResource Gray600}"
+                                      HorizontalTextAlignment="Center"/>
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Padding="14"
                                    Margin="0,6"

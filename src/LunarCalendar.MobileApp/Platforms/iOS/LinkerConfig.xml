@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<linker>
+  <!-- Preserve all SQLite types -->
+  <assembly fullname="SQLite-net">
+    <type fullname="*" />
+  </assembly>
+  <assembly fullname="SQLitePCLRaw.core">
+    <type fullname="*" />
+  </assembly>
+  <assembly fullname="SQLitePCLRaw.batteries_v2">
+    <type fullname="*" />
+  </assembly>
+
+  <!-- Preserve app data models -->
+  <assembly fullname="LunarCalendar.MobileApp">
+    <namespace fullname="LunarCalendar.MobileApp.Data.Models" preserve="all" />
+  </assembly>
+</linker>

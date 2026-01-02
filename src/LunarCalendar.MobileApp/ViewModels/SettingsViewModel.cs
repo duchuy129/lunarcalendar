@@ -5,6 +5,7 @@ using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.Data;
 using LunarCalendar.MobileApp.Resources.Strings;
 using LunarCalendar.MobileApp.Models;
+using System.Windows.Input;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -52,9 +53,23 @@ public partial class SettingsViewModel : BaseViewModel
 
     [ObservableProperty]
     private LanguageOption? _selectedLanguage;
+    
+    // Manual command properties
+    public ICommand SyncDataCommand { get; }
+    public ICommand ClearCacheCommand { get; }
+    public ICommand AboutCommand { get; }
+    public ICommand ResetSettingsCommand { get; }
 
     public SettingsViewModel()
     {
+        System.Diagnostics.Debug.WriteLine("!!! SettingsViewModel() - PARAMETERLESS constructor called !!!");
+        
+        // Initialize commands manually
+        SyncDataCommand = new AsyncRelayCommand(SyncDataAsync);
+        ClearCacheCommand = new AsyncRelayCommand(ClearCacheAsync);
+        AboutCommand = new AsyncRelayCommand(AboutAsync);
+        ResetSettingsCommand = new AsyncRelayCommand(ResetSettingsAsync);
+        
         Title = AppResources.Settings;
         LoadSettings();
         LoadAppInfo();
@@ -66,10 +81,23 @@ public partial class SettingsViewModel : BaseViewModel
         LunarCalendarDatabase database,
         ILocalizationService localizationService)
     {
+        System.Diagnostics.Debug.WriteLine("!!! SettingsViewModel(services) - DI constructor called !!!");
+        
         _connectivityService = connectivityService;
         _syncService = syncService;
         _database = database;
         _localizationService = localizationService;
+
+        System.Diagnostics.Debug.WriteLine($"!!! _connectivityService injected: {_connectivityService != null} !!!");
+        System.Diagnostics.Debug.WriteLine($"!!! _syncService injected: {_syncService != null} !!!");
+        System.Diagnostics.Debug.WriteLine($"!!! _database injected: {_database != null} !!!");
+        System.Diagnostics.Debug.WriteLine($"!!! _localizationService injected: {_localizationService != null} !!!");
+
+        // Initialize commands manually
+        SyncDataCommand = new AsyncRelayCommand(SyncDataAsync);
+        ClearCacheCommand = new AsyncRelayCommand(ClearCacheAsync);
+        AboutCommand = new AsyncRelayCommand(AboutAsync);
+        ResetSettingsCommand = new AsyncRelayCommand(ResetSettingsAsync);
 
         Title = AppResources.Settings;
         LoadSettings();
@@ -198,23 +226,29 @@ public partial class SettingsViewModel : BaseViewModel
         AppVersion = $"Version {AppInfo.VersionString} (Build {AppInfo.BuildString})";
     }
 
-    [RelayCommand]
-    async Task SyncDataAsync()
+    public async Task SyncDataAsync()
     {
-        if (_connectivityService == null || _syncService == null)
-        {
-            await Shell.Current.DisplayAlert(AppResources.ErrorTitle, AppResources.SyncServiceNotAvailable, AppResources.OK);
-            return;
-        }
-
-        if (!_connectivityService.IsConnected)
-        {
-            await Shell.Current.DisplayAlert(AppResources.Offline, AppResources.OfflineMessage, AppResources.OK);
-            return;
-        }
-
+        System.Diagnostics.Debug.WriteLine("!!! SyncDataAsync CALLED !!!");
         try
         {
+            System.Diagnostics.Debug.WriteLine($"!!! _connectivityService: {_connectivityService != null} !!!");
+            System.Diagnostics.Debug.WriteLine($"!!! _syncService: {_syncService != null} !!!");
+            
+            if (_connectivityService == null || _syncService == null)
+            {
+                System.Diagnostics.Debug.WriteLine("!!! Services are null, showing alert !!!");
+                await Application.Current.MainPage.DisplayAlert(AppResources.ErrorTitle, AppResources.SyncServiceNotAvailable, AppResources.OK);
+                return;
+            }
+
+            if (!_connectivityService.IsConnected)
+            {
+                System.Diagnostics.Debug.WriteLine("!!! Not connected, showing alert !!!");
+                await Application.Current.MainPage.DisplayAlert(AppResources.Offline, AppResources.OfflineMessage, AppResources.OK);
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine("!!! Starting sync !!!");
             IsSyncing = true;
             var currentYear = DateTime.Today.Year;
             var currentMonth = DateTime.Today.Month;
@@ -223,17 +257,28 @@ public partial class SettingsViewModel : BaseViewModel
 
             if (success)
             {
+                System.Diagnostics.Debug.WriteLine("!!! Sync successful !!!");
                 UpdateSyncStatus();
-                await Shell.Current.DisplayAlert(AppResources.SyncComplete, AppResources.SyncCompleteMessage, AppResources.OK);
+                await Application.Current.MainPage.DisplayAlert(AppResources.SyncComplete, AppResources.SyncCompleteMessage, AppResources.OK);
             }
             else
             {
-                await Shell.Current.DisplayAlert(AppResources.SyncFailed, AppResources.SyncFailedMessage, AppResources.OK);
+                System.Diagnostics.Debug.WriteLine("!!! Sync failed !!!");
+                await Application.Current.MainPage.DisplayAlert(AppResources.SyncFailed, AppResources.SyncFailedMessage, AppResources.OK);
             }
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.SyncError, string.Format(AppResources.SyncErrorMessage, ex.Message), AppResources.OK);
+            System.Diagnostics.Debug.WriteLine($"!!! SyncDataAsync error: {ex.Message} !!!");
+            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
+            try
+            {
+                await Application.Current.MainPage.DisplayAlert(AppResources.SyncError, string.Format(AppResources.SyncErrorMessage, ex.Message), AppResources.OK);
+            }
+            catch (Exception displayEx)
+            {
+                System.Diagnostics.Debug.WriteLine($"!!! Failed to display error alert: {displayEx.Message} !!!");
+            }
         }
         finally
         {
@@ -241,9 +286,9 @@ public partial class SettingsViewModel : BaseViewModel
         }
     }
 
-    [RelayCommand]
-    async Task ClearCacheAsync()
+    public async Task ClearCacheAsync()
     {
+        System.Diagnostics.Debug.WriteLine("!!! ClearCacheAsync CALLED !!!");
         try
         {
             IsBusy = true;
@@ -269,11 +314,21 @@ public partial class SettingsViewModel : BaseViewModel
                 await _database.ClearAllDataAsync();
             }
 
-            await Shell.Current.DisplayAlert(AppResources.Success, AppResources.CacheClearedMessage, AppResources.OK);
+            System.Diagnostics.Debug.WriteLine("!!! Cache cleared, showing alert !!!");
+            await Application.Current.MainPage.DisplayAlert(AppResources.Success, AppResources.CacheClearedMessage, AppResources.OK);
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.ErrorTitle, string.Format(AppResources.ClearCacheError, ex.Message), AppResources.OK);
+            System.Diagnostics.Debug.WriteLine($"!!! ClearCacheAsync error: {ex.Message} !!!");
+            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
+            try
+            {
+                await Application.Current.MainPage.DisplayAlert(AppResources.ErrorTitle, string.Format(AppResources.ClearCacheError, ex.Message), AppResources.OK);
+            }
+            catch (Exception displayEx)
+            {
+                System.Diagnostics.Debug.WriteLine($"!!! Failed to display error alert: {displayEx.Message} !!!");
+            }
         }
         finally
         {
@@ -281,29 +336,60 @@ public partial class SettingsViewModel : BaseViewModel
         }
     }
 
-    [RelayCommand]
-    async Task AboutAsync()
+    public async Task AboutAsync()
     {
-        await Shell.Current.DisplayAlert(
-            AppResources.About,
-            AppResources.AboutMessage,
-            AppResources.OK);
+        System.Diagnostics.Debug.WriteLine("!!! AboutAsync CALLED !!!");
+        try
+        {
+            System.Diagnostics.Debug.WriteLine("!!! Showing About alert !!!");
+            await Application.Current.MainPage.DisplayAlert(
+                AppResources.About,
+                AppResources.AboutMessage,
+                AppResources.OK);
+            System.Diagnostics.Debug.WriteLine("!!! About alert completed !!!");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"!!! AboutAsync error: {ex.Message} !!!");
+            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
+        }
     }
 
-    [RelayCommand]
-    async Task ResetSettingsAsync()
+    public async Task ResetSettingsAsync()
     {
-        var confirmed = await Shell.Current.DisplayAlert(
-            AppResources.ResetSettingsTitle,
-            AppResources.ResetSettingsMessage,
-            AppResources.Yes,
-            AppResources.No);
-
-        if (confirmed)
+        System.Diagnostics.Debug.WriteLine("!!! ResetSettingsAsync CALLED !!!");
+        try
         {
-            Preferences.Clear();
-            LoadSettings();
-            await Shell.Current.DisplayAlert(AppResources.Success, AppResources.SettingsResetMessage, AppResources.OK);
+            System.Diagnostics.Debug.WriteLine("!!! Showing confirmation dialog !!!");
+            var confirmed = await Application.Current.MainPage.DisplayAlert(
+                AppResources.ResetSettingsTitle,
+                AppResources.ResetSettingsMessage,
+                AppResources.Yes,
+                AppResources.No);
+
+            System.Diagnostics.Debug.WriteLine($"!!! User confirmed: {confirmed} !!!");
+            
+            if (confirmed)
+            {
+                Preferences.Clear();
+                LoadSettings();
+                
+                System.Diagnostics.Debug.WriteLine("!!! Settings reset, showing success alert !!!");
+                await Application.Current.MainPage.DisplayAlert(AppResources.Success, AppResources.SettingsResetMessage, AppResources.OK);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"!!! ResetSettingsAsync error: {ex.Message} !!!");
+            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
+            try
+            {
+                await Application.Current.MainPage.DisplayAlert(AppResources.ErrorTitle, $"Failed to reset settings: {ex.Message}", AppResources.OK);
+            }
+            catch (Exception displayEx)
+            {
+                System.Diagnostics.Debug.WriteLine($"!!! Failed to display error alert: {displayEx.Message} !!!");
+            }
         }
     }
 

@@ -17,24 +17,26 @@ public partial class CalendarPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        
-        if (!_isInitialized)
+
+        try
         {
-            await _viewModel.InitializeAsync();
-            _isInitialized = true;
-        }
-        else
-        {
-            // CRITICAL: Must await RefreshSettings to prevent iOS crash
-            // When navigating back from Settings, collection updates must complete
-            // before iOS UICollectionView tries to render
-            await _viewModel.RefreshSettingsAsync();
-            
-            // iOS-specific: Small delay to ensure collection is fully bound before rendering
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            if (!_isInitialized)
             {
-                await Task.Delay(50);
+                await _viewModel.InitializeAsync();
+                _isInitialized = true;
             }
+            else
+            {
+                // FIXED: Now using atomic collection replacement, safe to call directly
+                // Collection replacement doesn't trigger intermediate CollectionChanged events
+                // Added try-catch to prevent crashes when navigating back from detail pages
+                await _viewModel.RefreshSettingsAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"=== ERROR in OnAppearing: {ex.Message} ===");
+            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
         }
     }
 }

@@ -257,8 +257,9 @@
 
                     <!-- Sync Now Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate SyncNow}"
-                                Command="{Binding SyncDataCommand}"
+                        <Button x:Name="SyncButton"
+                                Text="{ext:Translate SyncNow}"
+                                Clicked="OnSyncClicked"
                                 BackgroundColor="{DynamicResource Primary}"
                                 TextColor="White"
                                 CornerRadius="8"
@@ -299,8 +300,9 @@
 
                     <!-- Clear Cache Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate ClearCache}"
-                                Command="{Binding ClearCacheCommand}"
+                        <Button x:Name="ClearCacheButton"
+                                Text="{ext:Translate ClearCache}"
+                                Clicked="OnClearCacheClicked"
                                 BackgroundColor="{DynamicResource Primary}"
                                 TextColor="White"
                                 CornerRadius="8"
@@ -313,8 +315,9 @@
 
                     <!-- Reset Settings Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate ResetSettings}"
-                                Command="{Binding ResetSettingsCommand}"
+                        <Button x:Name="ResetSettingsButton"
+                                Text="{ext:Translate ResetSettings}"
+                                Clicked="OnResetSettingsClicked"
                                 BackgroundColor="{DynamicResource Tertiary}"
                                 TextColor="White"
                                 CornerRadius="8"
@@ -362,8 +365,9 @@
 
                     <!-- About Button -->
                     <Grid Padding="16,12">
-                        <Button Text="{ext:Translate AboutThisApp}"
-                                Command="{Binding AboutCommand}"
+                        <Button x:Name="AboutButton"
+                                Text="{ext:Translate AboutThisApp}"
+                                Clicked="OnAboutClicked"
                                 BackgroundColor="{DynamicResource Secondary}"
                                 TextColor="White"
                                 CornerRadius="8"

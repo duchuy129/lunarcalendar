@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net10.0-tizen</TargetFrameworks> -->
 
 		<!-- Note for MacCatalyst:
 		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
@@ -32,7 +32,7 @@
 		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
-		<TargetPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">18.0</TargetPlatformVersion>
+		<TargetPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">26.2</TargetPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
@@ -42,14 +42,22 @@
 		<!-- Disable Fast Deployment for Android to prevent emulator crashes -->
 		<EmbedAssembliesIntoApk Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</EmbedAssembliesIntoApk>
 
-		<!-- iOS Simulator Code Signing -->
-		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' and '$(TargetFramework)' == 'net8.0-ios'">iossimulator-arm64</RuntimeIdentifier>
+		<!-- TEMPORARY: Disable iOS linker for Debug builds on device to isolate crash -->
+		<MtouchLink Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(Configuration)' == 'Debug' and '$(RuntimeIdentifier)' == 'ios-arm64'">None</MtouchLink>
 
-		<!-- iOS Code Signing for Free Developer Account -->
-		<CodesignKey Condition="'$(TargetFramework)' == 'net8.0-ios'">Apple Development</CodesignKey>
-		<CodesignProvision Condition="'$(TargetFramework)' == 'net8.0-ios'">Automatic</CodesignProvision>
-		<MtouchUseLlvm Condition="'$(TargetFramework)' == 'net8.0-ios'">false</MtouchUseLlvm>
-		<IpaPackageName Condition="'$(TargetFramework)' == 'net8.0-ios'"></IpaPackageName>
+		<!-- iOS Simulator Code Signing - Default to simulator for development -->
+		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' and '$(TargetFramework)' == 'net10.0-ios'">iossimulator-arm64</RuntimeIdentifier>
+
+		<!-- Disable code signing for simulator builds -->
+		<CodesignKey Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(RuntimeIdentifier)' == 'iossimulator-arm64'"></CodesignKey>
+		<CodesignProvision Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(RuntimeIdentifier)' == 'iossimulator-arm64'"></CodesignProvision>
+
+		<!-- Enable code signing only for device builds -->
+		<CodesignKey Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(RuntimeIdentifier)' == 'ios-arm64'">Apple Development</CodesignKey>
+		<CodesignProvision Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(RuntimeIdentifier)' == 'ios-arm64'">Automatic</CodesignProvision>
+
+		<MtouchUseLlvm Condition="'$(TargetFramework)' == 'net10.0-ios'">false</MtouchUseLlvm>
+		<IpaPackageName Condition="'$(TargetFramework)' == 'net10.0-ios'"></IpaPackageName>
 	</PropertyGroup>
 
 	<!-- Release Configuration Optimizations -->
@@ -118,7 +126,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
 
