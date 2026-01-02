@@ -593,31 +593,50 @@ public partial class CalendarViewModel : BaseViewModel
     async Task PreviousYearAsync()
     {
         _hapticService.PerformClick();
-        SelectedYear--;
-        EnsureYearInRange(SelectedYear);
-        await LoadYearHolidaysAsync();
+        var newYear = SelectedYear - 1;
+
+        // FIX: Ensure the year is in the collection BEFORE setting SelectedYear
+        // This prevents Picker rendering issues where text becomes invisible
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            EnsureYearInRangeSync(newYear);
+            SelectedYear = newYear;
+        });
     }
 
     [RelayCommand]
     async Task NextYearAsync()
     {
         _hapticService.PerformClick();
-        SelectedYear++;
-        EnsureYearInRange(SelectedYear);
-        await LoadYearHolidaysAsync();
+        var newYear = SelectedYear + 1;
+
+        // FIX: Ensure the year is in the collection BEFORE setting SelectedYear
+        // This prevents Picker rendering issues where text becomes invisible
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            EnsureYearInRangeSync(newYear);
+            SelectedYear = newYear;
+        });
     }
 
     [RelayCommand]
     async Task CurrentYearAsync()
     {
         _hapticService.PerformClick();
-        SelectedYear = DateTime.Today.Year;
-        EnsureYearInRange(SelectedYear);
-        await LoadYearHolidaysAsync();
+        var newYear = DateTime.Today.Year;
+
+        // FIX: Ensure the year is in the collection BEFORE setting SelectedYear
+        // This prevents Picker rendering issues where text becomes invisible
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            EnsureYearInRangeSync(newYear);
+            SelectedYear = newYear;
+        });
     }
 
     // Helper method to ensure year is in available years list
-    private void EnsureYearInRange(int year)
+    // CRITICAL: This must be called from the main thread and completes synchronously
+    private void EnsureYearInRangeSync(int year)
     {
         if (AvailableYears == null || AvailableYears.Count == 0)
         {
@@ -645,6 +664,9 @@ public partial class CalendarViewModel : BaseViewModel
                     AvailableYears.Add(y);
                 }
             }
+
+            // FIX: Notify that the collection has changed to force Picker refresh
+            OnPropertyChanged(nameof(AvailableYears));
         }
     }
 
