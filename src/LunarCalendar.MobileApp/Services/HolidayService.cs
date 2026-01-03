@@ -17,6 +17,10 @@ public class HolidayService : IHolidayService
     private int _cachedYear;
     private int _cachedMonth;
 
+    // Year-level cache to prevent duplicate calculations
+    private readonly Dictionary<int, List<HolidayOccurrence>> _yearCache = new();
+    private readonly object _yearCacheLock = new();
+
     public HolidayService(
         IHolidayCalculationService holidayCalculationService,
         LunarCalendarDatabase database)
@@ -32,12 +36,29 @@ public class HolidayService : IHolidayService
 
     public async Task<List<HolidayOccurrence>> GetHolidaysForYearAsync(int year)
     {
+        // Check cache first (thread-safe)
+        lock (_yearCacheLock)
+        {
+            if (_yearCache.TryGetValue(year, out var cached))
+            {
+                Debug.WriteLine($"HolidayService: Using cached holidays for year {year} ({cached.Count} items)");
+                return cached;
+            }
+        }
+
         try
         {
             Debug.WriteLine($"HolidayService: Calculating holidays for year {year} locally");
 
             // Calculate locally - instant, no network needed
             var holidays = _holidayCalculationService.GetHolidaysForYear(year);
+
+            // Store in cache (thread-safe)
+            lock (_yearCacheLock)
+            {
+                _yearCache[year] = holidays;
+                Debug.WriteLine($"HolidayService: Cached {holidays.Count} holidays for year {year}");
+            }
 
             // Save to database in background for historical tracking
             _ = Task.Run(async () =>

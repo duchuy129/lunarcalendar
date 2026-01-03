@@ -624,4 +624,10 @@
   <data name="LunarSpecialDay" xml:space="preserve">
     <value>Ngày Đặc Biệt Âm Lịch</value>
   </data>
+  <data name="YearHolidays" xml:space="preserve">
+    <value>Ngày Lễ</value>
+  </data>
+  <data name="NoHolidaysFound" xml:space="preserve">
+    <value>Không tìm thấy lễ nào trong năm này</value>
+  </data>
 </root>

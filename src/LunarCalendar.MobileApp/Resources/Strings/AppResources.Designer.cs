@@ -729,6 +729,18 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
             }
         }
 
+        public static string YearHolidays {
+            get {
+                return ResourceManager.GetString("YearHolidays", resourceCulture);
+            }
+        }
+
+        public static string NoHolidaysFound {
+            get {
+                return ResourceManager.GetString("NoHolidaysFound", resourceCulture);
+            }
+        }
+
         // Holiday Names
         public static string Holiday_TetNguyenDan1_Name {
             get {

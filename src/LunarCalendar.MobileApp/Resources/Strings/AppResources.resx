@@ -624,4 +624,10 @@ A beautiful calendar app that displays both Gregorian and Vietnamese Lunar dates
   <data name="LunarSpecialDay" xml:space="preserve">
     <value>Lunar Special Day</value>
   </data>
+  <data name="YearHolidays" xml:space="preserve">
+    <value>Holidays</value>
+  </data>
+  <data name="NoHolidaysFound" xml:space="preserve">
+    <value>No holidays found for this year</value>
+  </data>
 </root>

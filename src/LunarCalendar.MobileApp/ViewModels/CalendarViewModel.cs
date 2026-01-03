@@ -170,7 +170,7 @@ public partial class CalendarViewModel : BaseViewModel
             System.Diagnostics.Debug.WriteLine($"=== Current Culture: {CultureInfo.CurrentUICulture.Name} ===");
             
             // Give culture change time to fully propagate
-            await Task.Delay(100);
+            await Task.Delay(200);
             
             System.Diagnostics.Debug.WriteLine($"=== After delay, Culture: {CultureInfo.CurrentUICulture.Name} ===");
             
@@ -187,9 +187,19 @@ public partial class CalendarViewModel : BaseViewModel
             // FIX: Update TodayLunarDisplay directly without waiting for LoadCalendarAsync
             await UpdateTodayDisplayAsync();
             
-            RefreshLocalizedHolidayProperties();
-            await LoadCalendarAsync(); // Refresh today section and all date displays
-            await LoadUpcomingHolidaysAsync(); // Refresh upcoming holidays to update localized strings
+            // FIX: Safely refresh localized properties with error handling
+            // DO NOT reload collections during language change - only refresh displayed text
+            try
+            {
+                RefreshLocalizedHolidayProperties();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"=== Error refreshing localized properties: {ex.Message} ===");
+            }
+            
+            // Refresh calendar display (dates) without modifying collections
+            await LoadCalendarAsync();
         });
     }
 
@@ -206,21 +216,49 @@ public partial class CalendarViewModel : BaseViewModel
 
     private void RefreshLocalizedHolidayProperties()
     {
-        // Create snapshots to avoid enumeration issues during concurrent updates
-        // This is defensive programming to prevent rare race conditions
-        var upcomingSnapshot = UpcomingHolidays.ToList();
-        var yearSnapshot = YearHolidays.ToList();
-        
-        // Refresh all localized holiday occurrences in upcoming holidays
-        foreach (var holiday in upcomingSnapshot)
+        // FIX: Add null checks to prevent crashes during initialization or disposal
+        if (UpcomingHolidays == null || YearHolidays == null)
         {
-            holiday.RefreshLocalizedProperties();
+            System.Diagnostics.Debug.WriteLine("=== RefreshLocalizedHolidayProperties: Collections not initialized ===");
+            return;
         }
 
-        // Refresh all localized holiday occurrences in year holidays
-        foreach (var holiday in yearSnapshot)
+        try
         {
-            holiday.RefreshLocalizedProperties();
+            // Create snapshots to avoid enumeration issues during concurrent updates
+            // This is defensive programming to prevent rare race conditions
+            var upcomingSnapshot = UpcomingHolidays.ToList();
+            var yearSnapshot = YearHolidays.ToList();
+            
+            // Refresh all localized holiday occurrences in upcoming holidays
+            foreach (var holiday in upcomingSnapshot)
+            {
+                try
+                {
+                    holiday?.RefreshLocalizedProperties();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"=== Error refreshing upcoming holiday: {ex.Message} ===");
+                }
+            }
+
+            // Refresh all localized holiday occurrences in year holidays
+            foreach (var holiday in yearSnapshot)
+            {
+                try
+                {
+                    holiday?.RefreshLocalizedProperties();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"=== Error refreshing year holiday: {ex.Message} ===");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"=== Error in RefreshLocalizedHolidayProperties: {ex.Message} ===");
         }
     }
 
@@ -259,15 +297,14 @@ public partial class CalendarViewModel : BaseViewModel
             ShowLunarDates = SettingsViewModel.GetShowLunarDates();
             UpcomingHolidaysDays = SettingsViewModel.GetUpcomingHolidaysDays();
 
-            System.Diagnostics.Debug.WriteLine("=== Loading calendar ===");
-            await LoadCalendarAsync();
-
-            System.Diagnostics.Debug.WriteLine("=== Loading year holidays ===");
-            await LoadYearHolidaysAsync();
-
-            System.Diagnostics.Debug.WriteLine("=== Loading upcoming holidays ===");
-            await LoadUpcomingHolidaysAsync();
-            System.Diagnostics.Debug.WriteLine($"=== After LoadUpcomingHolidaysAsync: UpcomingHolidays.Count = {UpcomingHolidays.Count}, IsLoadingHolidays = {IsLoadingHolidays} ===");
+            // PERFORMANCE OPTIMIZATION: Load calendar and upcoming holidays in parallel
+            // Year holidays are now in a separate tab and will load on-demand
+            System.Diagnostics.Debug.WriteLine("=== Loading calendar and upcoming holidays in parallel ===");
+            await Task.WhenAll(
+                LoadCalendarAsync(),
+                LoadUpcomingHolidaysAsync()
+            );
+            System.Diagnostics.Debug.WriteLine($"=== Parallel loading complete: UpcomingHolidays.Count = {UpcomingHolidays.Count}, IsLoadingHolidays = {IsLoadingHolidays} ===");
 
             System.Diagnostics.Debug.WriteLine("=== CalendarViewModel.InitializeAsync COMPLETE ===");
         }
@@ -812,6 +849,16 @@ public partial class CalendarViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine($"=== LoadYearHolidaysAsync START for year {SelectedYear} ===");
             
+            // CRITICAL iOS FIX: Hide CollectionView BEFORE modifying collection
+            // This prevents iOS crash when CollectionView is being rendered while collection changes
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                IsLoadingHolidays = true;
+                System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to TRUE ===");
+                // Yield to UI thread to ensure visibility change is processed
+                await Task.Yield();
+            });
+            
             var holidays = await _holidayService.GetHolidaysForYearAsync(SelectedYear);
             System.Diagnostics.Debug.WriteLine($"=== Got {holidays.Count} holidays from service ===");
 
@@ -824,12 +871,20 @@ public partial class CalendarViewModel : BaseViewModel
             System.Diagnostics.Debug.WriteLine($"=== After filtering: {filteredHolidays.Count} holidays ===");
 
             // Update UI on main thread
+            // FIX: Use Clear/Add pattern instead of replacing collection to prevent enumeration crashes
+            // This prevents race conditions when language change handler is enumerating YearHolidays
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 try
                 {
-                    YearHolidays = new ObservableCollection<LocalizedHolidayOccurrence>(
-                        filteredHolidays.Select(h => new LocalizedHolidayOccurrence(h)));
+                    // Clear existing items instead of replacing collection
+                    YearHolidays.Clear();
+                    
+                    // Add new items one by one
+                    foreach (var holiday in filteredHolidays)
+                    {
+                        YearHolidays.Add(new LocalizedHolidayOccurrence(holiday));
+                    }
                     
                     System.Diagnostics.Debug.WriteLine($"=== YearHolidays updated with {YearHolidays.Count} items ===");
                 }
@@ -838,6 +893,9 @@ public partial class CalendarViewModel : BaseViewModel
                     System.Diagnostics.Debug.WriteLine($"=== ERROR during UI update: {ex.Message} ===");
                 }
             });
+
+            // Small delay to ensure UI is stable before showing CollectionView again
+            await Task.Delay(50);
         }
         catch (Exception ex)
         {
@@ -850,6 +908,13 @@ public partial class CalendarViewModel : BaseViewModel
         }
         finally
         {
+            // Show CollectionView again
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                IsLoadingHolidays = false;
+                System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to FALSE ===");
+            });
+            
             _updateSemaphore.Release();
         }
     }
@@ -873,19 +938,14 @@ public partial class CalendarViewModel : BaseViewModel
             System.Diagnostics.Debug.WriteLine($"=== UpcomingHolidaysDays: {UpcomingHolidaysDays} ===");
 
             // CRITICAL iOS FIX: Hide CollectionView BEFORE modifying collection
-            IsLoadingHolidays = true;
-            System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to TRUE ===");
-
-            // iOS-specific: Longer delay to ensure CALayer finishes hiding CollectionView
-            // This prevents CALayer drawInContext crash during collection update
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            // Set loading state on main thread and yield to allow UI to update
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await Task.Delay(200);
-            }
-            else
-            {
-                await Task.Delay(50);
-            }
+                IsLoadingHolidays = true;
+                System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to TRUE ===");
+                // Yield to UI thread to ensure visibility change is processed
+                await Task.Yield();
+            });
 
             var today = DateTime.Today;
             var endDate = today.AddDays(UpcomingHolidaysDays);
@@ -933,36 +993,31 @@ public partial class CalendarViewModel : BaseViewModel
             );
 
             // Replace entire collection reference on main thread - atomic operation
-            await MainThread.InvokeOnMainThreadAsync(() =>
+            // Then show the view after binding completes
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 try
                 {
                     System.Diagnostics.Debug.WriteLine("=== Replacing UpcomingHolidays collection reference ===");
                     UpcomingHolidays = newCollection;
                     System.Diagnostics.Debug.WriteLine($"=== Collection replaced successfully: {UpcomingHolidays.Count} items ===");
+
+                    // Yield to allow binding to complete before showing
+                    await Task.Yield();
+
+                    // Show CollectionView after binding completes
+                    IsLoadingHolidays = false;
+                    System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to FALSE - Collection ready ===");
                 }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"=== ERROR replacing collection: {ex.Message} ===");
                     System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+                    IsLoadingHolidays = false;
                 }
             });
 
-            // iOS-specific: Longer delay to ensure collection binding completes
-            // This prevents showing the CollectionView before iOS finishes binding
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                await Task.Delay(200);
-            }
-            else
-            {
-                await Task.Delay(100);
-            }
-
-            // Show CollectionView again
-            System.Diagnostics.Debug.WriteLine("=== Setting IsLoadingHolidays to FALSE ===");
-            IsLoadingHolidays = false;
-            System.Diagnostics.Debug.WriteLine($"=== LoadUpcomingHolidaysAsync COMPLETE - IsLoadingHolidays: {IsLoadingHolidays}, Count: {UpcomingHolidays.Count} ===");
+            System.Diagnostics.Debug.WriteLine($"=== LoadUpcomingHolidaysAsync COMPLETE - Count: {UpcomingHolidays.Count} ===");
         }
         catch (Exception ex)
         {

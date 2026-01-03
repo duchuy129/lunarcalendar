@@ -11,6 +11,7 @@ namespace LunarCalendar.MobileApp;
 public class AppShell : Shell
 {
 	private ShellContent? _calendarTab;
+	private ShellContent? _yearHolidaysTab;
 	private ShellContent? _settingsTab;
 
 	public AppShell()
@@ -53,6 +54,11 @@ public class AppShell : Shell
 		{
 			_calendarTab.Title = AppResources.Calendar;
 			System.Diagnostics.Debug.WriteLine($"=== Updated Calendar tab title to: {AppResources.Calendar} ===");
+		}
+		if (_yearHolidaysTab != null)
+		{
+			_yearHolidaysTab.Title = AppResources.YearHolidays;
+			System.Diagnostics.Debug.WriteLine($"=== Updated Year Holidays tab title to: {AppResources.YearHolidays} ===");
 		}
 		if (_settingsTab != null)
 		{
@@ -98,12 +104,26 @@ public class AppShell : Shell
 			Size = 30
 		};
 
+		_yearHolidaysTab = new ShellContent
+		{
+			Title = AppResources.YearHolidays,
+			ContentTemplate = new DataTemplate(typeof(YearHolidaysPage))
+		};
+
+		// Set icon using FontImageSource - color will be managed by Shell
+		_yearHolidaysTab.Icon = new FontImageSource
+		{
+			Glyph = "🎉", // Party popper emoji for holidays
+			FontFamily = "Arial",
+			Size = 30
+		};
+
 		_settingsTab = new ShellContent
 		{
 			Title = AppResources.Settings,
 			ContentTemplate = new DataTemplate(typeof(SettingsPage))
 		};
-		
+
 		// Set icon using FontImageSource - color will be managed by Shell
 		_settingsTab.Icon = new FontImageSource
 		{
@@ -113,6 +133,7 @@ public class AppShell : Shell
 		};
 
 		tabBar.Items.Add(_calendarTab);
+		tabBar.Items.Add(_yearHolidaysTab);
 		tabBar.Items.Add(_settingsTab);
 
 		this.Items.Add(tabBar);
