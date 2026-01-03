@@ -477,26 +477,26 @@ public partial class CalendarViewModel : BaseViewModel
             var daysToGenerate = weeksNeeded * 7;
 
             // Adjust calendar height based on number of weeks
-            // Now using fixed cell heights (60px per cell + margins)
-            // Calculate: (cell height + margins) * rows = (60 + 4) * rows
+            // Now using fixed cell heights (70px per cell + margins)
+            // Calculate: (cell height + margins) * rows = (70 + 4) * rows
             if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 CalendarHeight = weeksNeeded switch
                 {
-                    4 => 256,  // 4 rows: 64 * 4 = 256
-                    5 => 320,  // 5 rows: 64 * 5 = 320
-                    6 => 384,  // 6 rows: 64 * 6 = 384
-                    _ => 320   // Default to 5 rows
+                    4 => 296,  // 4 rows: 74 * 4 = 296
+                    5 => 370,  // 5 rows: 74 * 5 = 370
+                    6 => 444,  // 6 rows: 74 * 6 = 444
+                    _ => 370   // Default to 5 rows
                 };
             }
             else
             {
                 CalendarHeight = weeksNeeded switch
                 {
-                    4 => 256,  // 4 rows: 64 * 4 = 256
-                    5 => 320,  // 5 rows: 64 * 5 = 320
-                    6 => 384,  // 6 rows: 64 * 6 = 384
-                    _ => 320   // Default to 5 rows
+                    4 => 296,  // 4 rows: 74 * 4 = 296
+                    5 => 370,  // 5 rows: 74 * 5 = 370
+                    6 => 444,  // 6 rows: 74 * 6 = 444
+                    _ => 370   // Default to 5 rows
                 };
             }
 
@@ -793,23 +793,8 @@ public partial class CalendarViewModel : BaseViewModel
                 viewModel.Holiday = holidayOccurrence;
             }
 
-            // Navigate using current page's navigation
-            // The calendar tab is wrapped in NavigationPage, so get the NavigationPage
-            if (Application.Current?.MainPage is TabbedPage tabbedPage)
-            {
-                var currentPage = tabbedPage.CurrentPage;
-
-                // If current page is NavigationPage (calendar tab), use its navigation
-                if (currentPage is NavigationPage navPage)
-                {
-                    await navPage.PushAsync(holidayDetailPage);
-                }
-                // Otherwise use the page's own navigation (fallback)
-                else if (currentPage != null)
-                {
-                    await currentPage.Navigation.PushAsync(holidayDetailPage);
-                }
-            }
+            // Navigate using Shell navigation (app uses AppShell, not TabbedPage)
+            await Shell.Current.Navigation.PushAsync(holidayDetailPage);
         }
         catch (Exception ex)
         {

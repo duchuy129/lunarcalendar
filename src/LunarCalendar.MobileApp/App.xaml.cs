@@ -19,62 +19,9 @@ public partial class App : Application
 			InitializeLocalization();
 			System.Diagnostics.Debug.WriteLine("=== Localization initialized ===");
 
-		// Using TabbedPage instead of Shell (Shell has black screen issue on iOS physical devices)
-		var tabbedPage = new TabbedPage();
-
-		// Modern tab bar styling
-		ApplyModernTabBarStyling(tabbedPage);
-
-		// Get pages from DI container
-		var serviceProvider = IPlatformApplication.Current?.Services
-			?? throw new InvalidOperationException("Service provider not available");
-
-		var calendarPage = serviceProvider.GetRequiredService<Views.CalendarPage>();
-		var settingsPage = serviceProvider.GetRequiredService<Views.SettingsPage>();
-
-		// Wrap both pages in NavigationPage for consistent header/footer styling
-		// Calendar page needs NavigationPage to enable push navigation for holiday details
-		var calendarNav = new NavigationPage(calendarPage)
-		{
-			Title = calendarPage.Title,
-			IconImageSource = new FontImageSource
-			{
-				Glyph = "📅", // Calendar emoji - works everywhere
-				Size = 24
-			}
-		};
-
-		// Wrap Settings page in NavigationPage for consistent appearance
-		var settingsNav = new NavigationPage(settingsPage)
-		{
-			Title = settingsPage.Title,
-			IconImageSource = new FontImageSource
-			{
-				Glyph = "⚙️", // Settings emoji - works everywhere
-				Size = 24
-			}
-		};
-
-		// Bind NavigationPage titles to update when page titles change (for language switching)
-		calendarPage.PropertyChanged += (s, e) =>
-		{
-			if (e.PropertyName == nameof(calendarPage.Title))
-			{
-				calendarNav.Title = calendarPage.Title;
-			}
-		};
-
-		settingsPage.PropertyChanged += (s, e) =>
-		{
-			if (e.PropertyName == nameof(settingsPage.Title))
-			{
-				settingsNav.Title = settingsPage.Title;
-			}
-		};
-
-		tabbedPage.Children.Add(calendarNav);
-		tabbedPage.Children.Add(settingsNav);			MainPage = tabbedPage;
-			System.Diagnostics.Debug.WriteLine("=== TabbedPage with real pages created ===");
+		// USE APPSHELL WITH HELLO WORLD TEST!
+			MainPage = new AppShell();
+			System.Diagnostics.Debug.WriteLine("=== AppShell created with HELLO WORLD ===");
 			System.Diagnostics.Debug.WriteLine("=== App Constructor END ===");
 		}
 		catch (Exception ex)

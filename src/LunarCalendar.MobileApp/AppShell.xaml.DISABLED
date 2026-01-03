@@ -3,17 +3,38 @@
     x:Class="LunarCalendar.MobileApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
     xmlns:views="clr-namespace:LunarCalendar.MobileApp.Views"
     Shell.FlyoutBehavior="Disabled"
-    Shell.TabBarIsVisible="True">
+    Shell.TabBarIsVisible="True"
+    Shell.TabBarBackgroundColor="White"
+    Shell.TabBarForegroundColor="#512BD4"
+    Shell.TabBarUnselectedColor="#999999"
+    android:TabbedPage.ToolbarPlacement="Bottom">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TabBar">
+                <Setter Property="Shell.TabBarBackgroundColor" Value="White"/>
+                <Setter Property="Shell.TabBarForegroundColor" Value="#512BD4"/>
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#999999"/>
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
 
     <TabBar>
         <ShellContent
             Title="Calendar"
-            Icon="calendar.png"
+            Icon="icon_calendar.svg"
             Route="calendar">
             <ContentPage BackgroundColor="White">
                 <VerticalStackLayout Padding="20" Spacing="10" VerticalOptions="Center">
+                    <Label Text="🔴 VERSION: BUILD 2026-01-02 18:25 🔴"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="Red"
+                           Margin="0,0,0,20"/>
                     <Label Text="Calendar"
                            FontSize="32"
                            FontAttributes="Bold"
@@ -28,13 +49,19 @@
                            HorizontalOptions="Center"
                            TextColor="Gray"
                            HorizontalTextAlignment="Center"/>
+                    <Label Text="⬇️ CHECK: Tabs should be at BOTTOM ⬇️"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="Red"
+                           Margin="0,20,0,0"/>
                 </VerticalStackLayout>
             </ContentPage>
         </ShellContent>
 
         <ShellContent
             Title="Settings"
-            Icon="settings.png"
+            Icon="icon_settings.svg"
             Route="settings"
             ContentTemplate="{DataTemplate views:SettingsPage}" />
     </TabBar>

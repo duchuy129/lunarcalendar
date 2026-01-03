@@ -245,12 +245,12 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <!-- IMPROVED: Better visual hierarchy with softer shadows and hover states -->
-                    <!-- FIX: Added HeightRequest to ensure consistent cell heights on iOS -->
+                    <!-- FIX: Increased HeightRequest from 60 to 70 to prevent lunar text from being cut off -->
                     <Border Padding="5"
                            Margin="2"
                            Background="#FAFBFC"
                            StrokeThickness="0"
-                           HeightRequest="60">
+                           HeightRequest="70">
                         <!-- Minimal shadow for depth -->
                         <Border.Shadow>
                             <Shadow Brush="Black"
