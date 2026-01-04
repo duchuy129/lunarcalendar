@@ -4,6 +4,13 @@ namespace LunarCalendar.MobileApp.Services;
 
 public class HapticService : IHapticService
 {
+    private readonly ILogService _logService;
+
+    public HapticService(ILogService logService)
+    {
+        _logService = logService;
+    }
+
     public void PerformClick()
     {
         if (SettingsViewModel.GetEnableHapticFeedback())
@@ -14,7 +21,7 @@ public class HapticService : IHapticService
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Haptic feedback error: {ex.Message}");
+                _logService.LogWarning("Haptic click feedback failed - non-critical", "HapticService.PerformClick");
             }
         }
     }
@@ -29,7 +36,7 @@ public class HapticService : IHapticService
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Haptic feedback error: {ex.Message}");
+                _logService.LogWarning("Haptic selection feedback failed - non-critical", "HapticService.PerformSelection");
             }
         }
     }

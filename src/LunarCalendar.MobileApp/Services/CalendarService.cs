@@ -14,13 +14,16 @@ public class CalendarService : ICalendarService
 {
     private readonly ILunarCalculationService _lunarCalculationService;
     private readonly LunarCalendarDatabase _database;
+    private readonly ILogService _logService;
 
     public CalendarService(
         ILunarCalculationService lunarCalculationService,
-        LunarCalendarDatabase database)
+        LunarCalendarDatabase database,
+        ILogService logService)
     {
         _lunarCalculationService = lunarCalculationService;
         _database = database;
+        _logService = logService;
     }
 
     public async Task<LunarDate?> GetLunarDateAsync(DateTime date)
@@ -51,7 +54,7 @@ public class CalendarService : ICalendarService
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error saving lunar date to database: {ex.Message}");
+                    _logService.LogError($"Failed to save lunar date to database for {date}", ex, "CalendarService.GetLunarDateAsync");
                 }
             });
 
@@ -59,7 +62,7 @@ public class CalendarService : ICalendarService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error calculating lunar date: {ex.Message}");
+            _logService.LogError($"Failed to get lunar date for {date}", ex, "CalendarService.GetLunarDateAsync");
             return null;
         }
     }
@@ -68,12 +71,10 @@ public class CalendarService : ICalendarService
     {
         try
         {
-            Debug.WriteLine($"CalendarService: Calculating local lunar dates for {year}/{month}");
 
             // Calculate locally - instant, no network needed
             var lunarDates = _lunarCalculationService.GetMonthInfo(year, month);
 
-            Debug.WriteLine($"CalendarService: Calculated {lunarDates.Count} lunar dates locally");
 
             // Save to database in background for historical tracking
             _ = Task.Run(async () =>
@@ -94,11 +95,10 @@ public class CalendarService : ICalendarService
                     }).ToList();
 
                     await _database.SaveLunarDatesAsync(entities);
-                    Debug.WriteLine($"CalendarService: Saved {entities.Count} lunar dates to database");
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error saving lunar dates to database: {ex.Message}");
+                    _logService.LogError("Failed to save lunar dates to database", ex, "CalendarService.GetLunarDatesForMonthAsync");
                 }
             });
 
@@ -106,7 +106,7 @@ public class CalendarService : ICalendarService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error calculating lunar dates: {ex.Message}");
+            _logService.LogError($"Failed to get lunar dates for month {year}-{month}", ex, "CalendarService.GetMonthLunarDatesAsync");
             return new List<LunarDate>();
         }
     }

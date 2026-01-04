@@ -11,17 +11,13 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="24">
 
-            <!-- Holiday Icon/Color Indicator - Elegant Gradient Design -->
+            <!-- Holiday Icon/Color Indicator - Solid Color with Stroke (iOS-safe) -->
             <Border HeightRequest="160"
                     WidthRequest="160"
-                    StrokeThickness="0"
+                    Stroke="{Binding HolidayColorHex}"
+                    StrokeThickness="4"
+                    BackgroundColor="{Binding HolidayColorHex}"
                     HorizontalOptions="Center">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="{Binding HolidayColorHex}" Offset="0.0"/>
-                        <GradientStop Color="{Binding HolidayColorHex}" Offset="1.0"/>
-                    </LinearGradientBrush>
-                </Border.Background>
                 <Border.Shadow>
                     <Shadow Brush="{Binding HolidayColorHex}"
                             Opacity="0.3"
@@ -65,16 +61,12 @@
                    HorizontalOptions="Center"
                    HorizontalTextAlignment="Center"/>
 
-            <!-- Holiday Type Badge - Elegant Gradient Design -->
+            <!-- Holiday Type Badge - Solid Color with Stroke (iOS-safe) -->
             <Border Padding="18,9"
-                    StrokeThickness="0"
+                    Stroke="{Binding HolidayColorHex}"
+                    StrokeThickness="2"
+                    BackgroundColor="{Binding HolidayColorHex}"
                     HorizontalOptions="Center">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="{Binding HolidayColorHex}" Offset="0.0"/>
-                        <GradientStop Color="{Binding HolidayColorHex}" Offset="1.0"/>
-                    </LinearGradientBrush>
-                </Border.Background>
                 <Border.Shadow>
                     <Shadow Brush="{Binding HolidayColorHex}"
                             Opacity="0.2"

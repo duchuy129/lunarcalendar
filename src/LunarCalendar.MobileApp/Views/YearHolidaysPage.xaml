@@ -201,17 +201,13 @@
                                 <Grid ColumnDefinitions="Auto,*"
                                      ColumnSpacing="12">
 
-                                    <!-- Date Box - Elegant Soft Gradient Design -->
+                                    <!-- Date Box - Solid Color with Stroke (iOS-safe) -->
                                     <Border Grid.Column="0"
                                            Padding="12,14"
-                                           StrokeThickness="0"
+                                           Stroke="{Binding ColorHex}"
+                                           StrokeThickness="3"
+                                           BackgroundColor="{Binding ColorHex}"
                                            WidthRequest="70">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                <GradientStop Color="{Binding ColorHex}" Offset="0.0"/>
-                                                <GradientStop Color="{Binding ColorHex}" Offset="1.0"/>
-                                            </LinearGradientBrush>
-                                        </Border.Background>
                                         <Border.Shadow>
                                             <Shadow Brush="{Binding ColorHex}"
                                                     Opacity="0.25"

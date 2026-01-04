@@ -46,6 +46,7 @@
     <Color x:Key="LunarRed">#DC5A7A</Color><!-- Softer red for better readability -->
     <Color x:Key="LunarGold">#F5C842</Color><!-- Less aggressive yellow -->
     <Color x:Key="TodayGreen">#10C993</Color><!-- Slightly muted green -->
+    <Color x:Key="Danger">#DC3545</Color><!-- Red for destructive actions -->
 
     <!-- Background Gradients - Improved for eye comfort -->
     <Color x:Key="BackgroundLight">#FFFFFF</Color>

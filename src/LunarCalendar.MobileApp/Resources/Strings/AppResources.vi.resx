@@ -254,6 +254,17 @@
     <value>Về Ứng Dụng Này</value>
   </data>
 
+  <!-- Diagnostics -->
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Chẩn Đoán</value>
+  </data>
+  <data name="ViewDiagnosticLogs" xml:space="preserve">
+    <value>Xem Nhật Ký Chẩn Đoán</value>
+  </data>
+  <data name="ClearLogs" xml:space="preserve">
+    <value>Xóa Nhật Ký</value>
+  </data>
+
   <!-- Sync Messages -->
   <data name="SyncComplete" xml:space="preserve">
     <value>Đồng Bộ Hoàn Tất</value>

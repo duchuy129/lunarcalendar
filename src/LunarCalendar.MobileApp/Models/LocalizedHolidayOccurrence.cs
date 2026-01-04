@@ -35,7 +35,9 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
             Holiday.DescriptionResourceKey,
             Holiday.Description);
 
-    public string ColorHex => HolidayOccurrence.ColorHex;
+    public string ColorHex => string.IsNullOrWhiteSpace(HolidayOccurrence.ColorHex) 
+        ? "#FF0000" 
+        : HolidayOccurrence.ColorHex;
     public bool IsPublicHoliday => HolidayOccurrence.IsPublicHoliday;
     
     // Culture-aware Gregorian date formatting

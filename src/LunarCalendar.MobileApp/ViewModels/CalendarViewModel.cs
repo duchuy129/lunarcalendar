@@ -19,6 +19,7 @@ public partial class CalendarViewModel : BaseViewModel
     private readonly IHapticService _hapticService;
     private readonly IConnectivityService _connectivityService;
     private readonly ISyncService _syncService;
+    private readonly ILogService _logService;
 
     [ObservableProperty]
     private DateTime _currentMonth;
@@ -68,13 +69,12 @@ public partial class CalendarViewModel : BaseViewModel
 
     partial void OnUpcomingHolidaysChanged(ObservableCollection<LocalizedHolidayOccurrence> value)
     {
-        System.Diagnostics.Debug.WriteLine($"!!! UpcomingHolidays PROPERTY CHANGED - New collection has {value?.Count ?? 0} items !!!");
-        System.Diagnostics.Debug.WriteLine($"!!! IsLoadingHolidays: {IsLoadingHolidays} !!!");
+        // Property changed handler - no action needed
     }
 
     partial void OnIsLoadingHolidaysChanged(bool value)
     {
-        System.Diagnostics.Debug.WriteLine($"!!! IsLoadingHolidays CHANGED to: {value} !!!");
+        // Property changed handler - no action needed
     }
 
     partial void OnSelectedYearChanged(int value)
@@ -127,7 +127,8 @@ public partial class CalendarViewModel : BaseViewModel
         IHolidayService holidayService,
         IHapticService hapticService,
         IConnectivityService connectivityService,
-        ISyncService syncService)
+        ISyncService syncService,
+        ILogService logService)
     {
         _calendarService = calendarService;
         _userModeService = userModeService;
@@ -135,6 +136,9 @@ public partial class CalendarViewModel : BaseViewModel
         _hapticService = hapticService;
         _connectivityService = connectivityService;
         _syncService = syncService;
+        _logService = logService;
+        
+        _logService.LogInfo("CalendarViewModel initialized", "CalendarViewModel");
 
         Title = AppResources.Calendar;
         _currentMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -166,13 +170,8 @@ public partial class CalendarViewModel : BaseViewModel
         // Subscribe to language changes
         WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, async (r, m) =>
         {
-            System.Diagnostics.Debug.WriteLine($"=== LanguageChangedMessage received in CalendarViewModel ===");
-            System.Diagnostics.Debug.WriteLine($"=== Current Culture: {CultureInfo.CurrentUICulture.Name} ===");
-            
             // Give culture change time to fully propagate
             await Task.Delay(200);
-            
-            System.Diagnostics.Debug.WriteLine($"=== After delay, Culture: {CultureInfo.CurrentUICulture.Name} ===");
             
             LoadMonthNames();
             Title = AppResources.Calendar; // Update title with new language
@@ -193,9 +192,9 @@ public partial class CalendarViewModel : BaseViewModel
             {
                 RefreshLocalizedHolidayProperties();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                System.Diagnostics.Debug.WriteLine($"=== Error refreshing localized properties: {ex.Message} ===");
+                // Silent failure - localization refresh is non-critical
             }
             
             // Refresh calendar display (dates) without modifying collections
@@ -219,7 +218,6 @@ public partial class CalendarViewModel : BaseViewModel
         // FIX: Add null checks to prevent crashes during initialization or disposal
         if (UpcomingHolidays == null || YearHolidays == null)
         {
-            System.Diagnostics.Debug.WriteLine("=== RefreshLocalizedHolidayProperties: Collections not initialized ===");
             return;
         }
 
@@ -237,9 +235,9 @@ public partial class CalendarViewModel : BaseViewModel
                 {
                     holiday?.RefreshLocalizedProperties();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    System.Diagnostics.Debug.WriteLine($"=== Error refreshing upcoming holiday: {ex.Message} ===");
+                    // Silent failure - individual holiday refresh is non-critical
                 }
             }
 
@@ -250,15 +248,15 @@ public partial class CalendarViewModel : BaseViewModel
                 {
                     holiday?.RefreshLocalizedProperties();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    System.Diagnostics.Debug.WriteLine($"=== Error refreshing year holiday: {ex.Message} ===");
+                    // Silent failure - individual holiday refresh is non-critical
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            System.Diagnostics.Debug.WriteLine($"=== Error in RefreshLocalizedHolidayProperties: {ex.Message} ===");
+            // Silent failure - localization refresh is non-critical
         }
     }
 
@@ -290,8 +288,8 @@ public partial class CalendarViewModel : BaseViewModel
     {
         try
         {
-            System.Diagnostics.Debug.WriteLine("=== CalendarViewModel.InitializeAsync START ===");
-
+            _logService.LogInfo("Initializing calendar view", "CalendarViewModel.InitializeAsync");
+            
             // Load settings
             ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
             ShowLunarDates = SettingsViewModel.GetShowLunarDates();
@@ -299,19 +297,16 @@ public partial class CalendarViewModel : BaseViewModel
 
             // PERFORMANCE OPTIMIZATION: Load calendar and upcoming holidays in parallel
             // Year holidays are now in a separate tab and will load on-demand
-            System.Diagnostics.Debug.WriteLine("=== Loading calendar and upcoming holidays in parallel ===");
             await Task.WhenAll(
                 LoadCalendarAsync(),
                 LoadUpcomingHolidaysAsync()
             );
-            System.Diagnostics.Debug.WriteLine($"=== Parallel loading complete: UpcomingHolidays.Count = {UpcomingHolidays.Count}, IsLoadingHolidays = {IsLoadingHolidays} ===");
-
-            System.Diagnostics.Debug.WriteLine("=== CalendarViewModel.InitializeAsync COMPLETE ===");
+            
+            _logService.LogInfo("Calendar initialization complete", "CalendarViewModel.InitializeAsync");
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== INIT ERROR: {ex.Message} ===");
-            System.Diagnostics.Debug.WriteLine($"=== STACK: {ex.StackTrace} ===");
+            _logService.LogError("Failed to initialize calendar", ex, "CalendarViewModel.InitializeAsync");
             // Ensure loading indicator is hidden even if there's an error
             IsLoadingHolidays = false;
         }
@@ -324,33 +319,27 @@ public partial class CalendarViewModel : BaseViewModel
 
         try
         {
-            System.Diagnostics.Debug.WriteLine("=== RefreshSettingsAsync START ===");
 
             // Refresh settings when returning to calendar page
             ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
             ShowLunarDates = SettingsViewModel.GetShowLunarDates();
             var newDays = SettingsViewModel.GetUpcomingHolidaysDays();
 
-            System.Diagnostics.Debug.WriteLine($"=== Current UpcomingHolidaysDays: {UpcomingHolidaysDays}, New: {newDays} ===");
-
+            
             if (UpcomingHolidaysDays != newDays)
             {
-                System.Diagnostics.Debug.WriteLine("=== Days changed, updating UpcomingHolidaysDays and reloading holidays ===");
                 UpcomingHolidaysDays = newDays;
 
                 // Wait for any ongoing holiday loading to complete first
                 if (_isUpdatingHolidays)
                 {
-                    System.Diagnostics.Debug.WriteLine("=== Waiting for ongoing holiday update to complete ===");
                     // Wait up to 5 seconds for the semaphore
                     if (await _updateSemaphore.WaitAsync(5000))
                     {
                         _updateSemaphore.Release();
-                        System.Diagnostics.Debug.WriteLine("=== Previous update completed ===");
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine("=== WARNING: Timeout waiting for previous update ===");
                         // Don't reload if previous update is stuck
                         return;
                     }
@@ -359,17 +348,12 @@ public partial class CalendarViewModel : BaseViewModel
                 // MUST await to ensure collection update completes before page renders
                 await LoadUpcomingHolidaysAsync();
             }
-
-            System.Diagnostics.Debug.WriteLine("=== RefreshSettingsAsync COMPLETE ===");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            System.Diagnostics.Debug.WriteLine($"=== ERROR in RefreshSettingsAsync: {ex.Message} ===");
-            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+            // Silent failure - settings refresh is non-critical
         }
-    }
-
-    [RelayCommand]
+    }    [RelayCommand]
     async Task PreviousMonthAsync()
     {
         _hapticService.PerformClick();
@@ -410,7 +394,7 @@ public partial class CalendarViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error during refresh: {ex.Message}");
+            _logService.LogError("Failed to initialize calendar data", ex, "CalendarViewModel.InitializeAsync");
         }
         finally
         {
@@ -489,14 +473,12 @@ public partial class CalendarViewModel : BaseViewModel
                 // Vietnamese: "Ngày 11 Tháng 15, Năm Tỵ"
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
                 
-                System.Diagnostics.Debug.WriteLine($"=== BEFORE FORMAT: Culture={CultureInfo.CurrentUICulture.Name}, TwoLetter={CultureInfo.CurrentUICulture.TwoLetterISOLanguageName} ===");
                 
                 TodayLunarDisplay = DateFormatterHelper.FormatLunarDateWithYear(
                     todayLunar.LunarDay, 
                     todayLunar.LunarMonth, 
                     localizedAnimalSign);
                 
-                System.Diagnostics.Debug.WriteLine($"=== Today Display Updated: Culture={CultureInfo.CurrentUICulture.Name}, Display={TodayLunarDisplay} ===");
             }
 
             // Create calendar days
@@ -577,7 +559,6 @@ public partial class CalendarViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error loading calendar: {ex.Message}");
             // Show error to user
             await Application.Current.MainPage.DisplayAlert("Error", "Failed to load calendar data", "OK");
         }
@@ -592,7 +573,6 @@ public partial class CalendarViewModel : BaseViewModel
     {
         try
         {
-            System.Diagnostics.Debug.WriteLine($"=== UpdateTodayDisplayAsync called ===");
             
             // Get today's lunar date
             var todayLunarDates = await _calendarService.GetMonthLunarDatesAsync(
@@ -605,19 +585,17 @@ public partial class CalendarViewModel : BaseViewModel
             {
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
                 
-                System.Diagnostics.Debug.WriteLine($"=== Before format in UpdateToday: Culture={CultureInfo.CurrentUICulture.Name} ===");
                 
                 TodayLunarDisplay = DateFormatterHelper.FormatLunarDateWithYear(
                     todayLunar.LunarDay, 
                     todayLunar.LunarMonth, 
                     localizedAnimalSign);
                 
-                System.Diagnostics.Debug.WriteLine($"=== Today Display updated directly: {TodayLunarDisplay} ===");
             }
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== Error updating today display: {ex.Message} ===");
+            _logService.LogError("Failed to load today's lunar display", ex, "CalendarViewModel.LoadTodayLunarDisplay");
         }
     }
 
@@ -783,17 +761,12 @@ public partial class CalendarViewModel : BaseViewModel
         // Add haptic feedback for better UX
         _hapticService.PerformClick();
 
-        System.Diagnostics.Debug.WriteLine($"!!! ToggleYearSection called - Current state: {IsYearSectionExpanded} !!!");
         IsYearSectionExpanded = !IsYearSectionExpanded;
-        System.Diagnostics.Debug.WriteLine($"!!! New state: {IsYearSectionExpanded} !!!");
         
         // Reload holidays when expanding to ensure they render properly
         if (IsYearSectionExpanded)
         {
-            System.Diagnostics.Debug.WriteLine($"!!! Section expanded, reloading holidays for year {SelectedYear} !!!");
-            System.Diagnostics.Debug.WriteLine($"!!! Current YearHolidays count BEFORE reload: {YearHolidays?.Count ?? 0} !!!");
             await LoadYearHolidaysAsync();
-            System.Diagnostics.Debug.WriteLine($"!!! Current YearHolidays count AFTER reload: {YearHolidays?.Count ?? 0} !!!");
         }
     }
 
@@ -818,7 +791,6 @@ public partial class CalendarViewModel : BaseViewModel
             var serviceProvider = IPlatformApplication.Current?.Services;
             if (serviceProvider == null)
             {
-                System.Diagnostics.Debug.WriteLine("=== Service provider not available ===");
                 return;
             }
 
@@ -835,8 +807,7 @@ public partial class CalendarViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== Error navigating to holiday detail: {ex.Message} ===");
-            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+            _logService.LogError("Failed to navigate to holiday detail", ex, "CalendarViewModel.NavigateToHolidayDetail");
         }
     }
 
@@ -847,20 +818,17 @@ public partial class CalendarViewModel : BaseViewModel
 
         try
         {
-            System.Diagnostics.Debug.WriteLine($"=== LoadYearHolidaysAsync START for year {SelectedYear} ===");
             
             // CRITICAL iOS FIX: Hide CollectionView BEFORE modifying collection
             // This prevents iOS crash when CollectionView is being rendered while collection changes
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 IsLoadingHolidays = true;
-                System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to TRUE ===");
                 // Yield to UI thread to ensure visibility change is processed
                 await Task.Yield();
             });
             
             var holidays = await _holidayService.GetHolidaysForYearAsync(SelectedYear);
-            System.Diagnostics.Debug.WriteLine($"=== Got {holidays.Count} holidays from service ===");
 
             // Filter out Lunar Special Days
             var filteredHolidays = holidays
@@ -868,7 +836,6 @@ public partial class CalendarViewModel : BaseViewModel
                 .OrderBy(h => h.GregorianDate)
                 .ToList();
             
-            System.Diagnostics.Debug.WriteLine($"=== After filtering: {filteredHolidays.Count} holidays ===");
 
             // Update UI on main thread
             // FIX: Use Clear/Add pattern instead of replacing collection to prevent enumeration crashes
@@ -886,11 +853,10 @@ public partial class CalendarViewModel : BaseViewModel
                         YearHolidays.Add(new LocalizedHolidayOccurrence(holiday));
                     }
                     
-                    System.Diagnostics.Debug.WriteLine($"=== YearHolidays updated with {YearHolidays.Count} items ===");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"=== ERROR during UI update: {ex.Message} ===");
+                    _logService.LogError("Failed to add holiday to collection", ex, "CalendarViewModel.LoadYearHolidaysAsync");
                 }
             });
 
@@ -899,7 +865,7 @@ public partial class CalendarViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== ERROR loading year holidays: {ex.Message} ===");
+            _logService.LogError("Failed to load year holidays", ex, "CalendarViewModel.LoadYearHolidaysAsync");
             
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
@@ -912,7 +878,6 @@ public partial class CalendarViewModel : BaseViewModel
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 IsLoadingHolidays = false;
-                System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to FALSE ===");
             });
             
             _updateSemaphore.Release();
@@ -924,7 +889,6 @@ public partial class CalendarViewModel : BaseViewModel
         // Prevent concurrent updates that can cause iOS crashes
         if (_isUpdatingHolidays)
         {
-            System.Diagnostics.Debug.WriteLine("=== Skipping concurrent holiday update ===");
             return;
         }
 
@@ -934,38 +898,29 @@ public partial class CalendarViewModel : BaseViewModel
         {
             _isUpdatingHolidays = true;
 
-            System.Diagnostics.Debug.WriteLine($"=== LoadUpcomingHolidaysAsync START ===");
-            System.Diagnostics.Debug.WriteLine($"=== UpcomingHolidaysDays: {UpcomingHolidaysDays} ===");
 
             // CRITICAL iOS FIX: Hide CollectionView BEFORE modifying collection
             // Set loading state on main thread and yield to allow UI to update
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 IsLoadingHolidays = true;
-                System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to TRUE ===");
                 // Yield to UI thread to ensure visibility change is processed
                 await Task.Yield();
             });
 
             var today = DateTime.Today;
             var endDate = today.AddDays(UpcomingHolidaysDays);
-            System.Diagnostics.Debug.WriteLine($"=== Date range: {today:yyyy-MM-dd} to {endDate:yyyy-MM-dd} ===");
 
             var upcomingHolidays = new List<HolidayOccurrence>();
 
             // Get current year holidays
-            System.Diagnostics.Debug.WriteLine($"=== Fetching holidays for year {today.Year} ===");
             var currentYearHolidays = await _holidayService.GetHolidaysForYearAsync(today.Year);
-            System.Diagnostics.Debug.WriteLine($"=== Got {currentYearHolidays.Count} holidays for year {today.Year} ===");
 
             // If the range extends into next year, get next year's holidays too
             if (endDate.Year > today.Year)
             {
-                System.Diagnostics.Debug.WriteLine($"=== Fetching holidays for year {today.Year + 1} ===");
                 var nextYearHolidays = await _holidayService.GetHolidaysForYearAsync(today.Year + 1);
-                System.Diagnostics.Debug.WriteLine($"=== Got {nextYearHolidays.Count} holidays for year {today.Year + 1} ===");
                 currentYearHolidays = currentYearHolidays.Concat(nextYearHolidays).ToList();
-                System.Diagnostics.Debug.WriteLine($"=== Total holidays after concat: {currentYearHolidays.Count} ===");
             }
 
             // Filter holidays that fall within the upcoming range
@@ -974,19 +929,8 @@ public partial class CalendarViewModel : BaseViewModel
                 .OrderBy(h => h.GregorianDate)
                 .ToList();
 
-            System.Diagnostics.Debug.WriteLine($"=== After filtering: Found {upcomingHolidays.Count} upcoming holidays ===");
-            Console.WriteLine($"!!! FOUND {upcomingHolidays.Count} UPCOMING HOLIDAYS !!!");
-            foreach (var h in upcomingHolidays)
-            {
-                var msg = $"  - {h.Holiday.Name} on {h.GregorianDate:yyyy-MM-dd}";
-                System.Diagnostics.Debug.WriteLine($"==={msg} ===");
-                Console.WriteLine($"!!!{msg} !!!");
-            }
-            System.Diagnostics.Debug.WriteLine($"=== Current UpcomingHolidays collection has {UpcomingHolidays.Count} items ===");
-
             // CRITICAL iOS FIX: Create NEW collection instead of modifying existing one
             // This is atomic and prevents CALayer rendering crashes during collection updates
-            System.Diagnostics.Debug.WriteLine($"=== Creating new collection with {upcomingHolidays.Count} holidays ===");
 
             var newCollection = new ObservableCollection<LocalizedHolidayOccurrence>(
                 upcomingHolidays.Select(h => new LocalizedHolidayOccurrence(h))
@@ -998,36 +942,29 @@ public partial class CalendarViewModel : BaseViewModel
             {
                 try
                 {
-                    System.Diagnostics.Debug.WriteLine("=== Replacing UpcomingHolidays collection reference ===");
                     UpcomingHolidays = newCollection;
-                    System.Diagnostics.Debug.WriteLine($"=== Collection replaced successfully: {UpcomingHolidays.Count} items ===");
 
                     // Yield to allow binding to complete before showing
                     await Task.Yield();
 
                     // Show CollectionView after binding completes
                     IsLoadingHolidays = false;
-                    System.Diagnostics.Debug.WriteLine($"=== IsLoadingHolidays set to FALSE - Collection ready ===");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"=== ERROR replacing collection: {ex.Message} ===");
-                    System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+                    _logService.LogError("Failed to update UI", ex, "CalendarViewModel.LoadUpcomingHolidaysAsync");
                     IsLoadingHolidays = false;
                 }
             });
 
-            System.Diagnostics.Debug.WriteLine($"=== LoadUpcomingHolidaysAsync COMPLETE - Count: {UpcomingHolidays.Count} ===");
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== Error loading upcoming holidays: {ex.Message} ===");
-            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+            _logService.LogError("Failed to load upcoming holidays", ex, "CalendarViewModel.LoadUpcomingHolidaysAsync");
             IsLoadingHolidays = false;
         }
         finally
         {
-            System.Diagnostics.Debug.WriteLine("=== Releasing update semaphore ===");
             _isUpdatingHolidays = false;
             _updateSemaphore.Release();
         }
@@ -1077,7 +1014,7 @@ public partial class CalendarViewModel : BaseViewModel
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error updating calendar days: {ex.Message}");
+                _logService.LogWarning("Incremental update failed, using full replacement: " + ex.Message, "CalendarViewModel.UpdateCalendarDaysCollection");
                 // Fallback to full replacement
                 CalendarDays.Clear();
                 foreach (var day in newDays)

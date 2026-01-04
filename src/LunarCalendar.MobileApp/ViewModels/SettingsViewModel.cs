@@ -20,6 +20,7 @@ public partial class SettingsViewModel : BaseViewModel
     private readonly ISyncService? _syncService;
     private readonly LunarCalendarDatabase? _database;
     private readonly ILocalizationService? _localizationService;
+    private readonly ILogService? _logService;
 
     [ObservableProperty]
     private bool _showCulturalBackground;
@@ -62,7 +63,6 @@ public partial class SettingsViewModel : BaseViewModel
 
     public SettingsViewModel()
     {
-        System.Diagnostics.Debug.WriteLine("!!! SettingsViewModel() - PARAMETERLESS constructor called !!!");
         
         // Initialize commands manually
         SyncDataCommand = new AsyncRelayCommand(SyncDataAsync);
@@ -79,19 +79,16 @@ public partial class SettingsViewModel : BaseViewModel
         IConnectivityService connectivityService,
         ISyncService syncService,
         LunarCalendarDatabase database,
-        ILocalizationService localizationService)
+        ILocalizationService localizationService,
+        ILogService logService)
     {
-        System.Diagnostics.Debug.WriteLine("!!! SettingsViewModel(services) - DI constructor called !!!");
         
         _connectivityService = connectivityService;
         _syncService = syncService;
         _database = database;
         _localizationService = localizationService;
+        _logService = logService;
 
-        System.Diagnostics.Debug.WriteLine($"!!! _connectivityService injected: {_connectivityService != null} !!!");
-        System.Diagnostics.Debug.WriteLine($"!!! _syncService injected: {_syncService != null} !!!");
-        System.Diagnostics.Debug.WriteLine($"!!! _database injected: {_database != null} !!!");
-        System.Diagnostics.Debug.WriteLine($"!!! _localizationService injected: {_localizationService != null} !!!");
 
         // Initialize commands manually
         SyncDataCommand = new AsyncRelayCommand(SyncDataAsync);
@@ -184,7 +181,6 @@ public partial class SettingsViewModel : BaseViewModel
             // Simply set the language - UI will update automatically via bindings
             _localizationService.SetLanguage(value.Code);
 
-            System.Diagnostics.Debug.WriteLine($"=== Language switched to: {value.Code} ===");
         }
     }
 
@@ -228,27 +224,21 @@ public partial class SettingsViewModel : BaseViewModel
 
     public async Task SyncDataAsync()
     {
-        System.Diagnostics.Debug.WriteLine("!!! SyncDataAsync CALLED !!!");
         try
         {
-            System.Diagnostics.Debug.WriteLine($"!!! _connectivityService: {_connectivityService != null} !!!");
-            System.Diagnostics.Debug.WriteLine($"!!! _syncService: {_syncService != null} !!!");
             
             if (_connectivityService == null || _syncService == null)
             {
-                System.Diagnostics.Debug.WriteLine("!!! Services are null, showing alert !!!");
                 await Application.Current.MainPage.DisplayAlert(AppResources.ErrorTitle, AppResources.SyncServiceNotAvailable, AppResources.OK);
                 return;
             }
 
             if (!_connectivityService.IsConnected)
             {
-                System.Diagnostics.Debug.WriteLine("!!! Not connected, showing alert !!!");
                 await Application.Current.MainPage.DisplayAlert(AppResources.Offline, AppResources.OfflineMessage, AppResources.OK);
                 return;
             }
 
-            System.Diagnostics.Debug.WriteLine("!!! Starting sync !!!");
             IsSyncing = true;
             var currentYear = DateTime.Today.Year;
             var currentMonth = DateTime.Today.Month;
@@ -257,27 +247,22 @@ public partial class SettingsViewModel : BaseViewModel
 
             if (success)
             {
-                System.Diagnostics.Debug.WriteLine("!!! Sync successful !!!");
                 UpdateSyncStatus();
                 await Application.Current.MainPage.DisplayAlert(AppResources.SyncComplete, AppResources.SyncCompleteMessage, AppResources.OK);
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("!!! Sync failed !!!");
                 await Application.Current.MainPage.DisplayAlert(AppResources.SyncFailed, AppResources.SyncFailedMessage, AppResources.OK);
             }
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"!!! SyncDataAsync error: {ex.Message} !!!");
-            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
             try
             {
                 await Application.Current.MainPage.DisplayAlert(AppResources.SyncError, string.Format(AppResources.SyncErrorMessage, ex.Message), AppResources.OK);
             }
             catch (Exception displayEx)
             {
-                System.Diagnostics.Debug.WriteLine($"!!! Failed to display error alert: {displayEx.Message} !!!");
             }
         }
         finally
@@ -288,7 +273,6 @@ public partial class SettingsViewModel : BaseViewModel
 
     public async Task ClearCacheAsync()
     {
-        System.Diagnostics.Debug.WriteLine("!!! ClearCacheAsync CALLED !!!");
         try
         {
             IsBusy = true;
@@ -314,20 +298,16 @@ public partial class SettingsViewModel : BaseViewModel
                 await _database.ClearAllDataAsync();
             }
 
-            System.Diagnostics.Debug.WriteLine("!!! Cache cleared, showing alert !!!");
             await Application.Current.MainPage.DisplayAlert(AppResources.Success, AppResources.CacheClearedMessage, AppResources.OK);
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"!!! ClearCacheAsync error: {ex.Message} !!!");
-            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
             try
             {
                 await Application.Current.MainPage.DisplayAlert(AppResources.ErrorTitle, string.Format(AppResources.ClearCacheError, ex.Message), AppResources.OK);
             }
             catch (Exception displayEx)
             {
-                System.Diagnostics.Debug.WriteLine($"!!! Failed to display error alert: {displayEx.Message} !!!");
             }
         }
         finally
@@ -338,57 +318,45 @@ public partial class SettingsViewModel : BaseViewModel
 
     public async Task AboutAsync()
     {
-        System.Diagnostics.Debug.WriteLine("!!! AboutAsync CALLED !!!");
         try
         {
-            System.Diagnostics.Debug.WriteLine("!!! Showing About alert !!!");
             await Application.Current.MainPage.DisplayAlert(
                 AppResources.About,
                 AppResources.AboutMessage,
                 AppResources.OK);
-            System.Diagnostics.Debug.WriteLine("!!! About alert completed !!!");
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"!!! AboutAsync error: {ex.Message} !!!");
-            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
         }
     }
 
     public async Task ResetSettingsAsync()
     {
-        System.Diagnostics.Debug.WriteLine("!!! ResetSettingsAsync CALLED !!!");
         try
         {
-            System.Diagnostics.Debug.WriteLine("!!! Showing confirmation dialog !!!");
             var confirmed = await Application.Current.MainPage.DisplayAlert(
                 AppResources.ResetSettingsTitle,
                 AppResources.ResetSettingsMessage,
                 AppResources.Yes,
                 AppResources.No);
 
-            System.Diagnostics.Debug.WriteLine($"!!! User confirmed: {confirmed} !!!");
             
             if (confirmed)
             {
                 Preferences.Clear();
                 LoadSettings();
                 
-                System.Diagnostics.Debug.WriteLine("!!! Settings reset, showing success alert !!!");
                 await Application.Current.MainPage.DisplayAlert(AppResources.Success, AppResources.SettingsResetMessage, AppResources.OK);
             }
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"!!! ResetSettingsAsync error: {ex.Message} !!!");
-            System.Diagnostics.Debug.WriteLine($"!!! Stack trace: {ex.StackTrace} !!!");
             try
             {
                 await Application.Current.MainPage.DisplayAlert(AppResources.ErrorTitle, $"Failed to reset settings: {ex.Message}", AppResources.OK);
             }
             catch (Exception displayEx)
             {
-                System.Diagnostics.Debug.WriteLine($"!!! Failed to display error alert: {displayEx.Message} !!!");
             }
         }
     }
@@ -411,5 +379,73 @@ public partial class SettingsViewModel : BaseViewModel
     public static int GetUpcomingHolidaysDays()
     {
         return Preferences.Get(UpcomingHolidaysDaysKey, 30);
+    }
+
+    // Diagnostic Commands
+    [RelayCommand]
+    private async Task ViewLogsAsync()
+    {
+        try
+        {
+            if (_logService == null)
+            {
+                await Shell.Current.DisplayAlert("Error", "Log service not available", "OK");
+                return;
+            }
+
+            var logs = await _logService.GetLogsAsync();
+            
+            if (string.IsNullOrEmpty(logs))
+            {
+                await Shell.Current.DisplayAlert("Logs", "No logs available yet.", "OK");
+                return;
+            }
+
+            // For MVP: Show last 2000 characters (most recent logs)
+            var displayLogs = logs.Length > 2000 
+                ? "..." + logs.Substring(logs.Length - 2000) 
+                : logs;
+
+            await Shell.Current.DisplayAlert(
+                "Diagnostic Logs", 
+                displayLogs, 
+                "OK");
+        }
+        catch (Exception ex)
+        {
+            _logService?.LogError("Failed to view logs", ex, "SettingsViewModel.ViewLogs");
+            await Shell.Current.DisplayAlert("Error", $"Failed to load logs: {ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task ClearLogsAsync()
+    {
+        try
+        {
+            if (_logService == null)
+            {
+                await Shell.Current.DisplayAlert("Error", "Log service not available", "OK");
+                return;
+            }
+
+            var confirmed = await Shell.Current.DisplayAlert(
+                "Clear Logs",
+                "Are you sure you want to delete all diagnostic logs?",
+                "Yes",
+                "No");
+
+            if (!confirmed) return;
+
+            await _logService.ClearLogsAsync();
+            _logService.LogInfo("Logs cleared by user", "SettingsViewModel.ClearLogs");
+            
+            await Shell.Current.DisplayAlert("Success", "Diagnostic logs cleared successfully.", "OK");
+        }
+        catch (Exception ex)
+        {
+            _logService?.LogError("Failed to clear logs", ex, "SettingsViewModel.ClearLogs");
+            await Shell.Current.DisplayAlert("Error", $"Failed to clear logs: {ex.Message}", "OK");
+        }
     }
 }

@@ -13,7 +13,7 @@ public class Holiday
     public int? GregorianMonth { get; set; }
     public int? GregorianDay { get; set; }
     public HolidayType Type { get; set; }
-    public string ColorHex { get; set; } = string.Empty;
+    public string ColorHex { get; set; } = "#FF0000";
     public bool IsPublicHoliday { get; set; }
     public string Culture { get; set; } = "Vietnamese";
 
@@ -31,7 +31,9 @@ public class HolidayOccurrence
     public bool HasLunarDate => Holiday?.HasLunarDate ?? false;
     public string HolidayName => Holiday?.Name ?? string.Empty;
     public string HolidayDescription => Holiday?.Description ?? string.Empty;
-    public string ColorHex => Holiday?.ColorHex ?? "#FF0000";
+    public string ColorHex => !string.IsNullOrWhiteSpace(Holiday?.ColorHex) 
+        ? Holiday.ColorHex 
+        : "#FF0000";
     public bool IsPublicHoliday => Holiday?.IsPublicHoliday ?? false;
     public string GregorianDateFormatted => GregorianDate.ToString("MMMM dd, yyyy");
 

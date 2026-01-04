@@ -8,9 +8,11 @@ public class LocalizationService : ILocalizationService
 {
     private const string LanguagePreferenceKey = "AppLanguage";
     private readonly ResourceManager _resourceManager;
+    private readonly ILogService _logService;
 
-    public LocalizationService()
+    public LocalizationService(ILogService logService)
     {
+        _logService = logService;
         _resourceManager = new ResourceManager(
             "LunarCalendar.MobileApp.Resources.Strings.AppResources",
             typeof(LocalizationService).Assembly);
@@ -81,11 +83,9 @@ public class LocalizationService : ILocalizationService
             // Notify all subscribers that language has changed using CommunityToolkit.Mvvm.Messaging
             WeakReferenceMessenger.Default.Send(new LanguageChangedMessage());
 
-            System.Diagnostics.Debug.WriteLine($"=== Language changed to: {culture.Name} ===");
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error setting language: {ex.Message}");
             // Fallback to Vietnamese
             var fallbackCulture = new CultureInfo("vi-VN");
             CultureInfo.CurrentCulture = fallbackCulture;
@@ -100,8 +100,9 @@ public class LocalizationService : ILocalizationService
             var value = _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
             return value ?? key; // Return key if not found
         }
-        catch
+        catch (Exception ex)
         {
+            _logService.LogWarning($"Failed to get localized string for key: {key}", "LocalizationService.GetString");
             return key;
         }
     }

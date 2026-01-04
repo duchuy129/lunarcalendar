@@ -3,12 +3,7 @@ using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.ViewModels;
 using LunarCalendar.MobileApp.Views;
 using LunarCalendar.MobileApp.Data;
-// TODO: Add AppCenter for crash analytics when ready for production
-// Note: AppCenter packages removed temporarily due to iOS simulator linking issue
-// Re-add when deploying to physical devices or production
-// using Microsoft.AppCenter;
-// using Microsoft.AppCenter.Analytics;
-// using Microsoft.AppCenter.Crashes;
+using LunarCalendar.MobileApp.Helpers;
 
 namespace LunarCalendar.MobileApp;
 
@@ -16,9 +11,8 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
-		// TODO: Initialize AppCenter for crash reporting and analytics in production
-		// AppCenter.Start("ios={Your-iOS-App-Secret};android={Your-Android-App-Secret}",
-		//     typeof(Analytics), typeof(Crashes));
+		// Register global exception handlers early
+		RegisterGlobalExceptionHandlers();
 
 		var builder = MauiApp.CreateBuilder();
 		builder
@@ -33,6 +27,14 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
+		// Register LogService first (needed by other services and ILogger integration)
+		builder.Services.AddSingleton<ILogService, LogService>();
+
+		// Add LogService integration for framework-level logging
+		// Use a factory to get the same LogService instance from DI
+		builder.Logging.Services.AddSingleton<ILoggerProvider>(sp =>
+			new LogServiceProvider(sp.GetRequiredService<ILogService>()));
+
 		// Register Database
 		var dbPath = Path.Combine(FileSystem.AppDataDirectory, "lunarcalendar.db3");
 		builder.Services.AddSingleton(sp => new LunarCalendarDatabase(dbPath));
@@ -41,7 +43,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.ILunarCalculationService, LunarCalendar.Core.Services.LunarCalculationService>();
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.IHolidayCalculationService, LunarCalendar.Core.Services.HolidayCalculationService>();
 
-		// Register App Services
+		// Register App Services (LogService already registered above)
 		builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
 		builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 		builder.Services.AddSingleton<IUserModeService, UserModeService>();
@@ -65,5 +67,57 @@ public static class MauiProgram
 		builder.Services.AddTransient<SettingsPage>();
 
 		return builder.Build();
+	}
+
+	private static void RegisterGlobalExceptionHandlers()
+	{
+		// Register global unhandled exception handler
+		AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
+		// Register unobserved task exception handler
+		TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+	}
+
+	private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+	{
+		var exception = e.ExceptionObject as Exception;
+		var logService = GetLogServiceSafe();
+
+		logService?.LogError(
+			$"Unhandled exception - app will crash (IsTerminating: {e.IsTerminating})",
+			exception,
+			"AppDomain.UnhandledException"
+		);
+
+		// Note: AppCenter crash reporting can be added here when re-enabled
+	}
+
+	private static void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+	{
+		var logService = GetLogServiceSafe();
+
+		logService?.LogError(
+			"Unobserved task exception",
+			e.Exception,
+			"TaskScheduler.UnobservedTaskException"
+		);
+
+		// Mark exception as observed to prevent app crash
+		e.SetObserved();
+
+		// Note: AppCenter crash reporting can be added here when re-enabled
+	}
+
+	private static ILogService? GetLogServiceSafe()
+	{
+		try
+		{
+			return ServiceHelper.GetService<ILogService>();
+		}
+		catch
+		{
+			// If service resolution fails, return null - logging is best-effort
+			return null;
+		}
 	}
 }

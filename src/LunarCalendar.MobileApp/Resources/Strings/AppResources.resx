@@ -254,6 +254,17 @@ Sign up to create and sync events.</value>
     <value>About This App</value>
   </data>
 
+  <!-- Diagnostics -->
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="ViewDiagnosticLogs" xml:space="preserve">
+    <value>View Diagnostic Logs</value>
+  </data>
+  <data name="ClearLogs" xml:space="preserve">
+    <value>Clear Logs</value>
+  </data>
+
   <!-- Sync Messages -->
   <data name="SyncComplete" xml:space="preserve">
     <value>Sync Complete</value>

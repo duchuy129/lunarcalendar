@@ -12,10 +12,12 @@ namespace LunarCalendar.MobileApp.ViewModels;
 public partial class HolidayDetailViewModel : BaseViewModel
 {
     private readonly ICalendarService _calendarService;
+    private readonly ILogService _logService;
 
-    public HolidayDetailViewModel(ICalendarService calendarService)
+    public HolidayDetailViewModel(ICalendarService calendarService, ILogService logService)
     {
         _calendarService = calendarService;
+        _logService = logService;
 
         // Subscribe to language changes
         WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
@@ -80,16 +82,6 @@ public partial class HolidayDetailViewModel : BaseViewModel
             holidayOccurrence.Holiday.NameResourceKey,
             holidayOccurrence.Holiday.Name);
 
-        // DEBUG: Log holiday data to verify what we're receiving
-        System.Diagnostics.Debug.WriteLine($"========== HOLIDAY DETAIL DEBUG ==========");
-        System.Diagnostics.Debug.WriteLine($"Holiday Name: {holidayOccurrence.Holiday.Name}");
-        System.Diagnostics.Debug.WriteLine($"Description: {holidayOccurrence.Holiday.Description}");
-        System.Diagnostics.Debug.WriteLine($"Description Length: {holidayOccurrence.Holiday.Description?.Length ?? 0}");
-        System.Diagnostics.Debug.WriteLine($"IsPublicHoliday: {holidayOccurrence.Holiday.IsPublicHoliday}");
-        System.Diagnostics.Debug.WriteLine($"Type: {holidayOccurrence.Holiday.Type}");
-        System.Diagnostics.Debug.WriteLine($"ColorHex: {holidayOccurrence.Holiday.ColorHex}");
-        System.Diagnostics.Debug.WriteLine($"==========================================");
-
         // Format Gregorian date using culture-aware formatter
         GregorianDateFormatted = DateFormatterHelper.FormatGregorianDateLong(holidayOccurrence.GregorianDate);
 
@@ -131,7 +123,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error getting lunar date: {ex.Message}");
+                _logService.LogWarning("Failed to convert holiday date to lunar format", "HolidayDetailViewModel.OnHolidayChanged");
                 lunarDateText = "Lunar date unavailable";
             }
         }
@@ -176,13 +168,6 @@ public partial class HolidayDetailViewModel : BaseViewModel
         GregorianDateMonth = holidayOccurrence.GregorianDate.ToString("MMM");
         GregorianDateDay = holidayOccurrence.GregorianDate.ToString("dd");
         GregorianDateYear = holidayOccurrence.GregorianDate.ToString("yyyy");
-
-        // DEBUG: Log the calculated properties
-        System.Diagnostics.Debug.WriteLine($"AnimalSignDisplay: '{AnimalSignDisplay}'");
-        System.Diagnostics.Debug.WriteLine($"IsPublicHoliday: {IsPublicHoliday}");
-        System.Diagnostics.Debug.WriteLine($"HasDescription: {HasDescription}");
-        System.Diagnostics.Debug.WriteLine($"HolidayDescription: '{HolidayDescription}'");
-        System.Diagnostics.Debug.WriteLine($"==========================================");
     }
 
     private void UpdateLocalizedStrings()

@@ -18,7 +18,6 @@ public partial class YearHolidaysPage : ContentPage
         // Subscribe to language change events to update title
         WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
         {
-            System.Diagnostics.Debug.WriteLine("=== YearHolidaysPage: Language changed, updating title ===");
             Title = AppResources.YearHolidays;
         });
     }

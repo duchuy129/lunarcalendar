@@ -1,3 +1,4 @@
+using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.ViewModels;
 
 namespace LunarCalendar.MobileApp.Views;
@@ -5,12 +6,14 @@ namespace LunarCalendar.MobileApp.Views;
 public partial class CalendarPage : ContentPage
 {
     private readonly CalendarViewModel _viewModel;
+    private readonly ILogService _logService;
     private bool _isInitialized = false;
 
-    public CalendarPage(CalendarViewModel viewModel)
+    public CalendarPage(CalendarViewModel viewModel, ILogService logService)
     {
         InitializeComponent();
         _viewModel = viewModel;
+        _logService = logService;
         BindingContext = _viewModel;
     }
 
@@ -35,8 +38,7 @@ public partial class CalendarPage : ContentPage
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== ERROR in OnAppearing: {ex.Message} ===");
-            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+            _logService.LogError("Failed to initialize or refresh calendar page", ex, "CalendarPage");
         }
     }
 }

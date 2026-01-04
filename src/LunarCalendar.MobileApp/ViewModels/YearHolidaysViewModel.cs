@@ -12,6 +12,7 @@ namespace LunarCalendar.MobileApp.ViewModels;
 public partial class YearHolidaysViewModel : ObservableObject
 {
     private readonly IHolidayService _holidayService;
+    private readonly ILogService _logService;
     private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
 
     [ObservableProperty]
@@ -29,9 +30,10 @@ public partial class YearHolidaysViewModel : ObservableObject
     [ObservableProperty]
     private string _todayButtonText = AppResources.Today;
 
-    public YearHolidaysViewModel(IHolidayService holidayService)
+    public YearHolidaysViewModel(IHolidayService holidayService, ILogService logService)
     {
         _holidayService = holidayService;
+        _logService = logService;
 
         // Initialize available years - wide range for year picker
         // Users can navigate to any year using previous/next buttons
@@ -49,7 +51,6 @@ public partial class YearHolidaysViewModel : ObservableObject
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("=== YearHolidaysViewModel: Language changed ===");
 
                 // Update button text
                 await MainThread.InvokeOnMainThreadAsync(() =>
@@ -75,13 +76,12 @@ public partial class YearHolidaysViewModel : ObservableObject
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
                         YearHolidays = newCollection;
-                        System.Diagnostics.Debug.WriteLine($"=== Replaced with NEW collection: {newCollection.Count} refreshed items ===");
                     });
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"=== Error in language change handler: {ex.Message} ===");
+                _logService.LogWarning("Failed to refresh UI after language change - non-critical", "YearHolidaysViewModel.OnLanguageChanged");
             }
         });
     }
@@ -93,7 +93,6 @@ public partial class YearHolidaysViewModel : ObservableObject
 
     partial void OnSelectedYearChanged(int value)
     {
-        System.Diagnostics.Debug.WriteLine($"=== YearHolidaysViewModel: Selected year changed to {value} ===");
 
         // Use Task.Run to avoid blocking and properly handle async call
         Task.Run(async () =>
@@ -104,7 +103,7 @@ public partial class YearHolidaysViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"=== ERROR in OnSelectedYearChanged: {ex.Message} ===");
+                _logService.LogError("Failed to load holidays for selected year", ex, "YearHolidaysViewModel.OnSelectedYearChanged");
             }
         });
     }
@@ -144,7 +143,6 @@ public partial class YearHolidaysViewModel : ObservableObject
             var serviceProvider = IPlatformApplication.Current?.Services;
             if (serviceProvider == null)
             {
-                System.Diagnostics.Debug.WriteLine("=== Service provider not available ===");
                 return;
             }
 
@@ -161,8 +159,7 @@ public partial class YearHolidaysViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== Error navigating to holiday detail: {ex.Message} ===");
-            System.Diagnostics.Debug.WriteLine($"=== Stack: {ex.StackTrace} ===");
+            _logService.LogError("Failed to navigate to holiday detail", ex, "YearHolidaysViewModel.SelectHoliday");
         }
     }
 
@@ -171,18 +168,15 @@ public partial class YearHolidaysViewModel : ObservableObject
         // Prevent concurrent updates
         if (!await _updateSemaphore.WaitAsync(0))
         {
-            System.Diagnostics.Debug.WriteLine($"=== LoadYearHolidaysAsync: Already loading, skipping ===");
             return;
         }
 
         try
         {
-            System.Diagnostics.Debug.WriteLine($"=== LoadYearHolidaysAsync START for year {SelectedYear} ===");
             
             IsLoading = true;
 
             var holidays = await _holidayService.GetHolidaysForYearAsync(SelectedYear);
-            System.Diagnostics.Debug.WriteLine($"=== Got {holidays.Count} holidays from service ===");
 
             // Filter out Lunar Special Days
             var filteredHolidays = holidays
@@ -190,7 +184,6 @@ public partial class YearHolidaysViewModel : ObservableObject
                 .OrderBy(h => h.GregorianDate)
                 .ToList();
 
-            System.Diagnostics.Debug.WriteLine($"=== After filtering: {filteredHolidays.Count} holidays ===");
 
             // CRITICAL iOS FIX: Create NEW ObservableCollection and replace entire reference
             // This is the SAME pattern used in CalendarViewModel.LoadUpcomingHolidaysAsync
@@ -202,12 +195,10 @@ public partial class YearHolidaysViewModel : ObservableObject
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 YearHolidays = newCollection;
-                System.Diagnostics.Debug.WriteLine($"=== YearHolidays replaced with NEW collection: {YearHolidays.Count} items ===");
             });
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"=== ERROR loading year holidays: {ex.Message} ===");
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
@@ -219,7 +210,6 @@ public partial class YearHolidaysViewModel : ObservableObject
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 IsLoading = false;
-                System.Diagnostics.Debug.WriteLine($"=== IsLoading set to FALSE ===");
             });
 
             _updateSemaphore.Release();

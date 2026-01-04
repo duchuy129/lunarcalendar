@@ -13,6 +13,7 @@ public class HolidayService : IHolidayService
 {
     private readonly IHolidayCalculationService _holidayCalculationService;
     private readonly LunarCalendarDatabase _database;
+    private readonly ILogService _logService;
     private List<HolidayOccurrence>? _cachedMonthHolidays;
     private int _cachedYear;
     private int _cachedMonth;
@@ -23,10 +24,12 @@ public class HolidayService : IHolidayService
 
     public HolidayService(
         IHolidayCalculationService holidayCalculationService,
-        LunarCalendarDatabase database)
+        LunarCalendarDatabase database,
+        ILogService logService)
     {
         _holidayCalculationService = holidayCalculationService;
         _database = database;
+        _logService = logService;
     }
 
     public async Task<List<Holiday>> GetAllHolidaysAsync()
@@ -41,14 +44,12 @@ public class HolidayService : IHolidayService
         {
             if (_yearCache.TryGetValue(year, out var cached))
             {
-                Debug.WriteLine($"HolidayService: Using cached holidays for year {year} ({cached.Count} items)");
                 return cached;
             }
         }
 
         try
         {
-            Debug.WriteLine($"HolidayService: Calculating holidays for year {year} locally");
 
             // Calculate locally - instant, no network needed
             var holidays = _holidayCalculationService.GetHolidaysForYear(year);
@@ -57,7 +58,6 @@ public class HolidayService : IHolidayService
             lock (_yearCacheLock)
             {
                 _yearCache[year] = holidays;
-                Debug.WriteLine($"HolidayService: Cached {holidays.Count} holidays for year {year}");
             }
 
             // Save to database in background for historical tracking
@@ -79,11 +79,10 @@ public class HolidayService : IHolidayService
                     }).ToList();
 
                     await _database.SaveHolidayOccurrencesAsync(entities);
-                    Debug.WriteLine($"HolidayService: Saved {entities.Count} holidays to database");
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error saving holidays to database: {ex.Message}");
+                    _logService.LogError("Failed to save holiday occurrences to database", ex, "HolidayService.GetHolidaysForMonthAsync");
                 }
             });
 
@@ -91,7 +90,6 @@ public class HolidayService : IHolidayService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error calculating holidays for year {year}: {ex.Message}");
             return new List<HolidayOccurrence>();
         }
     }
@@ -106,7 +104,6 @@ public class HolidayService : IHolidayService
 
         try
         {
-            Debug.WriteLine($"HolidayService: Calculating holidays for {year}/{month} locally");
 
             // Calculate locally - instant, no network needed
             var holidays = _holidayCalculationService.GetHolidaysForMonth(year, month);
@@ -137,11 +134,10 @@ public class HolidayService : IHolidayService
                         }).ToList();
 
                         await _database.SaveHolidayOccurrencesAsync(entities);
-                        Debug.WriteLine($"HolidayService: Saved {entities.Count} holidays to database");
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine($"Error saving holidays to database: {ex.Message}");
+                        _logService.LogError("Failed to save holiday occurrences to database", ex, "HolidayService.GetYearHolidaysAsync");
                     }
                 });
             }
@@ -150,7 +146,7 @@ public class HolidayService : IHolidayService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error calculating holidays for {year}/{month}: {ex.Message}");
+            _logService.LogError("Failed to get year holidays", ex, "HolidayService.GetYearHolidaysAsync");
             return new List<HolidayOccurrence>();
         }
     }
@@ -164,7 +160,7 @@ public class HolidayService : IHolidayService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error getting holiday for date {date}: {ex.Message}");
+            _logService.LogError($"Failed to get holiday for date {date}", ex, "HolidayService.GetHolidayForDateAsync");
             return null;
         }
     }

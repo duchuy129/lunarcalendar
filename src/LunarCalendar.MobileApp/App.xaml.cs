@@ -1,4 +1,5 @@
 ﻿using LunarCalendar.MobileApp.Services;
+using LunarCalendar.MobileApp.Helpers;
 using System.Globalization;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,30 +11,26 @@ public partial class App : Application
 	{
 		try
 		{
-			System.Diagnostics.Debug.WriteLine("=== App Constructor START ===");
-
 			InitializeComponent();
-			System.Diagnostics.Debug.WriteLine("=== InitializeComponent done ===");
 
 			// Initialize localization BEFORE creating any pages
 			InitializeLocalization();
-			System.Diagnostics.Debug.WriteLine("=== Localization initialized ===");
 
-		// USE APPSHELL WITH HELLO WORLD TEST!
-			MainPage = new AppShell();
-			System.Diagnostics.Debug.WriteLine("=== AppShell created with HELLO WORLD ===");
-			System.Diagnostics.Debug.WriteLine("=== App Constructor END ===");
-		}
-		catch (Exception ex)
-		{
-			System.Diagnostics.Debug.WriteLine($"=== CRASH in App Constructor: {ex.Message} ===");
-			System.Diagnostics.Debug.WriteLine($"=== Stack Trace: {ex.StackTrace} ===");
-			if (ex.InnerException != null)
-			{
-				System.Diagnostics.Debug.WriteLine($"=== Inner Exception: {ex.InnerException.Message} ===");
-			}
-			throw;
-		}
+			// USE APPSHELL WITH HELLO WORLD TEST!
+		MainPage = new AppShell();
+		
+		// Log successful app start (after services are initialized)
+		var logService = ServiceHelper.GetService<ILogService>();
+		logService?.LogInfo("App launched successfully", "App");
+	}
+	catch (Exception ex)
+	{
+		// Log crash before re-throwing
+		var logService = ServiceHelper.GetService<ILogService>();
+		logService?.LogError("App failed to launch", ex, "App.Constructor");
+
+		throw;
+	}
 	}
 
 	private void InitializeLocalization()
@@ -65,7 +62,6 @@ public partial class App : Application
 		CultureInfo.DefaultThreadCurrentCulture = culture;
 		CultureInfo.DefaultThreadCurrentUICulture = culture;
 
-		System.Diagnostics.Debug.WriteLine($"=== App Language Set: {culture.Name} ===");
 	}
 
 	private void ApplyModernTabBarStyling(TabbedPage tabbedPage)
@@ -90,19 +86,6 @@ public partial class App : Application
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		var window = base.CreateWindow(activationState);
-
-#if IOS
-		// Ensure window is properly sized for iPhone
-		window.Created += (s, e) =>
-		{
-			if (DeviceInfo.Current.Idiom == DeviceIdiom.Phone)
-			{
-				System.Diagnostics.Debug.WriteLine("=== Window created for iPhone ===");
-			}
-		};
-#endif
-
-		return window;
+		return base.CreateWindow(activationState);
 	}
 }

@@ -16,36 +16,19 @@ public class AppShell : Shell
 
 	public AppShell()
 	{
-		try
+		// BYPASS XAML - Create everything in code!
+		// InitializeComponent();
+
+		CreateUIInCode();
+
+		// Register routes
+		Routing.RegisterRoute("holidaydetail", typeof(HolidayDetailPage));
+
+		// Subscribe to language change events
+		WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
 		{
-			System.Diagnostics.Debug.WriteLine("=== AppShell Constructor START ===");
-
-			// BYPASS XAML - Create everything in code!
-			// InitializeComponent();
-
-			CreateUIInCode();
-
-			System.Diagnostics.Debug.WriteLine("=== AppShell InitializeComponent done ===");
-
-			// Register routes
-			Routing.RegisterRoute("holidaydetail", typeof(HolidayDetailPage));
-			System.Diagnostics.Debug.WriteLine("=== AppShell routes registered ===");
-
-			// Subscribe to language change events
-			WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
-			{
-				System.Diagnostics.Debug.WriteLine("=== AppShell: Language changed, updating tab titles ===");
-				UpdateTabTitles();
-			});
-
-			System.Diagnostics.Debug.WriteLine("=== AppShell Constructor END ===");
-		}
-		catch (Exception ex)
-		{
-			System.Diagnostics.Debug.WriteLine($"=== CRASH in AppShell Constructor: {ex.Message} ===");
-			System.Diagnostics.Debug.WriteLine($"=== Stack Trace: {ex.StackTrace} ===");
-			throw;
-		}
+			UpdateTabTitles();
+		});
 	}
 
 	private void UpdateTabTitles()
@@ -53,17 +36,14 @@ public class AppShell : Shell
 		if (_calendarTab != null)
 		{
 			_calendarTab.Title = AppResources.Calendar;
-			System.Diagnostics.Debug.WriteLine($"=== Updated Calendar tab title to: {AppResources.Calendar} ===");
 		}
 		if (_yearHolidaysTab != null)
 		{
 			_yearHolidaysTab.Title = AppResources.YearHolidays;
-			System.Diagnostics.Debug.WriteLine($"=== Updated Year Holidays tab title to: {AppResources.YearHolidays} ===");
 		}
 		if (_settingsTab != null)
 		{
 			_settingsTab.Title = AppResources.Settings;
-			System.Diagnostics.Debug.WriteLine($"=== Updated Settings tab title to: {AppResources.Settings} ===");
 		}
 	}
 

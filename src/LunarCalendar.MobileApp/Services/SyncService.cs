@@ -31,7 +31,6 @@ public class SyncService : ISyncService
     public async Task<bool> SyncHolidaysForYearAsync(int year, CancellationToken cancellationToken = default)
     {
         // Bundled architecture: No API sync needed - calculations are instant and local
-        Debug.WriteLine($"SyncService: No sync needed for bundled architecture (local calculation)");
         _lastSyncTime = DateTime.Now;
         _lastSyncError = null;
         SetSyncStatus(false, "All data is local - no sync required", true);
@@ -41,7 +40,6 @@ public class SyncService : ISyncService
     public async Task<bool> SyncLunarDatesForMonthAsync(int year, int month, CancellationToken cancellationToken = default)
     {
         // Bundled architecture: No API sync needed - calculations are instant and local
-        Debug.WriteLine($"SyncService: No sync needed for bundled architecture (local calculation)");
         _lastSyncTime = DateTime.Now;
         _lastSyncError = null;
         SetSyncStatus(false, "All data is local - no sync required", true);
@@ -51,7 +49,6 @@ public class SyncService : ISyncService
     public async Task<bool> SyncAllAsync(int year, int month, CancellationToken cancellationToken = default)
     {
         // Bundled architecture: No API sync needed - calculations are instant and local
-        Debug.WriteLine($"SyncService: No sync needed for bundled architecture (local calculation)");
         _lastSyncTime = DateTime.Now;
         _lastSyncError = null;
         SetSyncStatus(false, "All data is local - no sync required", true);
