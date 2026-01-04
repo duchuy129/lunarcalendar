@@ -13,6 +13,7 @@ public partial class YearHolidaysViewModel : ObservableObject
 {
     private readonly IHolidayService _holidayService;
     private readonly ILogService _logService;
+    private readonly IHapticService _hapticService;
     private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
     private volatile bool _isLanguageChanging = false;
 
@@ -34,10 +35,11 @@ public partial class YearHolidaysViewModel : ObservableObject
     [ObservableProperty]
     private bool _showCulturalBackground = true;
 
-    public YearHolidaysViewModel(IHolidayService holidayService, ILogService logService)
+    public YearHolidaysViewModel(IHolidayService holidayService, ILogService logService, IHapticService hapticService)
     {
         _holidayService = holidayService;
         _logService = logService;
+        _hapticService = hapticService;
 
         // Initialize available years - wide range for year picker
         // Users can navigate to any year using previous/next buttons
@@ -121,6 +123,9 @@ public partial class YearHolidaysViewModel : ObservableObject
             return;
         }
 
+        // Haptic feedback for year picker selection
+        _hapticService.PerformSelection();
+
         // Use Task.Run to avoid blocking and properly handle async call
         Task.Run(async () =>
         {
@@ -141,6 +146,7 @@ public partial class YearHolidaysViewModel : ObservableObject
         var currentIndex = AvailableYears.IndexOf(SelectedYear);
         if (currentIndex > 0)
         {
+            _hapticService.PerformClick();
             SelectedYear = AvailableYears[currentIndex - 1];
         }
     }
@@ -151,6 +157,7 @@ public partial class YearHolidaysViewModel : ObservableObject
         var currentIndex = AvailableYears.IndexOf(SelectedYear);
         if (currentIndex < AvailableYears.Count - 1)
         {
+            _hapticService.PerformClick();
             SelectedYear = AvailableYears[currentIndex + 1];
         }
     }
@@ -158,6 +165,7 @@ public partial class YearHolidaysViewModel : ObservableObject
     [RelayCommand]
     private void CurrentYear()
     {
+        _hapticService.PerformClick();
         SelectedYear = DateTime.Now.Year;
     }
 

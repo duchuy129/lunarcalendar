@@ -63,22 +63,26 @@
 
 	<!-- Release Configuration Optimizations -->
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<!-- Enable AOT compilation for better performance -->
+		<!-- Enable trimming but use conservative linking mode for stability -->
 		<PublishTrimmed>true</PublishTrimmed>
-		<TrimMode>link</TrimMode>
+		<TrimMode>partial</TrimMode>
 
-		<!-- Android Release Settings -->
-		<AndroidLinkMode Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">Full</AndroidLinkMode>
+		<!-- Android Release Settings - Use SdkOnly linking to avoid AOT crashes -->
+		<AndroidLinkMode Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">SdkOnly</AndroidLinkMode>
 		<AndroidLinkTool Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">r8</AndroidLinkTool>
 		<AndroidEnableMultiDex Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</AndroidEnableMultiDex>
 		<AndroidPackageFormat Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">aab</AndroidPackageFormat>
 		<AndroidUseAapt2 Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</AndroidCreatePackagePerAbi>
-		<EnableLLVM Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</EnableLLVM>
+		<EnableLLVM Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</EnableLLVM>
+		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</RunAOTCompilation>
 
-		<!-- iOS Release Settings -->
-		<MtouchLink Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">Full</MtouchLink>
+		<!-- iOS Release Settings - CRITICAL: Enable hybrid AOT + interpreter mode -->
+		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</RunAOTCompilation>
+		<MtouchLink Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">SdkOnly</MtouchLink>
 		<MtouchEnableSGenConc Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</MtouchEnableSGenConc>
+		<!-- Enable interpreter for dynamic/reflection code that can't be AOT compiled -->
+		<MtouchInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">-all</MtouchInterpreter>
 
 		<!-- Optimize for size -->
 		<DebugType>none</DebugType>

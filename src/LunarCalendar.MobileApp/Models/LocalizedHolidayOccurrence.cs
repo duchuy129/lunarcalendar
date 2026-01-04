@@ -38,6 +38,13 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
     public string ColorHex => string.IsNullOrWhiteSpace(HolidayOccurrence.ColorHex) 
         ? "#FF0000" 
         : HolidayOccurrence.ColorHex;
+    
+    // AOT-safe color binding - returns actual Color object, not string
+    public Color BackgroundColor => Color.FromArgb(ColorHex);
+    
+    // AOT-safe brush binding for shadows
+    public Brush BackgroundBrush => new SolidColorBrush(BackgroundColor);
+    
     public bool IsPublicHoliday => HolidayOccurrence.IsPublicHoliday;
     
     // Culture-aware Gregorian date formatting

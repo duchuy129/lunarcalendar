@@ -289,17 +289,14 @@
                                 <!-- Semi-transparent special day background -->
                                 <Setter Property="Background" Value="#CCF0F7FB"/><!-- 80% light blue -->
                             </DataTrigger>
-                            <!-- IsToday trigger - Warm orange gradient for blending -->
+                            <!-- IsToday trigger - Warm orange solid color -->
                             <DataTrigger TargetType="Border"
                                        Binding="{Binding IsToday}"
                                        Value="True">
-                                <!-- Warm orange gradient for today -->
-                                <Setter Property="Background">
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#CCFFA07A" Offset="0.0"/><!-- 80% light orange -->
-                                        <GradientStop Color="#CCFF8C42" Offset="1.0"/><!-- 80% deep orange -->
-                                    </LinearGradientBrush>
-                                </Setter>
+                                <!-- REMOVED: Inline LinearGradientBrush (causes iOS Release crashes)
+                                     REASON: Dynamic gradient in DataTrigger fails in AOT mode
+                                     FIX: Use solid color #CCFF9966 (blend of light/deep orange) -->
+                                <Setter Property="Background" Value="#CCFF9966"/><!-- 80% medium orange -->
                                 <Setter Property="Stroke" Value="#99FF6B35"/><!-- 60% orange stroke -->
                                 <Setter Property="StrokeThickness" Value="2"/>
                                 <Setter Property="Shadow">
@@ -450,19 +447,15 @@
                             <Grid ColumnDefinitions="Auto,*"
                                  ColumnSpacing="12">
 
-                                <!-- Date Box - Elegant Soft Gradient Design -->
+                                <!-- Date Box - Solid color (AOT-safe) -->
                                 <Border Grid.Column="0"
                                        Padding="12,14"
                                        StrokeThickness="0"
-                                       WidthRequest="70">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="{Binding ColorHex}" Offset="0.0"/>
-                                            <GradientStop Color="{Binding ColorHex}" Offset="1.0"/>
-                                        </LinearGradientBrush>
-                                    </Border.Background>
+                                       WidthRequest="70"
+                                       BackgroundColor="{Binding BackgroundColor}">
+                                    <!-- Using BackgroundColor with Color object - 100% AOT-safe -->
                                     <Border.Shadow>
-                                        <Shadow Brush="{Binding ColorHex}"
+                                        <Shadow Brush="{Binding BackgroundBrush}"
                                                 Opacity="0.25"
                                                 Radius="12"
                                                 Offset="0,4"/>
