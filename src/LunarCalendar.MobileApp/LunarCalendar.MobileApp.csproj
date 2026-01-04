@@ -90,6 +90,19 @@
 		<Optimize>true</Optimize>
 	</PropertyGroup>
 
+	<!-- iOS Release Code Signing for App Store -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' AND '$(TargetFramework)' == 'net10.0-ios' AND '$(RuntimeIdentifier)' == 'ios-arm64'">
+		<!-- Code Signing -->
+		<CodesignKey>Apple Distribution</CodesignKey>
+		<CodesignProvision>Lunar Calendar App Store</CodesignProvision>
+		<CodesignEntitlements>Platforms/iOS/Entitlements.plist</CodesignEntitlements>
+
+		<!-- Build Settings -->
+		<ArchiveOnBuild>true</ArchiveOnBuild>
+		<BuildIpa>true</BuildIpa>
+		<EnableCodeSigning>true</EnableCodeSigning>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.png" BaseSize="1024,1024" />
