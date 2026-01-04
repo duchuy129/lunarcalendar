@@ -20,9 +20,6 @@ public class AppDelegate : MauiUIApplicationDelegate
 			SQLitePCL.Batteries_V2.Init();
 			logService?.LogInfo("SQLite initialized successfully", "AppDelegate.FinishedLaunching");
 
-			// Apply modern iOS tab bar styling - REMOVED due to AOT JIT compilation issues
-			// ConfigureModernTabBarAppearance();
-
 			var result = base.FinishedLaunching(application, launchOptions);
 			logService?.LogInfo("App launch completed successfully", "AppDelegate.FinishedLaunching");
 			return result;
@@ -32,36 +29,6 @@ public class AppDelegate : MauiUIApplicationDelegate
 			logService?.LogError("Fatal error during app launch", ex, "AppDelegate.FinishedLaunching");
 			throw;
 		}
-	}
-
-	private void ConfigureModernTabBarAppearance()
-	{
-		// Modern iOS tab bar with translucency and shadow
-		var tabBarAppearance = new UITabBarAppearance();
-		tabBarAppearance.ConfigureWithOpaqueBackground();
-		
-		// White background with subtle shadow
-		tabBarAppearance.BackgroundColor = UIColor.White;
-		tabBarAppearance.ShadowColor = new UIColor(0, 0, 0, 0.08f); // Use constructor instead of FromRGBA
-		
-		// Create colors
-		var grayColor = new UIColor(156f/255f, 163f/255f, 175f/255f, 1f); // Gray-400
-		var redColor = new UIColor(220f/255f, 38f/255f, 38f/255f, 1f); // Red-600
-		
-		// Unselected tab styling (gray) - use property setters instead of UIStringAttributes
-		var normalAppearance = tabBarAppearance.StackedLayoutAppearance.Normal;
-		normalAppearance.TitleTextAttributes.Font = UIFont.SystemFontOfSize(10, UIFontWeight.Medium);
-		normalAppearance.IconColor = grayColor;
-		
-		// Selected tab styling (red accent)
-		var selectedAppearance = tabBarAppearance.StackedLayoutAppearance.Selected;
-		selectedAppearance.TitleTextAttributes.Font = UIFont.SystemFontOfSize(10, UIFontWeight.Semibold);
-		selectedAppearance.IconColor = redColor;
-		
-		// Apply to all tab bars
-		UITabBar.Appearance.StandardAppearance = tabBarAppearance;
-		UITabBar.Appearance.ScrollEdgeAppearance = tabBarAppearance;
-		
 	}
 
 	protected override MauiApp CreateMauiApp()

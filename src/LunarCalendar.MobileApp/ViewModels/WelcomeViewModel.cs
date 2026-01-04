@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
 
@@ -8,10 +9,16 @@ public partial class WelcomeViewModel : BaseViewModel
 {
     private readonly IUserModeService _userModeService;
 
+    [ObservableProperty]
+    private bool _showCulturalBackground = true;
+
     public WelcomeViewModel(IUserModeService userModeService)
     {
         _userModeService = userModeService;
         Title = "Welcome";
+        
+        // Initialize settings
+        ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
     }
 
     [RelayCommand]

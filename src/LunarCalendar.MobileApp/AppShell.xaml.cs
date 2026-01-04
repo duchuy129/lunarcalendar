@@ -52,17 +52,9 @@ public class AppShell : Shell
 		// Set Shell properties
 		this.FlyoutBehavior = FlyoutBehavior.Disabled;
 
-		// Set tab bar colors for better visibility
-		Shell.SetTabBarBackgroundColor(this, Colors.White);
-		Shell.SetTabBarForegroundColor(this, Color.FromArgb("#512BD4"));
-		Shell.SetTabBarUnselectedColor(this, Color.FromArgb("#95959D"));
-		
-		// Platform-specific text color adjustments for better contrast
-#if ANDROID
-		Shell.SetTabBarTitleColor(this, Color.FromArgb("#512BD4")); // Selected tab text color
-#elif IOS
-		Shell.SetTabBarTitleColor(this, Color.FromArgb("#000000")); // iOS needs darker text for selected
-#endif
+		// NOTE: Tab bar styling is handled entirely in AppDelegate.cs for iOS
+		// This ensures smooth transitions without flickering
+		// The native iOS UITabBarAppearance provides better performance and consistency
 
 		// Shell automatically positions tabs at bottom on both iOS and Android!
 

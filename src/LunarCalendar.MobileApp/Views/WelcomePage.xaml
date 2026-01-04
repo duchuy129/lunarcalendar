@@ -8,11 +8,20 @@
              Shell.NavBarIsVisible="False"
              Background="{DynamicResource BackgroundGradient}">
 
-    <Grid RowDefinitions="*,Auto,Auto,Auto,Auto,*"
+    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,*"
           Padding="30">
 
+        <!-- Cultural Background Image - Toggle via settings -->
+        <Image Grid.RowSpan="7"
+               Source="lunar_bg.png"
+               Aspect="AspectFill"
+               Opacity="0.25"
+               IsVisible="{Binding ShowCulturalBackground}"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"/>
+
         <!-- Logo/Icon Area -->
-        <VerticalStackLayout Grid.Row="0"
+        <VerticalStackLayout Grid.Row="1"
                            VerticalOptions="Center"
                            HorizontalOptions="Center">
             <Label Text="🌙"
@@ -31,7 +40,7 @@
         </VerticalStackLayout>
 
         <!-- Continue as Guest Button -->
-        <Button Grid.Row="1"
+        <Button Grid.Row="2"
                 Text="{ext:Translate ContinueAsGuest}"
                 Command="{Binding ContinueAsGuestCommand}"
                 BackgroundColor="{DynamicResource Primary}"
@@ -43,7 +52,7 @@
                 Margin="0,20,0,0"/>
 
         <!-- Sign In Button -->
-        <Button Grid.Row="2"
+        <Button Grid.Row="3"
                 Text="{ext:Translate SignIn}"
                 Command="{Binding NavigateToSignInCommand}"
                 BackgroundColor="Transparent"
@@ -57,7 +66,7 @@
                 Margin="0,15,0,0"/>
 
         <!-- Sign Up Button -->
-        <Button Grid.Row="3"
+        <Button Grid.Row="4"
                 Text="{ext:Translate SignUp}"
                 Command="{Binding NavigateToSignUpCommand}"
                 BackgroundColor="Transparent"
@@ -67,7 +76,7 @@
                 Margin="0,10,0,0"/>
 
         <!-- Info Text -->
-        <Label Grid.Row="4"
+        <Label Grid.Row="5"
                Text="{ext:Translate GuestModeInfo}"
                FontSize="12"
                TextColor="{DynamicResource Gray600}"

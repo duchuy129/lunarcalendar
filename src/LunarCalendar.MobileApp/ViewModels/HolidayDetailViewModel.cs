@@ -14,10 +14,16 @@ public partial class HolidayDetailViewModel : BaseViewModel
     private readonly ICalendarService _calendarService;
     private readonly ILogService _logService;
 
+    [ObservableProperty]
+    private bool _showCulturalBackground = true;
+
     public HolidayDetailViewModel(ICalendarService calendarService, ILogService logService)
     {
         _calendarService = calendarService;
         _logService = logService;
+
+        // Initialize settings
+        ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
 
         // Subscribe to language changes
         WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>

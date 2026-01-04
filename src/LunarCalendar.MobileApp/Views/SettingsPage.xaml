@@ -7,7 +7,16 @@
              Title="{Binding Title}"
              Background="{DynamicResource BackgroundGradient}">
 
-    <ScrollView>
+    <Grid>
+        <!-- Cultural Background Image - Toggle via settings -->
+        <Image Source="lunar_bg.png"
+               Aspect="AspectFill"
+               Opacity="0.25"
+               IsVisible="{Binding ShowCulturalBackground}"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"/>
+
+        <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Language Settings Section -->
@@ -425,4 +434,5 @@
 
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>

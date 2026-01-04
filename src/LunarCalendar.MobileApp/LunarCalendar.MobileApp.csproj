@@ -22,7 +22,7 @@
 		<NullabilityInfoContextSupport>true</NullabilityInfoContextSupport>
 
 		<!-- Display name -->
-		<ApplicationTitle>Vietnamese Lunar Calendar</ApplicationTitle>
+		<ApplicationTitle>Lunar Calendar</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.huynguyen.lunarcalendar</ApplicationId>
@@ -90,8 +90,8 @@
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.png" BaseSize="1024,1024" />
 
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.png" Color="#FFF9F0" BaseSize="456,456" />
+		<!-- Splash Screen - Full screen lunar background -->
+		<MauiSplashScreen Include="Resources\Splash\lunar_splash_no_bg.png" Color="#FFF9F0" BaseSize="456,456" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

@@ -30,6 +30,9 @@ public partial class YearHolidaysViewModel : ObservableObject
     [ObservableProperty]
     private string _todayButtonText = AppResources.Today;
 
+    [ObservableProperty]
+    private bool _showCulturalBackground = true;
+
     public YearHolidaysViewModel(IHolidayService holidayService, ILogService logService)
     {
         _holidayService = holidayService;
@@ -45,6 +48,9 @@ public partial class YearHolidaysViewModel : ObservableObject
 
         // Set selected year to current year
         _selectedYear = currentYear;
+
+        // Initialize settings
+        ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
 
         // Subscribe to language change events
         WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, async (r, m) =>

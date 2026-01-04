@@ -9,12 +9,12 @@
     <!-- Modern Ocean Gradient Theme - Refined 2025 Colors -->
     <!-- UPDATED: Softer, more sophisticated palette for better eye comfort -->
 
-    <!-- Primary Colors - Refined Ocean Blue Gradient -->
-    <Color x:Key="Primary">#0088CC</Color><!-- Slightly softer than before -->
-    <Color x:Key="PrimaryLight">#4DA8DA</Color><!-- Less saturated -->
-    <Color x:Key="PrimaryDark">#005A8C</Color><!-- More muted -->
-    <Color x:Key="PrimaryDarkText">#E8F4F8</Color>
-    <Color x:Key="PrimarySoft">#EBF5FB</Color><!-- New: Ultra-light for subtle backgrounds -->
+    <!-- Primary Colors - Warm Maroon/Brown to match lunar background -->
+    <Color x:Key="Primary">#A0522D</Color><!-- Sienna brown -->
+    <Color x:Key="PrimaryLight">#CD853F</Color><!-- Peru (light brown) -->
+    <Color x:Key="PrimaryDark">#8B4513</Color><!-- Saddle brown -->
+    <Color x:Key="PrimaryDarkText">#FFF8DC</Color>
+    <Color x:Key="PrimarySoft">#FAEBD7</Color><!-- Antique white -->
 
     <!-- Secondary Colors - Coral Accents -->
     <Color x:Key="Secondary">#FF6B6B</Color>
@@ -45,7 +45,8 @@
     <!-- Accent Colors for Lunar Elements -->
     <Color x:Key="LunarRed">#DC5A7A</Color><!-- Softer red for better readability -->
     <Color x:Key="LunarGold">#F5C842</Color><!-- Less aggressive yellow -->
-    <Color x:Key="TodayGreen">#10C993</Color><!-- Slightly muted green -->
+    <Color x:Key="TodayGreen">#FF8C42</Color><!-- Warm orange instead of green -->
+    <Color x:Key="TodayOrange">#FF8C42</Color><!-- Today highlight - warm orange -->
     <Color x:Key="Danger">#DC3545</Color><!-- Red for destructive actions -->
 
     <!-- Background Gradients - Improved for eye comfort -->
@@ -70,30 +71,36 @@
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
 
-    <!-- Modern Gradient Brushes -->
+    <!-- Semi-Transparent Glass-Morphism Gradient Brushes -->
+    <!-- Navigation and Header Gradients - Warm maroon/brown with transparency -->
     <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="{StaticResource PrimaryLight}" Offset="0.0"/>
-        <GradientStop Color="{StaticResource Primary}" Offset="1.0"/>
+        <GradientStop Color="#CCCD853F" Offset="0.0"/><!-- 80% peru (light brown) -->
+        <GradientStop Color="#CCA0522D" Offset="1.0"/><!-- 80% sienna -->
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="PrimaryGradientVertical" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="{StaticResource PrimaryLight}" Offset="0.0"/>
-        <GradientStop Color="{StaticResource Primary}" Offset="1.0"/>
+        <GradientStop Color="#CCCD853F" Offset="0.0"/><!-- 80% peru (light brown) -->
+        <GradientStop Color="#CCA0522D" Offset="1.0"/><!-- 80% sienna -->
     </LinearGradientBrush>
 
+    <!-- Background - Very light, blends with lunar_bg -->
     <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="{StaticResource BackgroundLight}" Offset="0.0"/>
-        <GradientStop Color="{StaticResource BackgroundLightGradient}" Offset="1.0"/>
+        <GradientStop Color="#00FFFFFF" Offset="0.0"/><!-- Fully transparent -->
+        <GradientStop Color="#00F7FBFF" Offset="1.0"/><!-- Fully transparent -->
     </LinearGradientBrush>
 
+    <!-- Card Gradients - Semi-transparent frosted glass effect -->
     <LinearGradientBrush x:Key="CardGradient" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="#FFFFFF" Offset="0.0"/>
-        <GradientStop Color="#FBFCFD" Offset="1.0"/>
+        <GradientStop Color="#E6FFFFFF" Offset="0.0"/><!-- 90% white -->
+        <GradientStop Color="#E6FBFCFD" Offset="1.0"/><!-- 90% off-white -->
     </LinearGradientBrush>
-    
-    <!-- New: Soft shadow for cards -->
+
+    <!-- Subtle Card - More transparent for better blending -->
     <LinearGradientBrush x:Key="SubtleCardGradient" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#FFFFFF" Offset="0.0"/>
-        <GradientStop Color="#F9FAFB" Offset="1.0"/>
+        <GradientStop Color="#CCFFFFFF" Offset="0.0"/><!-- 80% white -->
+        <GradientStop Color="#CCF9FAFB" Offset="1.0"/><!-- 80% off-white -->
     </LinearGradientBrush>
+
+    <!-- Calendar Cell Background - Very subtle -->
+    <SolidColorBrush x:Key="CalendarCellBg" Color="#CCFAFBFC"/><!-- 80% opacity -->
 </ResourceDictionary>
