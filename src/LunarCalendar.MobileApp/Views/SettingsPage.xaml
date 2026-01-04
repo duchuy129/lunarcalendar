@@ -303,7 +303,7 @@
                         <Button x:Name="ClearCacheButton"
                                 Text="{ext:Translate ClearCache}"
                                 Clicked="OnClearCacheClicked"
-                                BackgroundColor="{DynamicResource Primary}"
+                                BackgroundColor="{DynamicResource Secondary}"
                                 TextColor="White"
                                 CornerRadius="8"
                                 HorizontalOptions="Fill"/>
@@ -415,7 +415,7 @@
                         <Button x:Name="AboutButton"
                                 Text="{ext:Translate AboutThisApp}"
                                 Clicked="OnAboutClicked"
-                                BackgroundColor="{DynamicResource Secondary}"
+                                BackgroundColor="{DynamicResource Primary}"
                                 TextColor="White"
                                 CornerRadius="8"
                                 HorizontalOptions="Fill"/>
