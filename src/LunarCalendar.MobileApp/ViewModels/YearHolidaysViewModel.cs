@@ -14,6 +14,7 @@ public partial class YearHolidaysViewModel : ObservableObject
     private readonly IHolidayService _holidayService;
     private readonly ILogService _logService;
     private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
+    private volatile bool _isLanguageChanging = false;
 
     [ObservableProperty]
     private ObservableCollection<int> _availableYears = new();
@@ -52,11 +53,21 @@ public partial class YearHolidaysViewModel : ObservableObject
         // Initialize settings
         ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
 
+        // Subscribe to cultural background setting changes
+        WeakReferenceMessenger.Default.Register<CulturalBackgroundChangedMessage>(this, (r, m) =>
+        {
+            ShowCulturalBackground = m.ShowCulturalBackground;
+        });
+
         // Subscribe to language change events
         WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, async (r, m) =>
         {
+            // Acquire semaphore to prevent race condition with year navigation
+            await _updateSemaphore.WaitAsync();
+            
             try
             {
+                _isLanguageChanging = true;
 
                 // Update button text
                 await MainThread.InvokeOnMainThreadAsync(() =>
@@ -89,6 +100,11 @@ public partial class YearHolidaysViewModel : ObservableObject
             {
                 _logService.LogWarning("Failed to refresh UI after language change - non-critical", "YearHolidaysViewModel.OnLanguageChanged");
             }
+            finally
+            {
+                _isLanguageChanging = false;
+                _updateSemaphore.Release();
+            }
         });
     }
 
@@ -99,6 +115,11 @@ public partial class YearHolidaysViewModel : ObservableObject
 
     partial void OnSelectedYearChanged(int value)
     {
+        // Skip if language is currently changing to avoid race condition
+        if (_isLanguageChanging)
+        {
+            return;
+        }
 
         // Use Task.Run to avoid blocking and properly handle async call
         Task.Run(async () =>
@@ -171,6 +192,12 @@ public partial class YearHolidaysViewModel : ObservableObject
 
     private async Task LoadYearHolidaysAsync()
     {
+        // Skip if language change is in progress
+        if (_isLanguageChanging)
+        {
+            return;
+        }
+
         // Prevent concurrent updates
         if (!await _updateSemaphore.WaitAsync(0))
         {
@@ -179,6 +206,11 @@ public partial class YearHolidaysViewModel : ObservableObject
 
         try
         {
+            // Double-check after acquiring semaphore
+            if (_isLanguageChanging)
+            {
+                return;
+            }
             
             IsLoading = true;
 

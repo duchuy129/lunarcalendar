@@ -13,6 +13,14 @@ public class LanguageChangedMessage
 }
 
 /// <summary>
+/// Message sent when cultural background setting changes
+/// </summary>
+public class CulturalBackgroundChangedMessage
+{
+    public bool ShowCulturalBackground { get; set; }
+}
+
+/// <summary>
 /// Provides a reactive wrapper for localized strings that updates when language changes
 /// </summary>
 public class LocalizedString : INotifyPropertyChanged

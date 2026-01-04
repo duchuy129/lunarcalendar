@@ -187,6 +187,7 @@ public partial class SettingsViewModel : BaseViewModel
     partial void OnShowCulturalBackgroundChanged(bool value)
     {
         SaveSetting(ShowCulturalBackgroundKey, value);
+        WeakReferenceMessenger.Default.Send(new CulturalBackgroundChangedMessage { ShowCulturalBackground = value });
     }
 
     partial void OnEnableHapticFeedbackChanged(bool value)

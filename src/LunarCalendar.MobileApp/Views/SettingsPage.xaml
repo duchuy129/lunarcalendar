@@ -98,6 +98,7 @@
                         <Switch Grid.Column="1"
                                 IsToggled="{Binding ShowCulturalBackground}"
                                 OnColor="{DynamicResource Primary}"
+                                ThumbColor="White"
                                 VerticalOptions="Center"/>
                     </Grid>
 
@@ -119,6 +120,7 @@
                         <Switch Grid.Column="1"
                                 IsToggled="{Binding ShowLunarDates}"
                                 OnColor="{DynamicResource Primary}"
+                                ThumbColor="White"
                                 VerticalOptions="Center"/>
                     </Grid>
 
@@ -184,6 +186,7 @@
                         <Switch Grid.Column="1"
                                 IsToggled="{Binding EnableHapticFeedback}"
                                 OnColor="{DynamicResource Primary}"
+                                ThumbColor="White"
                                 VerticalOptions="Center"/>
                     </Grid>
                 </VerticalStackLayout>
