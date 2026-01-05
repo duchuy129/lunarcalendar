@@ -216,16 +216,13 @@
                     <!-- Online Status -->
                     <Grid Padding="16,12"
                           ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Grid.Column="0" Spacing="4">
-                            <Label Text="{ext:Translate ConnectionStatus}"
-                                   FontSize="16"
-                                   TextColor="{DynamicResource Gray900}"/>
-                            <Label Text="{Binding IsOnline, StringFormat='{0}'}"
-                                   FontSize="14"
-                                   TextColor="{DynamicResource Gray600}"/>
-                        </VerticalStackLayout>
+                        <Label Grid.Column="0"
+                               Text="{ext:Translate ConnectionStatus}"
+                               FontSize="16"
+                               TextColor="{DynamicResource Gray900}"
+                               VerticalOptions="Center"/>
                         <Label Grid.Column="1"
-                               Text="{Binding IsOnline, StringFormat='{0}'}"
+                               Text="{Binding ConnectionStatusText}"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="{DynamicResource Primary}"
@@ -234,13 +231,11 @@
                                 <DataTrigger TargetType="Label"
                                            Binding="{Binding IsOnline}"
                                            Value="True">
-                                    <Setter Property="Text" Value="{ext:Translate Online}" />
                                     <Setter Property="TextColor" Value="Green" />
                                 </DataTrigger>
                                 <DataTrigger TargetType="Label"
                                            Binding="{Binding IsOnline}"
                                            Value="False">
-                                    <Setter Property="Text" Value="{ext:Translate Offline}" />
                                     <Setter Property="TextColor" Value="Orange" />
                                 </DataTrigger>
                             </Label.Triggers>

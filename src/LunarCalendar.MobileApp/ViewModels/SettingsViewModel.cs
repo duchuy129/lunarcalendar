@@ -44,6 +44,9 @@ public partial class SettingsViewModel : BaseViewModel
     private bool _isOnline = true;
 
     [ObservableProperty]
+    private string _connectionStatusText = string.Empty;
+
+    [ObservableProperty]
     private string _lastSyncTime = "Never";
 
     [ObservableProperty]
@@ -71,6 +74,7 @@ public partial class SettingsViewModel : BaseViewModel
         ResetSettingsCommand = new AsyncRelayCommand(ResetSettingsAsync);
         
         Title = AppResources.Settings;
+        ConnectionStatusText = AppResources.Online; // Initialize with default
         LoadSettings();
         LoadAppInfo();
     }
@@ -101,6 +105,7 @@ public partial class SettingsViewModel : BaseViewModel
         LoadAppInfo();
         LoadLanguageSettings();
         UpdateSyncStatus();
+        UpdateConnectionStatus();
 
         // Monitor connectivity
         if (_connectivityService != null)
@@ -119,12 +124,20 @@ public partial class SettingsViewModel : BaseViewModel
         WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
         {
             Title = AppResources.Settings; // Update title with new language
+            UpdateConnectionStatus(); // Update connection status text with new language
+            UpdateSyncStatus(); // Update sync status with new language
         });
     }
 
     private void OnConnectivityChanged(object? sender, bool isConnected)
     {
         IsOnline = isConnected;
+        UpdateConnectionStatus();
+    }
+
+    private void UpdateConnectionStatus()
+    {
+        ConnectionStatusText = IsOnline ? AppResources.Online : AppResources.Offline;
     }
 
     private void OnSyncStatusChanged(object? sender, SyncStatusChangedEventArgs e)
@@ -155,7 +168,9 @@ public partial class SettingsViewModel : BaseViewModel
             }
             else
             {
-                LastSyncTime = _syncService.LastSyncTime.Value.ToString("MMM dd, yyyy HH:mm");
+                // Use culture-aware date formatting based on current language
+                var culture = System.Globalization.CultureInfo.CurrentCulture;
+                LastSyncTime = _syncService.LastSyncTime.Value.ToString("g", culture); // Short date and time pattern
             }
         }
         else
