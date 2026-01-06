@@ -1,12 +1,78 @@
-# Lunar Calendar Mobile App
+# Vietnamese Lunar Calendar
 
-Vietnamese Lunar Calendar mobile application built with .NET MAUI, supporting Android, iOS, and iPad.
+A cross-platform mobile application for Vietnamese lunar calendar with holiday tracking, built with .NET MAUI.
+
+## 📱 Overview
+
+Vietnamese Lunar Calendar is a fully offline-capable mobile application that provides accurate lunar date calculations and comprehensive Vietnamese holiday information. The app uses on-device calculations for instant performance and supports both English and Vietnamese languages.
+
+## ✨ Features
+
+- **Lunar Calendar Conversion**: Instant Gregorian to Vietnamese Lunar date conversion
+- **Vietnamese Holidays**: Comprehensive holiday database with detailed descriptions
+  - Color-coded holiday types (National, Cultural, International, Lunar)
+  - Holiday filtering by category
+  - Detailed holiday information pages
+- **Smart Navigation**:
+  - Month-by-month calendar view
+  - Year-level holiday overview
+  - Quick year picker (1900-2100)
+  - Today button for instant navigation
+- **Bilingual Support**: Full localization in English and Vietnamese
+- **Offline First**: All calculations happen on-device, no internet required
+- **Modern UI/UX**:
+  - Adaptive layouts for iPhone and iPad
+  - Haptic feedback for interactions
+  - Smooth animations and transitions
+  - Dark/light theme support
+
+## 🏗️ Architecture
+
+### Tech Stack
+
+- **Framework**: .NET MAUI (Multi-platform App UI) with .NET 10.0
+- **Target Platforms**:
+  - iOS 15.0+ (iPhone & iPad)
+  - Android 8.0+ (API level 26+)
+- **Languages**: C# 12, XAML
+- **Patterns**: MVVM (Model-View-ViewModel)
+- **Database**: SQLite (offline storage)
+- **Localization**: .NET Resource files (.resx)
+
+### Key Dependencies
+
+- **Microsoft.Maui.Controls** - UI framework
+- **CommunityToolkit.Mvvm** 8.2.2 - MVVM helpers
+- **sqlite-net-pcl** 1.9.172 - Local database
+- **ChineseLunisolarCalendar** - Built-in .NET lunar calculations
+
+### Project Structure
+
+```
+lunarcalendar/
+├── src/
+│   ├── LunarCalendar.Core/           # Shared business logic
+│   │   ├── Models/                   # Data models (Holiday, LunarDate)
+│   │   ├── Services/                 # Calculation services
+│   │   └── Data/                     # Holiday seed data
+│   ├── LunarCalendar.MobileApp/      # .NET MAUI application
+│   │   ├── Views/                    # XAML pages
+│   │   ├── ViewModels/               # View models (MVVM)
+│   │   ├── Services/                 # App services
+│   │   ├── Data/                     # SQLite database
+│   │   ├── Models/                   # App-specific models
+│   │   ├── Converters/               # XAML value converters
+│   │   ├── Resources/                # Images, fonts, strings
+│   │   └── Platforms/                # Platform-specific code
+│   └── LunarCalendar.Api/            # Backend API (optional)
+└── docs/                             # Documentation
+```
 
 ## 📋 Table of Contents
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
+- [Development Scripts](#development-scripts)
 - [Common Commands](#common-commands)
-  - [API Server](#api-server)
   - [Build Commands](#build-commands)
   - [Android Deployment](#android-deployment)
   - [iOS/iPad Deployment](#iosipad-deployment)
@@ -18,108 +84,115 @@ Vietnamese Lunar Calendar mobile application built with .NET MAUI, supporting An
 
 ## Prerequisites
 
-- .NET 8.0 SDK
-- Xcode (for iOS/iPad development)
-- Android SDK (for Android development)
-- Visual Studio Code or Visual Studio for Mac
+### Required
+- **.NET 10.0 SDK** or later
+- **macOS** (for iOS/iPad development)
+  - Xcode 16.0+
+  - iOS SDK 15.0+
+- **Android SDK** (for Android development)
+  - Android API level 26+ (Android 8.0+)
+  - Target API level 36 (Android 14+)
+
+### Development Environment
+- **Visual Studio Code** with C# Dev Kit, or
+- **Visual Studio 2022 for Mac** (17.6+), or
+- **JetBrains Rider**
 
 ---
 
 ## Quick Start
 
-### 1. Start API Server
+### Clone and Build
+
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar/src/LunarCalendar.Api
-dotnet run
-```
-The API will start on: **http://localhost:5090**
+# Clone the repository
+git clone <repository-url>
+cd lunarcalendar
 
-### 2. Build the Mobile App
+# Restore dependencies
+dotnet restore
+
+# Build for Android
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-android
+
+# Build for iOS
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-ios
+```
+
+### Run on Simulator
+
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
+# Android (using helper script)
+./deploy-android-sim.sh
 
-# For Android
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-android
+# iOS iPhone (using helper script)
+./deploy-ipad-auto.sh
 
-# For iOS
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-ios
+# Or use the comprehensive multi-platform script
+./deploy-multi-simulator.sh
 ```
 
-### 3. Run on Simulators/Emulators
-See platform-specific commands below.
+---
+
+## Development Scripts
+
+The project includes several helper scripts for common development tasks:
+
+### Android Scripts
+- `build-android-release.sh` - Build release APK/AAB
+- `deploy-android-sim.sh` - Deploy to Android emulator
+- `rebuild-deploy-android-latest.sh` - Clean build and deploy to latest emulator
+- `create-android-keystore.sh` - Create signing keystore
+
+### iOS Scripts
+- `build-ios-release.sh` - Build release IPA
+- `deploy-ios-device.sh` - Deploy to physical iOS device
+- `deploy-ipad-simulator.sh` - Deploy to iPad simulator
+- `deploy-ipad-auto.sh` - Auto-deploy to iPad
+
+### Utility Scripts
+- `deploy-multi-simulator.sh` - Deploy to multiple simulators
+- `verify-release-builds.sh` - Verify release builds
+- `capture-logs.sh` / `capture-device-log.sh` - Capture app logs
 
 ---
 
 ## Common Commands
 
-### API Server
-
-#### Start API Server (Foreground)
-```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar/src/LunarCalendar.Api
-dotnet run
-```
-
-#### Start API Server (Background)
-```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar/src/LunarCalendar.Api
-dotnet run &
-```
-
-#### Check if API is Running
-```bash
-ps aux | grep "LunarCalendar.Api" | grep -v grep
-```
-
-#### Test API Endpoint
-```bash
-curl http://localhost:5090/api/calendar/2025/12
-```
-
-#### Stop API Server
-```bash
-# Find the process ID
-ps aux | grep "LunarCalendar.Api" | grep -v grep
-
-# Kill the process (replace <PID> with actual process ID)
-kill <PID>
-
-# Or kill all dotnet processes (use with caution)
-pkill -f "LunarCalendar.Api"
-```
-
----
-
 ### Build Commands
 
 #### Clean Build
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-
 # Clean all targets
 dotnet clean src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj
 
 # Clean specific target
-dotnet clean src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-android
-dotnet clean src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-ios
+dotnet clean src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-android
+dotnet clean src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-ios
 ```
 
 #### Build for Android
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-android
+# Debug build
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-android
+
+# Release build (AAB for Play Store)
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj \
+  -f net10.0-android -c Release
 ```
 
 #### Build for iOS
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-ios
-```
+# Simulator build (default)
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-ios
 
-#### Build All Platforms
-```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj
+# Device build
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj \
+  -f net10.0-ios -r ios-arm64
+
+# Release build for App Store
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj \
+  -f net10.0-ios -c Release -r ios-arm64
 ```
 
 ---
@@ -144,22 +217,19 @@ dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj
 
 #### Install on Android Emulator
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-
 # Uninstall old version (if exists)
-~/Library/Android/sdk/platform-tools/adb uninstall com.companyname.lunarcalendar.mobileapp
+~/Library/Android/sdk/platform-tools/adb uninstall com.huynguyen.lunarcalendar
 
 # Install new version
-~/Library/Android/sdk/platform-tools/adb install -r src/LunarCalendar.MobileApp/bin/Debug/net8.0-android/com.companyname.lunarcalendar.mobileapp-Signed.apk
+~/Library/Android/sdk/platform-tools/adb install -r \
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-android/com.huynguyen.lunarcalendar-Signed.apk
 ```
 
 #### Launch on Android
 ```bash
-# Method 1: Using activity name
-~/Library/Android/sdk/platform-tools/adb shell am start -n com.companyname.lunarcalendar.mobileapp/crc641e6c7ae8ff9c86da.MainActivity
-
-# Method 2: Using package name
-~/Library/Android/sdk/platform-tools/adb shell monkey -p com.companyname.lunarcalendar.mobileapp -c android.intent.category.LAUNCHER 1
+# Using package name
+~/Library/Android/sdk/platform-tools/adb shell monkey \
+  -p com.huynguyen.lunarcalendar -c android.intent.category.LAUNCHER 1
 ```
 
 #### Android Logs
@@ -176,7 +246,7 @@ cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
 
 #### Force Stop Android App
 ```bash
-~/Library/Android/sdk/platform-tools/adb shell am force-stop com.companyname.lunarcalendar.mobileapp
+~/Library/Android/sdk/platform-tools/adb shell am force-stop com.huynguyen.lunarcalendar
 ```
 
 ---
@@ -213,52 +283,47 @@ open -a Simulator
 
 #### Install on iPhone 15 Pro (iOS 18.2)
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-
 xcrun simctl install 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
 ```
 
 #### Install on iPad Pro
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-
 xcrun simctl install D66062E4-3F8C-4709-B020-5F66809E3EDD \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
 ```
 
-#### Launch on iPhone 15 Pro (iOS 18.2)
+#### Launch on iPhone/iPad
 ```bash
+# iPhone 15 Pro
 xcrun simctl launch 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  com.companyname.lunarcalendar.mobileapp
-```
+  com.huynguyen.lunarcalendar
 
-#### Launch on iPad Pro
-```bash
+# iPad Pro
 xcrun simctl launch D66062E4-3F8C-4709-B020-5F66809E3EDD \
-  com.companyname.lunarcalendar.mobileapp
+  com.huynguyen.lunarcalendar
 ```
 
 #### Uninstall from iPhone/iPad
 ```bash
 # iPhone 15 Pro
 xcrun simctl uninstall 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  com.companyname.lunarcalendar.mobileapp
+  com.huynguyen.lunarcalendar
 
 # iPad Pro
 xcrun simctl uninstall D66062E4-3F8C-4709-B020-5F66809E3EDD \
-  com.companyname.lunarcalendar.mobileapp
+  com.huynguyen.lunarcalendar
 ```
 
 #### Terminate App on iPhone/iPad
 ```bash
 # iPhone 15 Pro
 xcrun simctl terminate 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  com.companyname.lunarcalendar.mobileapp
+  com.huynguyen.lunarcalendar
 
 # iPad Pro
 xcrun simctl terminate D66062E4-3F8C-4709-B020-5F66809E3EDD \
-  com.companyname.lunarcalendar.mobileapp
+  com.huynguyen.lunarcalendar
 ```
 
 #### Take Screenshot
@@ -327,21 +392,19 @@ xcrun simctl erase D66062E4-3F8C-4709-B020-5F66809E3EDD
 
 ## Development Workflow
 
-### Complete Workflow: Build and Deploy to All Platforms
+### Complete Development Workflow
 
-#### 1. Start API Server
+#### 1. Build the App
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar/src/LunarCalendar.Api
-dotnet run &
-```
-
-#### 2. Build App
-```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
+# Build for both platforms
 dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj
+
+# Or build specific platform
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-ios
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-android
 ```
 
-#### 3. Deploy to iPhone (iOS 18.2) - Recommended
+#### 2. Deploy to iPhone (iOS 18.2) - Recommended
 ```bash
 # Boot simulator
 xcrun simctl boot 4BEC1E56-9B92-4B3F-8065-04DDA5821951
@@ -349,13 +412,13 @@ open -a Simulator
 
 # Install and launch
 xcrun simctl install 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
 
 xcrun simctl launch 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  com.companyname.lunarcalendar.mobileapp
+  com.huynguyen.lunarcalendar
 ```
 
-#### 4. Deploy to iPad
+#### 3. Deploy to iPad
 ```bash
 # Boot simulator
 xcrun simctl boot D66062E4-3F8C-4709-B020-5F66809E3EDD
@@ -363,23 +426,24 @@ open -a Simulator
 
 # Install and launch
 xcrun simctl install D66062E4-3F8C-4709-B020-5F66809E3EDD \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
 
 xcrun simctl launch D66062E4-3F8C-4709-B020-5F66809E3EDD \
-  com.companyname.lunarcalendar.mobileapp
+  com.huynguyen.lunarcalendar
 ```
 
-#### 5. Deploy to Android
+#### 4. Deploy to Android
 ```bash
 # Start emulator (if not running)
 ~/Library/Android/sdk/emulator/emulator -avd <your-emulator-name> &
 
 # Wait for emulator to boot, then install
 ~/Library/Android/sdk/platform-tools/adb install -r \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-android/com.companyname.lunarcalendar.mobileapp-Signed.apk
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-android/com.huynguyen.lunarcalendar-Signed.apk
 
 # Launch
-~/Library/Android/sdk/platform-tools/adb shell monkey -p com.companyname.lunarcalendar.mobileapp -c android.intent.category.LAUNCHER 1
+~/Library/Android/sdk/platform-tools/adb shell monkey \
+  -p com.huynguyen.lunarcalendar -c android.intent.category.LAUNCHER 1
 ```
 
 ---
@@ -388,58 +452,69 @@ xcrun simctl launch D66062E4-3F8C-4709-B020-5F66809E3EDD \
 
 #### For iPhone 15 Pro (iOS 18.2)
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-
 # Rebuild
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-ios
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-ios
 
 # Terminate, reinstall, and launch
-xcrun simctl terminate 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.companyname.lunarcalendar.mobileapp
-xcrun simctl uninstall 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.companyname.lunarcalendar.mobileapp
+xcrun simctl terminate 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.huynguyen.lunarcalendar
+xcrun simctl uninstall 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.huynguyen.lunarcalendar
 xcrun simctl install 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
-xcrun simctl launch 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.companyname.lunarcalendar.mobileapp
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
+xcrun simctl launch 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.huynguyen.lunarcalendar
 ```
 
 #### For Android
 ```bash
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
-
 # Rebuild
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-android
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-android
 
 # Force stop, reinstall, and launch
-~/Library/Android/sdk/platform-tools/adb shell am force-stop com.companyname.lunarcalendar.mobileapp
+~/Library/Android/sdk/platform-tools/adb shell am force-stop com.huynguyen.lunarcalendar
 ~/Library/Android/sdk/platform-tools/adb install -r \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-android/com.companyname.lunarcalendar.mobileapp-Signed.apk
-~/Library/Android/sdk/platform-tools/adb shell monkey -p com.companyname.lunarcalendar.mobileapp -c android.intent.category.LAUNCHER 1
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-android/com.huynguyen.lunarcalendar-Signed.apk
+~/Library/Android/sdk/platform-tools/adb shell monkey \
+  -p com.huynguyen.lunarcalendar -c android.intent.category.LAUNCHER 1
+```
+
+---
+
+### Using Helper Scripts (Recommended)
+
+For faster development, use the provided helper scripts:
+
+```bash
+# Android - rebuild and deploy
+./rebuild-deploy-android-latest.sh
+
+# iOS - deploy to iPad
+./deploy-ipad-auto.sh
+
+# Multi-platform deployment
+./deploy-multi-simulator.sh
 ```
 
 ---
 
 ## Troubleshooting
 
-### API Server Issues
+### General Issues
 
-**Issue**: API not responding
+**Issue**: Build fails with "workload not found"
 ```bash
-# Check if API is running
-ps aux | grep "LunarCalendar.Api" | grep -v grep
+# Check installed workloads
+dotnet workload list
 
-# Check if port 5090 is in use
-lsof -i :5090
-
-# Test API directly
-curl http://localhost:5090/api/calendar/2025/12
+# Install required workloads
+dotnet workload install maui-ios maui-android
 ```
 
-**Issue**: Port 5090 already in use
+**Issue**: Dependency resolution errors
 ```bash
-# Find process using port 5090
-lsof -i :5090
+# Clear NuGet cache
+dotnet nuget locals all --clear
 
-# Kill the process (replace <PID>)
-kill <PID>
+# Restore packages
+dotnet restore src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj
 ```
 
 ---
@@ -462,15 +537,28 @@ xcrun simctl boot 4BEC1E56-9B92-4B3F-8065-04DDA5821951
 **Issue**: App not updating after rebuild
 ```bash
 # Uninstall app completely
-xcrun simctl uninstall 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.companyname.lunarcalendar.mobileapp
+xcrun simctl uninstall 4BEC1E56-9B92-4B3F-8065-04DDA5821951 com.huynguyen.lunarcalendar
 
 # Clean and rebuild
-dotnet clean src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-ios
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net8.0-ios
+dotnet clean src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-ios
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj -f net10.0-ios
 
 # Reinstall
 xcrun simctl install 4BEC1E56-9B92-4B3F-8065-04DDA5821951 \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64/LunarCalendar.MobileApp.app
+```
+
+**Issue**: iOS device build fails with code signing errors
+```bash
+# List available signing identities
+security find-identity -v -p codesigning
+
+# Clean build artifacts
+rm -rf src/LunarCalendar.MobileApp/bin src/LunarCalendar.MobileApp/obj
+
+# Rebuild with device runtime
+dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj \
+  -f net10.0-ios -r ios-arm64
 ```
 
 ---
@@ -497,11 +585,11 @@ pkill -9 qemu-system-x86_64
 **Issue**: App installation fails
 ```bash
 # Uninstall first
-~/Library/Android/sdk/platform-tools/adb uninstall com.companyname.lunarcalendar.mobileapp
+~/Library/Android/sdk/platform-tools/adb uninstall com.huynguyen.lunarcalendar
 
 # Try installing again
 ~/Library/Android/sdk/platform-tools/adb install -r \
-  src/LunarCalendar.MobileApp/bin/Debug/net8.0-android/com.companyname.lunarcalendar.mobileapp-Signed.apk
+  src/LunarCalendar.MobileApp/bin/Debug/net10.0-android/com.huynguyen.lunarcalendar-Signed.apk
 ```
 
 ---
@@ -544,51 +632,53 @@ For quick reference:
 
 ---
 
-## Project Structure
+## App Information
 
-```
-lunarcalendar/
-├── src/
-│   ├── LunarCalendar.Api/              # Backend API (ASP.NET Core)
-│   └── LunarCalendar.MobileApp/        # Mobile App (.NET MAUI)
-│       ├── Platforms/
-│       │   ├── Android/
-│       │   └── iOS/
-│       ├── Views/                      # XAML Pages
-│       ├── ViewModels/                 # View Models
-│       ├── Services/                   # Business Logic
-│       ├── Models/                     # Data Models
-│       └── Converters/                 # Value Converters
-├── README.md                           # This file
-├── IPHONE_FIX_COMPLETE.md             # iPhone black screen fix
-└── INSTALL_IOS18_RUNTIME.md           # iOS 18.2 runtime installation guide
-```
+### Version
+- **Current Version**: 1.0.1 (Build 2)
+- **Bundle ID**: com.huynguyen.lunarcalendar
+- **Supported Languages**: English, Vietnamese (default)
+
+### Platform Support
+- **iOS**: 15.0+ (iPhone and iPad)
+- **Android**: 8.0+ (API level 26+)
 
 ---
 
-## Features
+## Design Decisions
 
-- ✅ Vietnamese Lunar Calendar
-- ✅ Gregorian to Lunar date conversion
-- ✅ Vietnamese Holidays with color-coded display
-- ✅ Month navigation (Previous/Next/Today)
-- ✅ Year navigation for holidays
-- ✅ Year picker to jump to specific year
-- ✅ Dual date display (Gregorian + Lunar)
-- ✅ Guest mode / User mode toggle
-- ✅ Cross-platform: Android, iPhone, iPad
+### Offline-First Architecture
+The app is designed to work completely offline by bundling all calculation logic on-device:
+- **Lunar calculations**: Uses .NET's built-in `ChineseLunisolarCalendar`
+- **Holiday data**: Seeded into SQLite database on first launch
+- **No API dependency**: All features work without internet connection
+
+### Localization Strategy
+- Default language: Vietnamese (matches primary user base)
+- Resource files (.resx) for both English and Vietnamese
+- Dynamic language switching without app restart
+- Localized holiday names and descriptions
+
+### Performance Optimizations
+- **Instant calculations**: No network latency
+- **Efficient rendering**: Virtualized lists for large datasets
+- **Smart caching**: SQLite for historical data
+- **Release mode**: AOT compilation for iOS, R8 optimization for Android
 
 ---
 
-## API Endpoints
+## Contributing
 
-Base URL: `http://localhost:5090`
+### Code Style
+- Follow C# conventions and .NET best practices
+- Use MVVM pattern for UI logic
+- Add XML documentation for public APIs
+- Keep platform-specific code in Platforms/ folders
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/calendar/{year}/{month}` | GET | Get calendar for specific month |
-| `/api/holidays` | GET | Get all holidays |
-| `/api/holidays/{year}` | GET | Get holidays for specific year |
+### Testing
+- Manual testing on both iOS and Android required
+- Test language switching thoroughly
+- Verify offline functionality
 
 ---
 
@@ -596,11 +686,24 @@ Base URL: `http://localhost:5090`
 
 [Your License Here]
 
-## Support
+---
 
-For issues and questions:
-- See [IPHONE_FIX_COMPLETE.md](IPHONE_FIX_COMPLETE.md) for iPhone simulator issues
-- See [INSTALL_IOS18_RUNTIME.md](INSTALL_IOS18_RUNTIME.md) for iOS runtime installation
+## Support & Documentation
+
+For detailed guides and troubleshooting:
+- [Privacy Policy](PRIVACY_POLICY.md)
+- See project documentation in `docs/` folder
+- Check `*.md` files in root for specific guides
+
+---
+
+## Acknowledgments
+
+Built with:
+- .NET MAUI - Cross-platform framework by Microsoft
+- CommunityToolkit.Mvvm - MVVM helpers
+- SQLite - Local database
+- .NET ChineseLunisolarCalendar - Lunar date calculations
 
 ---
 
