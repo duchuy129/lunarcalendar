@@ -18,25 +18,48 @@ public class LunarCalendarDatabase
         if (_database is not null)
             return;
 
-        _database = new SQLiteAsyncConnection(_databasePath);
+        Console.WriteLine($"[DB] InitAsync: Initializing database at path: {_databasePath}");
+        try
+        {
+            _database = new SQLiteAsyncConnection(_databasePath);
 
-        await _database.CreateTableAsync<LunarDateEntity>();
-        await _database.CreateTableAsync<HolidayEntity>();
-        await _database.CreateTableAsync<HolidayOccurrenceEntity>();
-        await _database.CreateTableAsync<SyncLogEntity>();
+            await _database.CreateTableAsync<LunarDateEntity>();
+            await _database.CreateTableAsync<HolidayEntity>();
+            await _database.CreateTableAsync<HolidayOccurrenceEntity>();
+            await _database.CreateTableAsync<SyncLogEntity>();
+            
+            Console.WriteLine("[DB] Database initialized successfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DB] ERROR initializing database: {ex.Message}");
+            Console.WriteLine($"[DB] Stack trace: {ex.StackTrace}");
+            throw;
+        }
     }
 
     #region Lunar Dates
 
     public async Task<List<LunarDateEntity>> GetLunarDatesForMonthAsync(int year, int month)
     {
+        Console.WriteLine($"[DB] GetLunarDatesForMonthAsync: Fetching lunar dates for {year}-{month:D2}");
         await InitAsync();
         var startDate = new DateTime(year, month, 1);
         var endDate = startDate.AddMonths(1).AddDays(-1);
 
-        return await _database!.Table<LunarDateEntity>()
-            .Where(ld => ld.GregorianDate >= startDate && ld.GregorianDate <= endDate)
-            .ToListAsync();
+        try
+        {
+            var results = await _database!.Table<LunarDateEntity>()
+                .Where(ld => ld.GregorianDate >= startDate && ld.GregorianDate <= endDate)
+                .ToListAsync();
+            Console.WriteLine($"[DB] Found {results.Count} lunar dates for {year}-{month:D2}");
+            return results;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DB] ERROR fetching lunar dates: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task<LunarDateEntity?> GetLunarDateAsync(DateTime date)
@@ -50,44 +73,86 @@ public class LunarCalendarDatabase
 
     public async Task SaveLunarDateAsync(LunarDateEntity lunarDate)
     {
+        Console.WriteLine($"[DB] SaveLunarDateAsync: Saving lunar date for {lunarDate.GregorianDate:yyyy-MM-dd}");
         await InitAsync();
         lunarDate.LastSyncedAt = DateTime.UtcNow;
 
-        var existing = await GetLunarDateAsync(lunarDate.GregorianDate);
-        if (existing != null)
+        try
         {
-            lunarDate.Id = existing.Id;
-            await _database!.UpdateAsync(lunarDate);
+            var existing = await GetLunarDateAsync(lunarDate.GregorianDate);
+            if (existing != null)
+            {
+                lunarDate.Id = existing.Id;
+                await _database!.UpdateAsync(lunarDate);
+                Console.WriteLine($"[DB] Updated lunar date {lunarDate.GregorianDate:yyyy-MM-dd}");
+            }
+            else
+            {
+                await _database!.InsertAsync(lunarDate);
+                Console.WriteLine($"[DB] Inserted new lunar date {lunarDate.GregorianDate:yyyy-MM-dd}");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await _database!.InsertAsync(lunarDate);
+            Console.WriteLine($"[DB] ERROR saving lunar date: {ex.Message}");
+            Console.WriteLine($"[DB] Stack trace: {ex.StackTrace}");
+            throw;
         }
     }
 
     public async Task SaveLunarDatesAsync(List<LunarDateEntity> lunarDates)
     {
+        Console.WriteLine($"[DB] SaveLunarDatesAsync: Starting to save {lunarDates.Count} lunar dates");
         await InitAsync();
-        await _database!.RunInTransactionAsync(tran =>
-        {
-            foreach (var lunarDate in lunarDates)
-            {
-                lunarDate.LastSyncedAt = DateTime.UtcNow;
-                var existing = tran.Table<LunarDateEntity>()
-                    .Where(ld => ld.GregorianDate == lunarDate.GregorianDate)
-                    .FirstOrDefault();
 
-                if (existing != null)
-                {
-                    lunarDate.Id = existing.Id;
-                    tran.Update(lunarDate);
-                }
-                else
-                {
-                    tran.Insert(lunarDate);
-                }
+        // Prepare data BEFORE transaction to avoid sync calls in async context
+        var updates = new List<LunarDateEntity>();
+        var inserts = new List<LunarDateEntity>();
+
+        foreach (var lunarDate in lunarDates)
+        {
+            lunarDate.LastSyncedAt = DateTime.UtcNow;
+            
+            // Store in local variable to avoid closure issues with SQLite-net
+            var gregorianDate = lunarDate.GregorianDate;
+            
+            var existing = await _database!.Table<LunarDateEntity>()
+                .Where(ld => ld.GregorianDate == gregorianDate)
+                .FirstOrDefaultAsync();
+
+            if (existing != null)
+            {
+                lunarDate.Id = existing.Id;
+                updates.Add(lunarDate);
+                Console.WriteLine($"[DB] Lunar date {lunarDate.GregorianDate:yyyy-MM-dd} exists, will update");
             }
-        });
+            else
+            {
+                inserts.Add(lunarDate);
+                Console.WriteLine($"[DB] Lunar date {lunarDate.GregorianDate:yyyy-MM-dd} is new, will insert");
+            }
+        }
+
+        Console.WriteLine($"[DB] Prepared {updates.Count} updates and {inserts.Count} inserts");
+
+        try
+        {
+            // Execute batch operations in transaction
+            await _database!.RunInTransactionAsync(tran =>
+            {
+                foreach (var update in updates)
+                    tran.Update(update);
+                foreach (var insert in inserts)
+                    tran.Insert(insert);
+            });
+            Console.WriteLine($"[DB] Successfully saved {lunarDates.Count} lunar dates");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DB] ERROR saving lunar dates: {ex.Message}");
+            Console.WriteLine($"[DB] Stack trace: {ex.StackTrace}");
+            throw;
+        }
     }
 
     #endregion
@@ -96,10 +161,21 @@ public class LunarCalendarDatabase
 
     public async Task<List<HolidayOccurrenceEntity>> GetHolidaysForMonthAsync(int year, int month)
     {
+        Console.WriteLine($"[DB] GetHolidaysForMonthAsync: Fetching holidays for {year}-{month:D2}");
         await InitAsync();
-        return await _database!.Table<HolidayOccurrenceEntity>()
-            .Where(ho => ho.Year == year && ho.Month == month)
-            .ToListAsync();
+        try
+        {
+            var results = await _database!.Table<HolidayOccurrenceEntity>()
+                .Where(ho => ho.Year == year && ho.Month == month)
+                .ToListAsync();
+            Console.WriteLine($"[DB] Found {results.Count} holidays for {year}-{month:D2}");
+            return results;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DB] ERROR fetching holidays: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task<List<HolidayOccurrenceEntity>> GetHolidaysForYearAsync(int year)
@@ -121,27 +197,58 @@ public class LunarCalendarDatabase
 
     public async Task SaveHolidayOccurrencesAsync(List<HolidayOccurrenceEntity> occurrences)
     {
+        Console.WriteLine($"[DB] SaveHolidayOccurrencesAsync: Starting to save {occurrences.Count} holiday occurrences");
         await InitAsync();
-        await _database!.RunInTransactionAsync(tran =>
-        {
-            foreach (var occurrence in occurrences)
-            {
-                occurrence.LastSyncedAt = DateTime.UtcNow;
-                var existing = tran.Table<HolidayOccurrenceEntity>()
-                    .Where(ho => ho.GregorianDate == occurrence.GregorianDate && ho.Name == occurrence.Name)
-                    .FirstOrDefault();
 
-                if (existing != null)
-                {
-                    occurrence.Id = existing.Id;
-                    tran.Update(occurrence);
-                }
-                else
-                {
-                    tran.Insert(occurrence);
-                }
+        // Prepare data BEFORE transaction to avoid sync calls in async context
+        var updates = new List<HolidayOccurrenceEntity>();
+        var inserts = new List<HolidayOccurrenceEntity>();
+
+        foreach (var occurrence in occurrences)
+        {
+            occurrence.LastSyncedAt = DateTime.UtcNow;
+            
+            // Store in local variables to avoid closure issues with SQLite-net
+            var gregorianDate = occurrence.GregorianDate;
+            var holidayName = occurrence.Name;
+            
+            var existing = await _database!.Table<HolidayOccurrenceEntity>()
+                .Where(ho => ho.GregorianDate == gregorianDate && ho.Name == holidayName)
+                .FirstOrDefaultAsync();
+
+            if (existing != null)
+            {
+                occurrence.Id = existing.Id;
+                updates.Add(occurrence);
+                Console.WriteLine($"[DB] Holiday '{occurrence.Name}' on {occurrence.GregorianDate:yyyy-MM-dd} exists, will update");
             }
-        });
+            else
+            {
+                inserts.Add(occurrence);
+                Console.WriteLine($"[DB] Holiday '{occurrence.Name}' on {occurrence.GregorianDate:yyyy-MM-dd} is new, will insert");
+            }
+        }
+
+        Console.WriteLine($"[DB] Prepared {updates.Count} updates and {inserts.Count} inserts for holidays");
+
+        try
+        {
+            // Execute batch operations in transaction
+            await _database!.RunInTransactionAsync(tran =>
+            {
+                foreach (var update in updates)
+                    tran.Update(update);
+                foreach (var insert in inserts)
+                    tran.Insert(insert);
+            });
+            Console.WriteLine($"[DB] Successfully saved {occurrences.Count} holiday occurrences");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DB] ERROR saving holiday occurrences: {ex.Message}");
+            Console.WriteLine($"[DB] Stack trace: {ex.StackTrace}");
+            throw;
+        }
     }
 
     public async Task ClearHolidaysForYearAsync(int year)
