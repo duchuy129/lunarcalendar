@@ -126,6 +126,7 @@ public partial class SettingsViewModel : BaseViewModel
             Title = AppResources.Settings; // Update title with new language
             UpdateConnectionStatus(); // Update connection status text with new language
             UpdateSyncStatus(); // Update sync status with new language
+            LoadAppInfo(); // Update app version format with new language
         });
     }
 
@@ -235,7 +236,7 @@ public partial class SettingsViewModel : BaseViewModel
 
     private void LoadAppInfo()
     {
-        AppVersion = $"Version {AppInfo.VersionString} (Build {AppInfo.BuildString})";
+        AppVersion = string.Format(AppResources.AppVersionFormat, AppInfo.VersionString, AppInfo.BuildString);
     }
 
     public async Task SyncDataAsync()
@@ -405,32 +406,32 @@ public partial class SettingsViewModel : BaseViewModel
         {
             if (_logService == null)
             {
-                await Shell.Current.DisplayAlert("Error", "Log service not available", "OK");
+                await Shell.Current.DisplayAlert(AppResources.ErrorTitle, AppResources.LogServiceNotAvailable, AppResources.OK);
                 return;
             }
 
             var logs = await _logService.GetLogsAsync();
-            
+
             if (string.IsNullOrEmpty(logs))
             {
-                await Shell.Current.DisplayAlert("Logs", "No logs available yet.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.LogsTitle, AppResources.NoLogsAvailable, AppResources.OK);
                 return;
             }
 
             // For MVP: Show last 2000 characters (most recent logs)
-            var displayLogs = logs.Length > 2000 
-                ? "..." + logs.Substring(logs.Length - 2000) 
+            var displayLogs = logs.Length > 2000
+                ? "..." + logs.Substring(logs.Length - 2000)
                 : logs;
 
             await Shell.Current.DisplayAlert(
-                "Diagnostic Logs", 
-                displayLogs, 
-                "OK");
+                AppResources.DiagnosticLogsTitle,
+                displayLogs,
+                AppResources.OK);
         }
         catch (Exception ex)
         {
             _logService?.LogError("Failed to view logs", ex, "SettingsViewModel.ViewLogs");
-            await Shell.Current.DisplayAlert("Error", $"Failed to load logs: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert(AppResources.ErrorTitle, string.Format(AppResources.FailedToLoadLogs, ex.Message), AppResources.OK);
         }
     }
 
@@ -441,27 +442,27 @@ public partial class SettingsViewModel : BaseViewModel
         {
             if (_logService == null)
             {
-                await Shell.Current.DisplayAlert("Error", "Log service not available", "OK");
+                await Shell.Current.DisplayAlert(AppResources.ErrorTitle, AppResources.LogServiceNotAvailable, AppResources.OK);
                 return;
             }
 
             var confirmed = await Shell.Current.DisplayAlert(
-                "Clear Logs",
-                "Are you sure you want to delete all diagnostic logs?",
-                "Yes",
-                "No");
+                AppResources.ClearLogsConfirmTitle,
+                AppResources.ClearLogsConfirmMessage,
+                AppResources.Yes,
+                AppResources.No);
 
             if (!confirmed) return;
 
             await _logService.ClearLogsAsync();
             _logService.LogInfo("Logs cleared by user", "SettingsViewModel.ClearLogs");
-            
-            await Shell.Current.DisplayAlert("Success", "Diagnostic logs cleared successfully.", "OK");
+
+            await Shell.Current.DisplayAlert(AppResources.Success, AppResources.LogsClearedSuccess, AppResources.OK);
         }
         catch (Exception ex)
         {
             _logService?.LogError("Failed to clear logs", ex, "SettingsViewModel.ClearLogs");
-            await Shell.Current.DisplayAlert("Error", $"Failed to clear logs: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert(AppResources.ErrorTitle, string.Format(AppResources.FailedToClearLogs, ex.Message), AppResources.OK);
         }
     }
 }

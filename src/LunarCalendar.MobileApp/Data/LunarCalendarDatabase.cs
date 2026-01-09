@@ -105,46 +105,15 @@ public class LunarCalendarDatabase
         Console.WriteLine($"[DB] SaveLunarDatesAsync: Starting to save {lunarDates.Count} lunar dates");
         await InitAsync();
 
-        // Prepare data BEFORE transaction to avoid sync calls in async context
-        var updates = new List<LunarDateEntity>();
-        var inserts = new List<LunarDateEntity>();
-
-        foreach (var lunarDate in lunarDates)
-        {
-            lunarDate.LastSyncedAt = DateTime.UtcNow;
-            
-            // Store in local variable to avoid closure issues with SQLite-net
-            var gregorianDate = lunarDate.GregorianDate;
-            
-            var existing = await _database!.Table<LunarDateEntity>()
-                .Where(ld => ld.GregorianDate == gregorianDate)
-                .FirstOrDefaultAsync();
-
-            if (existing != null)
-            {
-                lunarDate.Id = existing.Id;
-                updates.Add(lunarDate);
-                Console.WriteLine($"[DB] Lunar date {lunarDate.GregorianDate:yyyy-MM-dd} exists, will update");
-            }
-            else
-            {
-                inserts.Add(lunarDate);
-                Console.WriteLine($"[DB] Lunar date {lunarDate.GregorianDate:yyyy-MM-dd} is new, will insert");
-            }
-        }
-
-        Console.WriteLine($"[DB] Prepared {updates.Count} updates and {inserts.Count} inserts");
-
         try
         {
-            // Execute batch operations in transaction
-            await _database!.RunInTransactionAsync(tran =>
+            // Use InsertOrReplace for simplicity and reliability
+            foreach (var lunarDate in lunarDates)
             {
-                foreach (var update in updates)
-                    tran.Update(update);
-                foreach (var insert in inserts)
-                    tran.Insert(insert);
-            });
+                lunarDate.LastSyncedAt = DateTime.UtcNow;
+                await _database!.InsertOrReplaceAsync(lunarDate);
+                Console.WriteLine($"[DB] Saved lunar date {lunarDate.GregorianDate:yyyy-MM-dd}");
+            }
             Console.WriteLine($"[DB] Successfully saved {lunarDates.Count} lunar dates");
         }
         catch (Exception ex)
@@ -200,47 +169,69 @@ public class LunarCalendarDatabase
         Console.WriteLine($"[DB] SaveHolidayOccurrencesAsync: Starting to save {occurrences.Count} holiday occurrences");
         await InitAsync();
 
-        // Prepare data BEFORE transaction to avoid sync calls in async context
-        var updates = new List<HolidayOccurrenceEntity>();
-        var inserts = new List<HolidayOccurrenceEntity>();
-
-        foreach (var occurrence in occurrences)
+        if (occurrences == null || occurrences.Count == 0)
         {
-            occurrence.LastSyncedAt = DateTime.UtcNow;
-            
-            // Store in local variables to avoid closure issues with SQLite-net
-            var gregorianDate = occurrence.GregorianDate;
-            var holidayName = occurrence.Name;
-            
-            var existing = await _database!.Table<HolidayOccurrenceEntity>()
-                .Where(ho => ho.GregorianDate == gregorianDate && ho.Name == holidayName)
-                .FirstOrDefaultAsync();
-
-            if (existing != null)
-            {
-                occurrence.Id = existing.Id;
-                updates.Add(occurrence);
-                Console.WriteLine($"[DB] Holiday '{occurrence.Name}' on {occurrence.GregorianDate:yyyy-MM-dd} exists, will update");
-            }
-            else
-            {
-                inserts.Add(occurrence);
-                Console.WriteLine($"[DB] Holiday '{occurrence.Name}' on {occurrence.GregorianDate:yyyy-MM-dd} is new, will insert");
-            }
+            Console.WriteLine("[DB] No holiday occurrences to save");
+            return;
         }
-
-        Console.WriteLine($"[DB] Prepared {updates.Count} updates and {inserts.Count} inserts for holidays");
 
         try
         {
-            // Execute batch operations in transaction
-            await _database!.RunInTransactionAsync(tran =>
+            // Get min and max dates to limit the existing records query
+            var minDate = occurrences.Min(o => o.GregorianDate);
+            var maxDate = occurrences.Max(o => o.GregorianDate);
+
+            // Load all existing records for the date range ONCE before processing
+            Console.WriteLine($"[DB] Loading existing holidays from {minDate:yyyy-MM-dd} to {maxDate:yyyy-MM-dd}");
+            var existingList = await _database!.Table<HolidayOccurrenceEntity>()
+                .Where(ho => ho.GregorianDate >= minDate && ho.GregorianDate <= maxDate)
+                .ToListAsync();
+
+            // Create lookup dictionary for fast in-memory matching
+            var existingDict = new Dictionary<string, HolidayOccurrenceEntity>();
+            foreach (var existing in existingList)
             {
-                foreach (var update in updates)
-                    tran.Update(update);
-                foreach (var insert in inserts)
-                    tran.Insert(insert);
-            });
+                var key = $"{existing.GregorianDate:yyyy-MM-dd}_{existing.Name}";
+                existingDict[key] = existing;
+            }
+            Console.WriteLine($"[DB] Found {existingDict.Count} existing holiday records");
+
+            // Prepare batches for update and insert
+            var toUpdate = new List<HolidayOccurrenceEntity>();
+            var toInsert = new List<HolidayOccurrenceEntity>();
+
+            // Process all occurrences in memory (no async calls)
+            foreach (var occurrence in occurrences)
+            {
+                occurrence.LastSyncedAt = DateTime.UtcNow;
+                var key = $"{occurrence.GregorianDate:yyyy-MM-dd}_{occurrence.Name}";
+
+                if (existingDict.TryGetValue(key, out var existing))
+                {
+                    occurrence.Id = existing.Id;
+                    toUpdate.Add(occurrence);
+                }
+                else
+                {
+                    toInsert.Add(occurrence);
+                }
+            }
+
+            Console.WriteLine($"[DB] Prepared {toUpdate.Count} updates and {toInsert.Count} inserts");
+
+            // Execute batch operations
+            foreach (var occurrence in toUpdate)
+            {
+                await _database!.UpdateAsync(occurrence);
+                Console.WriteLine($"[DB] Updated holiday '{occurrence.Name}' on {occurrence.GregorianDate:yyyy-MM-dd}");
+            }
+
+            foreach (var occurrence in toInsert)
+            {
+                await _database!.InsertAsync(occurrence);
+                Console.WriteLine($"[DB] Inserted holiday '{occurrence.Name}' on {occurrence.GregorianDate:yyyy-MM-dd}");
+            }
+
             Console.WriteLine($"[DB] Successfully saved {occurrences.Count} holiday occurrences");
         }
         catch (Exception ex)

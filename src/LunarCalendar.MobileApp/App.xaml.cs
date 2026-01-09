@@ -40,8 +40,9 @@ public partial class App : Application
 
 		if (string.IsNullOrEmpty(savedLanguage))
 		{
-			// Default to Vietnamese
-			savedLanguage = "vi";
+			// Default to system language
+			var systemLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+			savedLanguage = systemLanguage == "vi" ? "vi" : "en";
 		}
 
 		// Set the culture

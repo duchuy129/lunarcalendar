@@ -17,7 +17,7 @@ public class LocalizationService : ILocalizationService
             "LunarCalendar.MobileApp.Resources.Strings.AppResources",
             typeof(LocalizationService).Assembly);
 
-        // Load saved language preference or default to Vietnamese
+        // Load saved language preference or default to system language
         var savedLanguage = Preferences.Get(LanguagePreferenceKey, string.Empty);
         if (!string.IsNullOrEmpty(savedLanguage))
         {
@@ -25,8 +25,9 @@ public class LocalizationService : ILocalizationService
         }
         else
         {
-            // Default to Vietnamese
-            SetLanguage("vi");
+            // Default to system language
+            var systemLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            SetLanguage(systemLanguage == "vi" ? "vi" : "en");
         }
     }
 

@@ -8,7 +8,7 @@ public class LunarDateEntity
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    [Indexed]
+    [Unique]
     public DateTime GregorianDate { get; set; }
 
     public int LunarYear { get; set; }

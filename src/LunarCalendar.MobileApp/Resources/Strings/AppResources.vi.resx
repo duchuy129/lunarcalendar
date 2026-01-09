@@ -239,7 +239,7 @@
     <value>Dữ Liệu &amp; Lưu Trữ</value>
   </data>
   <data name="ClearCache" xml:space="preserve">
-    <value>Xóa Bộ Nhớ Cache &amp; Dữ Liệu Ngoại Tuyến</value>
+    <value>Xóa Bộ Nhớ Đệm &amp; Dữ Liệu Ngoại Tuyến</value>
   </data>
   <data name="ResetSettings" xml:space="preserve">
     <value>Đặt Lại Tất Cả Cài Đặt</value>
@@ -249,6 +249,9 @@
   </data>
   <data name="AppVersion" xml:space="preserve">
     <value>Phiên Bản Ứng Dụng</value>
+  </data>
+  <data name="AppVersionFormat" xml:space="preserve">
+    <value>Phiên Bản {0} (Build {1})</value>
   </data>
   <data name="AboutThisApp" xml:space="preserve">
     <value>Về Ứng Dụng Này</value>
@@ -263,6 +266,33 @@
   </data>
   <data name="ClearLogs" xml:space="preserve">
     <value>Xóa Nhật Ký</value>
+  </data>
+  <data name="LogServiceNotAvailable" xml:space="preserve">
+    <value>Dịch vụ nhật ký không khả dụng</value>
+  </data>
+  <data name="LogsTitle" xml:space="preserve">
+    <value>Nhật Ký</value>
+  </data>
+  <data name="NoLogsAvailable" xml:space="preserve">
+    <value>Chưa có nhật ký nào.</value>
+  </data>
+  <data name="DiagnosticLogsTitle" xml:space="preserve">
+    <value>Nhật Ký Chẩn Đoán</value>
+  </data>
+  <data name="FailedToLoadLogs" xml:space="preserve">
+    <value>Không thể tải nhật ký: {0}</value>
+  </data>
+  <data name="ClearLogsConfirmTitle" xml:space="preserve">
+    <value>Xóa Nhật Ký</value>
+  </data>
+  <data name="ClearLogsConfirmMessage" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa tất cả nhật ký chẩn đoán không?</value>
+  </data>
+  <data name="LogsClearedSuccess" xml:space="preserve">
+    <value>Đã xóa nhật ký chẩn đoán thành công.</value>
+  </data>
+  <data name="FailedToClearLogs" xml:space="preserve">
+    <value>Không thể xóa nhật ký: {0}</value>
   </data>
 
   <!-- Sync Messages -->
@@ -299,10 +329,10 @@
     <value>Thành Công</value>
   </data>
   <data name="CacheClearedMessage" xml:space="preserve">
-    <value>Đã xóa bộ nhớ cache và dữ liệu ngoại tuyến thành công</value>
+    <value>Đã xóa bộ nhớ đệm và dữ liệu ngoại tuyến thành công</value>
   </data>
   <data name="ClearCacheError" xml:space="preserve">
-    <value>Không thể xóa bộ nhớ cache: {0}</value>
+    <value>Không thể xóa bộ nhớ đệm: {0}</value>
   </data>
 
   <!-- About Dialog -->

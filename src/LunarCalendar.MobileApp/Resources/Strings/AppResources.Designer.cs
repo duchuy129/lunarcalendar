@@ -243,6 +243,12 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
             }
         }
 
+        public static string AppVersionFormat {
+            get {
+                return ResourceManager.GetString("AppVersionFormat", resourceCulture);
+            }
+        }
+
         public static string AboutThisApp {
             get {
                 return ResourceManager.GetString("AboutThisApp", resourceCulture);
@@ -992,6 +998,78 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
         public static string GoToToday {
             get {
                 return ResourceManager.GetString("GoToToday", resourceCulture);
+            }
+        }
+
+        public static string Diagnostics {
+            get {
+                return ResourceManager.GetString("Diagnostics", resourceCulture);
+            }
+        }
+
+        public static string ViewDiagnosticLogs {
+            get {
+                return ResourceManager.GetString("ViewDiagnosticLogs", resourceCulture);
+            }
+        }
+
+        public static string ClearLogs {
+            get {
+                return ResourceManager.GetString("ClearLogs", resourceCulture);
+            }
+        }
+
+        public static string LogServiceNotAvailable {
+            get {
+                return ResourceManager.GetString("LogServiceNotAvailable", resourceCulture);
+            }
+        }
+
+        public static string LogsTitle {
+            get {
+                return ResourceManager.GetString("LogsTitle", resourceCulture);
+            }
+        }
+
+        public static string NoLogsAvailable {
+            get {
+                return ResourceManager.GetString("NoLogsAvailable", resourceCulture);
+            }
+        }
+
+        public static string DiagnosticLogsTitle {
+            get {
+                return ResourceManager.GetString("DiagnosticLogsTitle", resourceCulture);
+            }
+        }
+
+        public static string FailedToLoadLogs {
+            get {
+                return ResourceManager.GetString("FailedToLoadLogs", resourceCulture);
+            }
+        }
+
+        public static string ClearLogsConfirmTitle {
+            get {
+                return ResourceManager.GetString("ClearLogsConfirmTitle", resourceCulture);
+            }
+        }
+
+        public static string ClearLogsConfirmMessage {
+            get {
+                return ResourceManager.GetString("ClearLogsConfirmMessage", resourceCulture);
+            }
+        }
+
+        public static string LogsClearedSuccess {
+            get {
+                return ResourceManager.GetString("LogsClearedSuccess", resourceCulture);
+            }
+        }
+
+        public static string FailedToClearLogs {
+            get {
+                return ResourceManager.GetString("FailedToClearLogs", resourceCulture);
             }
         }
     }
