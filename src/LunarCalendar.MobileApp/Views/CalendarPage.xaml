@@ -18,16 +18,17 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <RefreshView Grid.Row="0" Grid.RowSpan="8"
+    <RefreshView Grid.Row="0" Grid.RowSpan="6"
                  IsRefreshing="{Binding IsRefreshing}"
                  Command="{Binding RefreshCommand}"
                  RefreshColor="{DynamicResource Primary}">
         <ScrollView>
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                  RowSpacing="0"
                   BackgroundColor="Transparent">
 
             <!-- Cultural Background Image - Toggle via settings -->
-        <Image Grid.RowSpan="8"
+        <Image Grid.RowSpan="6"
                Source="lunar_bg.png"
                Aspect="AspectFill"
                Opacity="0.25"
@@ -35,10 +36,10 @@
                HorizontalOptions="Fill"
                VerticalOptions="Fill"/>
 
-        <!-- Month Navigation Header - IMPROVED: Softer gradient -->
+        <!-- Month Navigation Header - Fixed height to prevent layout shift -->
         <Grid Grid.Row="0"
               Background="{DynamicResource PrimaryGradient}"
-              MinimumHeightRequest="60">
+              HeightRequest="60">
             <Grid.Shadow>
                 <Shadow Brush="{DynamicResource Primary}"
                         Opacity="0.2"
@@ -47,13 +48,13 @@
             </Grid.Shadow>
             <Grid.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="12,8" />
-                    <On Platform="Android" Value="12,8" />
+                    <On Platform="iOS" Value="12,6" />
+                    <On Platform="Android" Value="12,6" />
                 </OnPlatform>
             </Grid.Padding>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="16"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -164,16 +165,16 @@
                              Margin="0,4,0,0"/>
         </Grid>
 
-        <!-- Today's Date Display -->
+        <!-- Today's Date Display - Fixed height to prevent layout shift -->
         <Border Grid.Row="1"
-                Margin="12,8"
+                Margin="12,4,12,4"
                 Background="{DynamicResource TodayGreen}"
                 StrokeThickness="0"
-                MinimumHeightRequest="54">
+                HeightRequest="56">
             <Border.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="20,14" />
-                    <On Platform="Android" Value="20,14" />
+                    <On Platform="iOS" Value="16,10" />
+                    <On Platform="Android" Value="16,10" />
                 </OnPlatform>
             </Border.Padding>
             <Border.Shadow>
@@ -202,11 +203,11 @@
             </Label>
         </Border>
 
-        <!-- Day of Week Header -->
+        <!-- Day of Week Header - Fixed height for consistency -->
         <Grid Grid.Row="2"
               BackgroundColor="Transparent"
-              Padding="12,6,12,6"
-              MinimumHeightRequest="28">
+              Padding="12,4,12,4"
+              HeightRequest="30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -227,21 +228,21 @@
         </Grid>
 
         <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="4"
+        <ActivityIndicator Grid.Row="3"
                           IsVisible="{Binding IsBusy}"
                           IsRunning="{Binding IsBusy}"
                           Color="{DynamicResource Primary}"
                           VerticalOptions="Center"
                           HorizontalOptions="Center"/>
 
-        <!-- Calendar Grid -->
-        <CollectionView Grid.Row="4"
+        <!-- Calendar Grid - Fixed height to prevent navigation bar and Today box from shifting -->
+        <CollectionView Grid.Row="3"
                        ItemsSource="{Binding CalendarDays}"
                        IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                        SelectionMode="None"
-                       HeightRequest="{Binding CalendarHeight}"
+                       HeightRequest="444"
                        VerticalOptions="Start"
-                       Margin="12,0">
+                       Margin="12,0,12,4">
             <CollectionView.GestureRecognizers>
                 <SwipeGestureRecognizer Direction="Left" Command="{Binding NextMonthCommand}"/>
                 <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousMonthCommand}"/>
@@ -388,9 +389,9 @@
         </CollectionView>
 
         <!-- Upcoming Holidays Section -->
-        <VerticalStackLayout Grid.Row="5"
+        <VerticalStackLayout Grid.Row="4"
                             BackgroundColor="Transparent"
-                            Padding="16,12">
+                            Padding="16,8">
 
             <!-- Section Header with Icon -->
             <HorizontalStackLayout Spacing="8" 
