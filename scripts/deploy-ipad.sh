@@ -2,8 +2,12 @@
 
 echo "📱 Deploying to iPad Air..."
 
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
 DEVICE_ID="60A80AA4-D712-579C-8C62-BB756F8E5706"
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
 
 echo "🧹 Cleaning previous builds..."
 dotnet clean "$PROJECT_PATH" -c Debug -f net10.0-ios
@@ -24,7 +28,7 @@ fi
 
 echo ""
 echo "📦 Finding app bundle..."
-APP_PATH=$(find src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/ios-arm64 -name "*.app" -type d | head -1)
+APP_PATH=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/ios-arm64" -name "*.app" -type d | head -1)
 
 if [ -z "$APP_PATH" ]; then
   echo "❌ App bundle not found!"

@@ -6,8 +6,10 @@
 echo "🧹 Cleaning up debug code..."
 echo ""
 
-# Define the project directory
-PROJECT_DIR="/Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar/src/LunarCalendar.MobileApp"
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_DIR="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp"
 
 # Files to clean (already cleaned CalendarViewModel.cs manually)
 FILES_TO_CLEAN=(
@@ -18,7 +20,7 @@ FILES_TO_CLEAN=(
 )
 
 # Backup directory
-BACKUP_DIR="/Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar/backup_$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="$WORKSPACE_ROOT/backup_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
 echo "📁 Creating backups in: $BACKUP_DIR"

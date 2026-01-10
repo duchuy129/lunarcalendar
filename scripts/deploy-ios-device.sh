@@ -8,6 +8,13 @@ echo "📱 Deploy to Physical iOS Device (Paid Developer Account)"
 echo "=========================================================="
 echo ""
 
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+PROVISIONING_PROFILE="$WORKSPACE_ROOT/releases/comhuynguyenlunarcalendar.mobileprovision"
+PROVISIONING_PROFILE_NAME="com.huynguyen.lunarcalendar"
+
 # Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -30,67 +37,76 @@ echo "$CONNECTED_DEVICES"
 DEVICE_ID=$(echo "$CONNECTED_DEVICES" | head -n 1 | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
 echo ""
 
-# Check for Apple Development certificate
+# Check for Apple Development certificate that matches the provisioning profile
 echo "🔐 Checking for Apple Development certificate..."
-CERT=$(security find-identity -v -p codesigning | grep "Apple Development" | head -n 1 || echo "")
+# Look for the specific certificate that matches our provisioning profile
+CERT=$(security find-identity -v -p codesigning | grep "Apple Development: Huy Nguyen (PCXAANVGF7)" || echo "")
 
 if [ -z "$CERT" ]; then
-    echo -e "${RED}❌ No Apple Development certificate found${NC}"
-    echo ""
-    echo "Please set up your certificate first:"
-    echo "  1. Open Xcode → Settings → Accounts"
-    echo "  2. Select your Apple ID → Click 'Manage Certificates'"
-    echo "  3. Click '+' and add 'Apple Development' certificate"
-    echo ""
-    echo "OR run this command to open Xcode Settings:"
-    echo "  open -a Xcode"
-    echo ""
-    exit 1
+    echo -e "${YELLOW}⚠️  Specific certificate not found, trying any Apple Development certificate...${NC}"
+    CERT=$(security find-identity -v -p codesigning | grep "Apple Development" | head -n 1 || echo "")
+
+    if [ -z "$CERT" ]; then
+        echo -e "${RED}❌ No Apple Development certificate found${NC}"
+        echo ""
+        echo "Please set up your certificate first:"
+        echo "  1. Open Xcode → Settings → Accounts"
+        echo "  2. Select your Apple ID → Click 'Manage Certificates'"
+        echo "  3. Click '+' and add 'Apple Development' certificate"
+        echo ""
+        exit 1
+    fi
 fi
 
 CERT_NAME=$(echo "$CERT" | sed 's/^[^"]*"//' | sed 's/".*//')
 echo -e "${GREEN}✓ Found certificate:${NC} $CERT_NAME"
 echo ""
 
-# Check for provisioning profile
-echo "📋 Checking for provisioning profiles..."
+# Check for and install provisioning profile
+echo "📋 Checking for provisioning profile..."
 PROFILES_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
-PROFILE_COUNT=$(ls "$PROFILES_DIR" 2>/dev/null | wc -l | tr -d ' ')
 
-if [ "$PROFILE_COUNT" -eq "0" ]; then
-    echo -e "${YELLOW}⚠️  No provisioning profiles found${NC}"
-    echo ""
-    echo "Xcode will attempt to create one automatically during build."
-    echo "If build fails, you need to:"
-    echo ""
-    echo "  1. Open: https://developer.apple.com/account/resources/profiles"
-    echo "  2. Create 'iOS App Development' profile for:"
-    echo "     - App ID: com.huynguyen.lunarcalendar"
-    echo "     - Device: $DEVICE_ID"
-    echo "  3. Download and double-click to install"
-    echo ""
-    read -p "Press Enter to continue with automatic provisioning..."
-    echo ""
-else
-    echo -e "${GREEN}✓ Found $PROFILE_COUNT provisioning profile(s)${NC}"
-    echo ""
+if [ ! -f "$PROVISIONING_PROFILE" ]; then
+    echo -e "${RED}❌ Provisioning profile not found${NC}"
+    echo "Expected location: $PROVISIONING_PROFILE"
+    exit 1
 fi
 
-# Build
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+echo -e "${GREEN}✓ Found provisioning profile:${NC} $(basename "$PROVISIONING_PROFILE")"
 
-echo "🔨 Building for iOS device..."
-echo "   Target: Physical Device (ios-arm64)"
-echo "   Configuration: Debug"
+# Create profiles directory if it doesn't exist
+mkdir -p "$PROFILES_DIR"
+
+# Install the provisioning profile
+echo "📥 Installing provisioning profile..."
+PROFILE_UUID=$(security cms -D -i "$PROVISIONING_PROFILE" 2>/dev/null | grep -A 1 "<key>UUID</key>" | tail -1 | sed 's/.*<string>\(.*\)<\/string>.*/\1/')
+
+if [ -z "$PROFILE_UUID" ]; then
+    echo -e "${RED}❌ Failed to extract UUID from provisioning profile${NC}"
+    exit 1
+fi
+
+cp "$PROVISIONING_PROFILE" "$PROFILES_DIR/$PROFILE_UUID.mobileprovision"
+echo -e "${GREEN}✓ Provisioning profile installed${NC}"
+echo "   UUID: $PROFILE_UUID"
 echo ""
 
-# Build with explicit parameters for device
+echo "🔨 Building for iOS device..."
+echo "   Project: $PROJECT_PATH"
+echo "   Target: Physical Device (ios-arm64)"
+echo "   Configuration: Release"
+echo "   Framework: net10.0-ios"
+echo "   Certificate: $CERT_NAME"
+echo "   Provisioning Profile: $PROVISIONING_PROFILE_NAME"
+echo ""
+
+# Build with explicit parameters for device - Release mode for device testing
 dotnet build "$PROJECT_PATH" \
-    -f net8.0-ios \
-    -c Debug \
+    -f net10.0-ios \
+    -c Release \
     -p:RuntimeIdentifier=ios-arm64 \
     -p:CodesignKey="$CERT_NAME" \
-    -p:CodesignProvision="" \
+    -p:CodesignProvision="$PROVISIONING_PROFILE_NAME" \
     -p:IpaPackageName="" \
     -p:BuildIpa=false \
     -p:EnableCodeSigning=true
@@ -117,15 +133,15 @@ echo -e "${GREEN}✅ Build successful!${NC}"
 echo ""
 
 # Find app bundle
-APP_BUNDLE=$(find src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/ios-arm64 -name "*.app" -type d 2>/dev/null | head -n 1)
+APP_BUNDLE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-ios/ios-arm64" -name "*.app" -type d 2>/dev/null | head -n 1)
 
 if [ -z "$APP_BUNDLE" ]; then
     echo -e "${RED}❌ App bundle not found at expected location${NC}"
     echo ""
-    echo "Expected: src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/ios-arm64/*.app"
+    echo "Expected: $WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-ios/ios-arm64/*.app"
     echo ""
     echo "Available builds:"
-    ls -la src/LunarCalendar.MobileApp/bin/Debug/net8.0-ios/ 2>/dev/null || echo "None"
+    ls -la "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-ios/" 2>/dev/null || echo "None"
     exit 1
 fi
 

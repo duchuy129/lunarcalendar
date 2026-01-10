@@ -3,13 +3,16 @@
 echo "🤖 Building LATEST Android Code and Deploying..."
 echo ""
 
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
 
 # Step 1: Clean everything
 echo "1️⃣ Cleaning all previous builds..."
 dotnet clean "$PROJECT_PATH" -c Debug -f net10.0-android
-rm -rf src/LunarCalendar.MobileApp/bin/Debug/net10.0-android
-rm -rf src/LunarCalendar.MobileApp/obj/Debug/net10.0-android
+rm -rf "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-android"
+rm -rf "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/obj/Debug/net10.0-android"
 echo "✅ Clean complete"
 
 # Step 2: Restore packages

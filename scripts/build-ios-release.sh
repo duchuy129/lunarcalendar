@@ -3,8 +3,10 @@
 echo "🍎 Building iOS Release for App Store..."
 echo ""
 
-# Configuration
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
 CONFIGURATION="Release"
 FRAMEWORK="net10.0-ios"
 RUNTIME="ios-arm64"
@@ -35,7 +37,7 @@ if [ $? -eq 0 ]; then
   echo "✅ iOS Release build completed successfully!"
   echo ""
   echo "📦 IPA location:"
-  find src/LunarCalendar.MobileApp/bin/Release/net10.0-ios -name "*.ipa" -exec ls -lh {} \; 2>/dev/null
+  find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-ios" -name "*.ipa" -exec ls -lh {} \; 2>/dev/null
 
   echo ""
   echo "📋 Next steps:"

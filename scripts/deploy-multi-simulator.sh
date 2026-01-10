@@ -7,8 +7,10 @@ echo "🚀 Vietnamese Lunar Calendar - Multi-Platform Deployment"
 echo "📋 Testing Logging Implementation"
 echo ""
 
-PROJECT_DIR="/Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar"
-cd "$PROJECT_DIR"
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+cd "$WORKSPACE_ROOT"
 
 # Colors for output
 GREEN='\033[0;32m'

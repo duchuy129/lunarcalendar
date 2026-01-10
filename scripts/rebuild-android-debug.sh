@@ -3,7 +3,10 @@
 echo "🤖 Rebuilding Android with Latest Updates..."
 echo ""
 
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
 
 # Clean previous builds
 echo "🧹 Cleaning previous builds..."
@@ -24,11 +27,11 @@ echo ""
 echo "✅ Build successful!"
 
 # Find the APK
-APK_FILE=$(find src/LunarCalendar.MobileApp/bin/Debug/net10.0-android -name "*-Signed.apk" 2>/dev/null | head -1)
+APK_FILE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-android" -name "*-Signed.apk" 2>/dev/null | head -1)
 
 if [ -z "$APK_FILE" ]; then
   echo "⚠️  No signed APK found, looking for unsigned..."
-  APK_FILE=$(find src/LunarCalendar.MobileApp/bin/Debug/net10.0-android -name "*.apk" 2>/dev/null | head -1)
+  APK_FILE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-android" -name "*.apk" 2>/dev/null | head -1)
 fi
 
 if [ -n "$APK_FILE" ]; then

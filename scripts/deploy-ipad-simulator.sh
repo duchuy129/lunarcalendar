@@ -2,8 +2,12 @@
 
 echo "📱 Deploying to iPad Pro 13-inch Simulator..."
 
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
 DEVICE_ID="0DE27D4D-782D-4FAA-9EB7-2598F41C5E93"
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
 
 echo "🔌 Booting iPad simulator..."
 xcrun simctl boot "$DEVICE_ID" 2>/dev/null || echo "Already booted"
@@ -20,7 +24,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-APP_PATH=$(find src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64 -name "*.app" -type d | head -1)
+APP_PATH=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/iossimulator-arm64" -name "*.app" -type d | head -1)
 
 echo ""
 echo "📱 Installing on iPad simulator..."

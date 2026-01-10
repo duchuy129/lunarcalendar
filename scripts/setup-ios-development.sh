@@ -116,15 +116,19 @@ else
     AUTO_PROVISION=false
 fi
 
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
 # Step 5: Test build
 echo ""
 echo "🔨 Step 5: Testing build for device..."
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
+cd "$WORKSPACE_ROOT"
 
 if [ "$AUTO_PROVISION" = true ]; then
     echo "Building with automatic provisioning..."
-    dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj \
-        -f net8.0-ios \
+    dotnet build "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj" \
+        -f net10.0-ios \
         -c Debug \
         -p:RuntimeIdentifier=ios-arm64 \
         -p:CodesignProvision=""

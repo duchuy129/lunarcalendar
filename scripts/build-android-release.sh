@@ -3,8 +3,10 @@
 echo "🤖 Building Android Release for Google Play..."
 echo ""
 
-# Configuration
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
 CONFIGURATION="Release"
 FRAMEWORK="net10.0-android"
 KEYSTORE_PROPS="$HOME/.android/keystore/lunarcalendar.properties"
@@ -86,10 +88,10 @@ if [ $? -eq 0 ]; then
   echo "✅ Android Release build completed successfully!"
   echo ""
   echo "📦 AAB location:"
-  find src/LunarCalendar.MobileApp/bin/Release/net10.0-android -name "*-Signed.aab" -exec ls -lh {} \; 2>/dev/null
+  find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-android" -name "*-Signed.aab" -exec ls -lh {} \; 2>/dev/null
 
   # Verify signature
-  AAB_FILE=$(find src/LunarCalendar.MobileApp/bin/Release/net10.0-android -name "*-Signed.aab" 2>/dev/null | head -1)
+  AAB_FILE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-android" -name "*-Signed.aab" 2>/dev/null | head -1)
   if [ -n "$AAB_FILE" ]; then
     echo ""
     echo "🔐 Verifying AAB signature..."

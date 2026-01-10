@@ -8,8 +8,10 @@ echo "📱 Deploy to Physical Android Device"
 echo "====================================="
 echo ""
 
-# Configuration
-PROJECT_PATH="src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_PATH="$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj"
 CONFIG="Debug"
 FRAMEWORK="net10.0-android"
 PACKAGE_NAME="com.huynguyen.lunarcalendar"

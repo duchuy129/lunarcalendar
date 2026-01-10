@@ -57,12 +57,16 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
+# Configuration - dynamically determine workspace root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
 # Build using dotnet first
 echo "🔨 Building app bundle..."
-cd /Users/huynguyen/Documents/GitHub/MobileProjects/lunarcalendar
+cd "$WORKSPACE_ROOT"
 
-dotnet build src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj \
-    -f net8.0-ios \
+dotnet build "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/LunarCalendar.MobileApp.csproj" \
+    -f net10.0-ios \
     -c Debug \
     -p:RuntimeIdentifier=iossimulator-arm64
 
