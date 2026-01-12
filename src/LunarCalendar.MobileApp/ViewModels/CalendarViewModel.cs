@@ -11,7 +11,7 @@ using System.Globalization;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
-public partial class CalendarViewModel : BaseViewModel
+public partial class CalendarViewModel : BaseViewModel, IDisposable
 {
     private readonly ICalendarService _calendarService;
     private readonly IUserModeService _userModeService;
@@ -20,6 +20,8 @@ public partial class CalendarViewModel : BaseViewModel
     private readonly IConnectivityService _connectivityService;
     private readonly ISyncService _syncService;
     private readonly ILogService _logService;
+
+    private bool _disposed = false;
 
     [ObservableProperty]
     private DateTime _currentMonth;
@@ -319,33 +321,18 @@ public partial class CalendarViewModel : BaseViewModel
 
         try
         {
-
             // Refresh settings when returning to calendar page
             ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
             ShowLunarDates = SettingsViewModel.GetShowLunarDates();
             var newDays = SettingsViewModel.GetUpcomingHolidaysDays();
 
-            
             if (UpcomingHolidaysDays != newDays)
             {
                 UpcomingHolidaysDays = newDays;
 
-                // Wait for any ongoing holiday loading to complete first
-                if (_isUpdatingHolidays)
-                {
-                    // Wait up to 5 seconds for the semaphore
-                    if (await _updateSemaphore.WaitAsync(5000))
-                    {
-                        _updateSemaphore.Release();
-                    }
-                    else
-                    {
-                        // Don't reload if previous update is stuck
-                        return;
-                    }
-                }
-
-                // MUST await to ensure collection update completes before page renders
+                // FIX: Check if update is in progress before attempting reload
+                // LoadUpcomingHolidaysAsync has its own early return if _isUpdatingHolidays is true
+                // Just await it - it will handle synchronization internally
                 await LoadUpcomingHolidaysAsync();
             }
         }
@@ -1023,5 +1010,29 @@ public partial class CalendarViewModel : BaseViewModel
                 }
             }
         });
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        try
+        {
+            // Unregister event handlers to prevent memory leaks
+            _connectivityService.ConnectivityChanged -= OnConnectivityChanged;
+            _syncService.SyncStatusChanged -= OnSyncStatusChanged;
+            WeakReferenceMessenger.Default.Unregister<LanguageChangedMessage>(this);
+
+            // Dispose SemaphoreSlim to prevent memory leak
+            _updateSemaphore?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            _logService?.LogWarning($"Error during disposal: {ex.Message}", "CalendarViewModel.Dispose");
+        }
+        finally
+        {
+            _disposed = true;
+        }
     }
 }

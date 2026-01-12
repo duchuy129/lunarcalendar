@@ -17,35 +17,59 @@ public interface ILogService
 
 public class LogService : ILogService
 {
-    private readonly string _logDirectory;
-    private readonly string _logFileName;
+    private string? _logDirectory;
+    private string? _logFileName;
     private readonly int _maxLogDays = 7; // Keep logs for 7 days
     private readonly SemaphoreSlim _writeLock = new(1, 1);
-    
+    private bool _initialized = false;
+    private readonly object _initLock = new();
+
     public LogService()
     {
-        // Use app-specific directory (not backed up to iCloud)
-        _logDirectory = Path.Combine(FileSystem.AppDataDirectory, "Logs");
-        _logFileName = $"app-{DateTime.Now:yyyy-MM-dd}.log";
-        
-        Directory.CreateDirectory(_logDirectory);
-        
-        // Rotate logs on initialization
-        RotateOldLogs();
+        // CRITICAL iOS 26.1 FIX: Don't access FileSystem in constructor
+        // FileSystem APIs not available during DI container creation
+        // Will initialize on first use
+    }
+
+    private void EnsureInitialized()
+    {
+        if (_initialized) return;
+
+        lock (_initLock)
+        {
+            if (_initialized) return;
+
+            try
+            {
+                _logDirectory = Path.Combine(FileSystem.AppDataDirectory, "Logs");
+                _logFileName = $"app-{DateTime.Now:yyyy-MM-dd}.log";
+                Directory.CreateDirectory(_logDirectory);
+                RotateOldLogs();
+                _initialized = true;
+            }
+            catch
+            {
+                // If initialization fails, just use Debug output
+                _initialized = true;
+            }
+        }
     }
 
     public void LogInfo(string message, string? source = null)
     {
+        EnsureInitialized();
         WriteLog("INFO", message, null, source);
     }
 
     public void LogWarning(string message, string? source = null)
     {
+        EnsureInitialized();
         WriteLog("WARN", message, null, source);
     }
 
     public void LogError(string message, Exception? exception = null, string? source = null)
     {
+        EnsureInitialized();
         WriteLog("ERROR", message, exception, source);
     }
 
@@ -53,13 +77,22 @@ public class LogService : ILogService
     {
         try
         {
+            // If not initialized, just use debug output
+            if (_logDirectory == null || _logFileName == null)
+            {
+                System.Diagnostics.Debug.WriteLine($"{level}: {message}");
+                if (exception != null)
+                    System.Diagnostics.Debug.WriteLine($"Exception: {exception}");
+                return;
+            }
+
             // Use async fire-and-forget for non-blocking logging
             Task.Run(async () =>
             {
                 await _writeLock.WaitAsync();
                 try
                 {
-                    var logPath = Path.Combine(_logDirectory, _logFileName);
+                    var logPath = Path.Combine(_logDirectory!, _logFileName!);
                     var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
                     var sourceInfo = source != null ? $" [{source}]" : "";
                     
@@ -122,6 +155,9 @@ public class LogService : ILogService
 
     public async Task ClearLogsAsync()
     {
+        EnsureInitialized();
+        if (_logDirectory == null) return;
+
         await _writeLock.WaitAsync();
         try
         {
@@ -140,6 +176,8 @@ public class LogService : ILogService
     {
         try
         {
+            if (_logDirectory == null) return;
+
             var cutoffDate = DateTime.Now.AddDays(-_maxLogDays);
             var logFiles = Directory.GetFiles(_logDirectory, "app-*.log");
             

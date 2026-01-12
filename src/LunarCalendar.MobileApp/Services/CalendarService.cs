@@ -33,30 +33,9 @@ public class CalendarService : ICalendarService
             // Calculate locally - instant, no network needed
             var lunarDate = _lunarCalculationService.ConvertToLunar(date);
 
-            // Save to database in background for historical tracking
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    var entity = new LunarDateEntity
-                    {
-                        GregorianDate = date.Date,
-                        LunarYear = lunarDate.LunarYear,
-                        LunarMonth = lunarDate.LunarMonth,
-                        LunarDay = lunarDate.LunarDay,
-                        IsLeapMonth = lunarDate.IsLeapMonth,
-                        LunarYearName = lunarDate.LunarYearName,
-                        LunarMonthName = lunarDate.LunarMonthName,
-                        LunarDayName = lunarDate.LunarDayName,
-                        AnimalSign = lunarDate.AnimalSign
-                    };
-                    await _database.SaveLunarDateAsync(entity);
-                }
-                catch (Exception ex)
-                {
-                    _logService.LogError($"Failed to save lunar date to database for {date}", ex, "CalendarService.GetLunarDateAsync");
-                }
-            });
+            // FIX: Removed fire-and-forget Task.Run to prevent unobserved exceptions
+            // Database caching is not critical - calculations are instant
+            // If caching is needed later, it should be awaited or use proper background service
 
             return lunarDate;
         }
@@ -71,36 +50,12 @@ public class CalendarService : ICalendarService
     {
         try
         {
-
             // Calculate locally - instant, no network needed
             var lunarDates = _lunarCalculationService.GetMonthInfo(year, month);
 
-
-            // Save to database in background for historical tracking
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    var entities = lunarDates.Select(ld => new LunarDateEntity
-                    {
-                        GregorianDate = ld.GregorianDate,
-                        LunarYear = ld.LunarYear,
-                        LunarMonth = ld.LunarMonth,
-                        LunarDay = ld.LunarDay,
-                        IsLeapMonth = ld.IsLeapMonth,
-                        LunarYearName = ld.LunarYearName,
-                        LunarMonthName = ld.LunarMonthName,
-                        LunarDayName = ld.LunarDayName,
-                        AnimalSign = ld.AnimalSign
-                    }).ToList();
-
-                    await _database.SaveLunarDatesAsync(entities);
-                }
-                catch (Exception ex)
-                {
-                    _logService.LogError("Failed to save lunar dates to database", ex, "CalendarService.GetLunarDatesForMonthAsync");
-                }
-            });
+            // FIX: Removed fire-and-forget Task.Run to prevent unobserved exceptions
+            // Database caching is not critical - calculations are instant
+            // If caching is needed later, it should be awaited or use proper background service
 
             return lunarDates;
         }

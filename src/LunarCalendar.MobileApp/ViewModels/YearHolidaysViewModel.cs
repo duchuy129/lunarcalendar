@@ -9,13 +9,14 @@ using LunarCalendar.MobileApp.Resources.Strings;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
-public partial class YearHolidaysViewModel : ObservableObject
+public partial class YearHolidaysViewModel : ObservableObject, IDisposable
 {
     private readonly IHolidayService _holidayService;
     private readonly ILogService _logService;
     private readonly IHapticService _hapticService;
     private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
     private volatile bool _isLanguageChanging = false;
+    private bool _disposed = false;
 
     [ObservableProperty]
     private ObservableCollection<int> _availableYears = new();
@@ -126,8 +127,9 @@ public partial class YearHolidaysViewModel : ObservableObject
         // Haptic feedback for year picker selection
         _hapticService.PerformSelection();
 
-        // Use Task.Run to avoid blocking and properly handle async call
-        Task.Run(async () =>
+        // FIX: Use MainThread.BeginInvokeOnMainThread instead of fire-and-forget Task.Run
+        // This ensures proper async handling without unobserved exceptions
+        MainThread.BeginInvokeOnMainThread(async () =>
         {
             try
             {
@@ -259,6 +261,29 @@ public partial class YearHolidaysViewModel : ObservableObject
             });
 
             _updateSemaphore.Release();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        try
+        {
+            // Unregister message subscriptions to prevent memory leaks
+            WeakReferenceMessenger.Default.Unregister<CulturalBackgroundChangedMessage>(this);
+            WeakReferenceMessenger.Default.Unregister<LanguageChangedMessage>(this);
+
+            // Dispose SemaphoreSlim to prevent memory leak
+            _updateSemaphore?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            _logService?.LogWarning($"Error during disposal: {ex.Message}", "YearHolidaysViewModel.Dispose");
+        }
+        finally
+        {
+            _disposed = true;
         }
     }
 }

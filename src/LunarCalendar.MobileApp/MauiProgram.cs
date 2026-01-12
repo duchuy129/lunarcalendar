@@ -36,8 +36,13 @@ public static class MauiProgram
 			new LogServiceProvider(sp.GetRequiredService<ILogService>()));
 
 		// Register Database
-		var dbPath = Path.Combine(FileSystem.AppDataDirectory, "lunarcalendar.db3");
-		builder.Services.AddSingleton(sp => new LunarCalendarDatabase(dbPath));
+		// CRITICAL FIX: Don't access FileSystem during DI registration - iOS 26.1 crashes
+		// Use factory to defer FileSystem access until first use
+		builder.Services.AddSingleton<LunarCalendarDatabase>(sp =>
+		{
+			var dbPath = Path.Combine(FileSystem.AppDataDirectory, "lunarcalendar.db3");
+			return new LunarCalendarDatabase(dbPath);
+		});
 
 		// Register Core Calculation Services (NO API REQUIRED - Bundled Architecture)
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.ILunarCalculationService, LunarCalendar.Core.Services.LunarCalculationService>();
