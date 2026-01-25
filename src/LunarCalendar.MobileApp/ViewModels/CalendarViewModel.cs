@@ -20,6 +20,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
     private readonly IConnectivityService _connectivityService;
     private readonly ISyncService _syncService;
     private readonly ILogService _logService;
+    private readonly Core.Services.ISexagenaryService _sexagenaryService;
 
     private bool _disposed = false;
 
@@ -31,6 +32,12 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
 
     [ObservableProperty]
     private string _todayLunarDisplay = "Loading...";
+
+    [ObservableProperty]
+    private string _todayStemBranch = string.Empty;
+
+    [ObservableProperty]
+    private Color _todayElementColor = Colors.Gray;
 
     [ObservableProperty]
     private ObservableCollection<CalendarDay> _calendarDays = new();
@@ -130,7 +137,8 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         IHapticService hapticService,
         IConnectivityService connectivityService,
         ISyncService syncService,
-        ILogService logService)
+        ILogService logService,
+        Core.Services.ISexagenaryService sexagenaryService)
     {
         _calendarService = calendarService;
         _userModeService = userModeService;
@@ -139,6 +147,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         _connectivityService = connectivityService;
         _syncService = syncService;
         _logService = logService;
+        _sexagenaryService = sexagenaryService;
         
         _logService.LogInfo("CalendarViewModel initialized", "CalendarViewModel");
 
@@ -579,11 +588,122 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
                     localizedAnimalSign);
                 
             }
+            
+            // Load today's stem-branch (Can Chi)
+            await LoadTodaySexagenaryInfoAsync();
         }
         catch (Exception ex)
         {
             _logService.LogError("Failed to load today's lunar display", ex, "CalendarViewModel.LoadTodayLunarDisplay");
         }
+    }
+
+    /// <summary>
+    /// Load today's stem-branch (Can Chi / 干支) information
+    /// </summary>
+    private async Task LoadTodaySexagenaryInfoAsync()
+    {
+        try
+        {
+            var today = DateTime.Today;
+            var sexagenaryInfo = await Task.Run(() => _sexagenaryService.GetSexagenaryInfo(today));
+            
+            // Format stem-branch display based on current language
+            var currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            
+            string stemName, branchName;
+            
+            if (currentCulture == "vi")
+            {
+                // Vietnamese names
+                stemName = GetVietnameseStemName(sexagenaryInfo.DayStem);
+                branchName = GetVietnameseBranchName(sexagenaryInfo.DayBranch);
+                TodayStemBranch = $"{stemName} {branchName}";
+            }
+            else if (currentCulture == "zh")
+            {
+                // Chinese characters
+                TodayStemBranch = sexagenaryInfo.GetDayChineseString();
+            }
+            else
+            {
+                // English names
+                stemName = sexagenaryInfo.DayStem.ToString();
+                branchName = sexagenaryInfo.DayBranch.ToString();
+                TodayStemBranch = $"{stemName} {branchName}";
+            }
+            
+            // Set element color for visual indicator
+            TodayElementColor = GetElementColor(sexagenaryInfo.DayElement);
+            
+            _logService.LogInfo($"Today's stem-branch: {TodayStemBranch}", "CalendarViewModel.LoadTodaySexagenaryInfo");
+        }
+        catch (Exception ex)
+        {
+            _logService.LogError("Failed to load today's stem-branch", ex, "CalendarViewModel.LoadTodaySexagenaryInfo");
+            TodayStemBranch = "—";
+            TodayElementColor = Colors.Gray;
+        }
+    }
+
+    /// <summary>
+    /// Get Vietnamese name for heavenly stem
+    /// </summary>
+    private string GetVietnameseStemName(Core.Models.HeavenlyStem stem)
+    {
+        return stem switch
+        {
+            Core.Models.HeavenlyStem.Jia => "Giáp",
+            Core.Models.HeavenlyStem.Yi => "Ất",
+            Core.Models.HeavenlyStem.Bing => "Bính",
+            Core.Models.HeavenlyStem.Ding => "Đinh",
+            Core.Models.HeavenlyStem.Wu => "Mậu",
+            Core.Models.HeavenlyStem.Ji => "Kỷ",
+            Core.Models.HeavenlyStem.Geng => "Canh",
+            Core.Models.HeavenlyStem.Xin => "Tân",
+            Core.Models.HeavenlyStem.Ren => "Nhâm",
+            Core.Models.HeavenlyStem.Gui => "Quý",
+            _ => stem.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get Vietnamese name for earthly branch
+    /// </summary>
+    private string GetVietnameseBranchName(Core.Models.EarthlyBranch branch)
+    {
+        return branch switch
+        {
+            Core.Models.EarthlyBranch.Zi => "Tý",
+            Core.Models.EarthlyBranch.Chou => "Sửu",
+            Core.Models.EarthlyBranch.Yin => "Dần",
+            Core.Models.EarthlyBranch.Mao => "Mão",
+            Core.Models.EarthlyBranch.Chen => "Thìn",
+            Core.Models.EarthlyBranch.Si => "Tỵ",
+            Core.Models.EarthlyBranch.Wu => "Ngọ",
+            Core.Models.EarthlyBranch.Wei => "Mùi",
+            Core.Models.EarthlyBranch.Shen => "Thân",
+            Core.Models.EarthlyBranch.You => "Dậu",
+            Core.Models.EarthlyBranch.Xu => "Tuất",
+            Core.Models.EarthlyBranch.Hai => "Hợi",
+            _ => branch.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get color associated with Five Element
+    /// </summary>
+    private Color GetElementColor(Core.Models.FiveElement element)
+    {
+        return element switch
+        {
+            Core.Models.FiveElement.Wood => Color.FromArgb("#4CAF50"),    // Green
+            Core.Models.FiveElement.Fire => Color.FromArgb("#F44336"),     // Red
+            Core.Models.FiveElement.Earth => Color.FromArgb("#8D6E63"),    // Brown
+            Core.Models.FiveElement.Metal => Color.FromArgb("#9E9E9E"),    // Gray/Silver
+            Core.Models.FiveElement.Water => Color.FromArgb("#2196F3"),    // Blue
+            _ => Colors.Gray
+        };
     }
 
     private void UpdateUserModeText()
