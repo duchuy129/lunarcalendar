@@ -171,7 +171,7 @@
                 Margin="12,4,12,4"
                 Background="{DynamicResource TodayGreen}"
                 StrokeThickness="0"
-                HeightRequest="56">
+                HeightRequest="76">
             <Border.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
                     <On Platform="iOS" Value="16,10" />
