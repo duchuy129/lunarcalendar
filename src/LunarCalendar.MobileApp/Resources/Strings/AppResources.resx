@@ -367,6 +367,22 @@ A beautiful calendar app that displays both Gregorian and Vietnamese Lunar dates
     <value>Cancel</value>
   </data>
 
+  <!-- Sexagenary (Can Chi) Info -->
+  <data name="WhatIsCanChiTitle" xml:space="preserve">
+    <value>What is Stem-Branch (Can Chi)?</value>
+  </data>
+  <data name="WhatIsCanChiMessage" xml:space="preserve">
+    <value>The Sexagenary Cycle (Can Chi / 干支) is a traditional Chinese system of 60 combinations formed by pairing 10 Heavenly Stems with 12 Earthly Branches. Each day, month, and year has its own stem-branch designation.
+
+This ancient system is used for:
+• Dating and timekeeping
+• Astrology and fortune-telling
+• Traditional medicine
+• Feng shui
+
+The current stem-branch represents today's position in this 60-day cycle.</value>
+  </data>
+
   <!-- Time Formats -->
   <data name="JustNow" xml:space="preserve">
     <value>Just now</value>

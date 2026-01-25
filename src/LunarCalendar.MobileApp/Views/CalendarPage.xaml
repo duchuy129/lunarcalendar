@@ -15,6 +15,7 @@
             <converters:IntToBoolConverter x:Key="IntToBoolConverter"/>
             <converters:MonthIndexConverter x:Key="MonthIndexConverter"/>
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -186,21 +187,53 @@
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="18"/>
             </Border.StrokeShape>
-            <Label HorizontalOptions="Center"
-                   VerticalOptions="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{ext:Translate TodayLabel}"
-                              FontSize="19"
-                              FontAttributes="Bold"
-                              TextColor="White"/>
-                        <Span Text="{Binding TodayLunarDisplay}"
-                              FontSize="19"
-                              FontAttributes="Bold"
-                              TextColor="White"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="4">
+                <!-- Today + Lunar Date -->
+                <Label HorizontalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{ext:Translate TodayLabel}"
+                                  FontSize="19"
+                                  FontAttributes="Bold"
+                                  TextColor="White"/>
+                            <Span Text="{Binding TodayLunarDisplay}"
+                                  FontSize="19"
+                                  FontAttributes="Bold"
+                                  TextColor="White"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                
+                <!-- Stem-Branch (Can Chi) with Element Indicator -->
+                <HorizontalStackLayout HorizontalOptions="Center" 
+                                       Spacing="6"
+                                       IsVisible="{Binding TodayStemBranch, Converter={StaticResource StringNotEmptyConverter}}">
+                    <!-- Five Element Color Indicator -->
+                    <Ellipse WidthRequest="10"
+                             HeightRequest="10"
+                             Fill="{Binding TodayElementColor}"
+                             VerticalOptions="Center"/>
+                    
+                    <!-- Stem-Branch Text (Can Chi / 干支) -->
+                    <Label Text="{Binding TodayStemBranch}"
+                           FontSize="14"
+                           FontAttributes="None"
+                           TextColor="#F0FFFFFF"
+                           VerticalOptions="Center"/>
+                    
+                    <!-- Info Icon for tooltip/explanation -->
+                    <Label Text="ⓘ"
+                           FontSize="14"
+                           TextColor="#C0FFFFFF"
+                           VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowSexagenaryInfoCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
         </Border>
 
         <!-- Day of Week Header - Fixed height for consistency -->

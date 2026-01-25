@@ -918,6 +918,35 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         }
     }
 
+    [RelayCommand]
+    async Task ShowSexagenaryInfoAsync()
+    {
+        // Add haptic feedback
+        _hapticService.PerformClick();
+
+        try
+        {
+            // Get localized strings for the dialog
+            var title = AppResources.WhatIsCanChiTitle ?? "What is Stem-Branch (Can Chi)?";
+            var message = AppResources.WhatIsCanChiMessage ?? 
+                "The Sexagenary Cycle (Can Chi / 干支) is a traditional Chinese system of 60 combinations formed by pairing 10 Heavenly Stems with 12 Earthly Branches. Each day, month, and year has its own stem-branch designation.\n\n" +
+                "This ancient system is used for:\n" +
+                "• Dating and timekeeping\n" +
+                "• Astrology and fortune-telling\n" +
+                "• Traditional medicine\n" +
+                "• Feng shui\n\n" +
+                "The current stem-branch represents today's position in this 60-day cycle.";
+            
+            var okButton = AppResources.OK ?? "OK";
+
+            await Application.Current.MainPage.DisplayAlert(title, message, okButton);
+        }
+        catch (Exception ex)
+        {
+            _logService.LogError("Failed to show sexagenary info", ex, "CalendarViewModel.ShowSexagenaryInfo");
+        }
+    }
+
     private async Task LoadYearHolidaysAsync()
     {
         // Prevent concurrent updates
