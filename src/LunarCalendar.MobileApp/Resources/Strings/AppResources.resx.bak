@@ -61,743 +61,614 @@
 
   <!-- Welcome Page -->
   <data name="AppName" xml:space="preserve">
-    <value>Lịch Âm</value>
+    <value>Lunar Calendar</value>
   </data>
   <data name="WelcomeTagline" xml:space="preserve">
-    <value>Theo dõi sự kiện qua lịch dương và lịch âm</value>
+    <value>Track events across calendars</value>
   </data>
   <data name="ContinueAsGuest" xml:space="preserve">
-    <value>Tiếp tục với tư cách Khách</value>
+    <value>Continue as Guest</value>
   </data>
   <data name="SignIn" xml:space="preserve">
-    <value>Đăng nhập</value>
+    <value>Sign In</value>
   </data>
   <data name="SignUp" xml:space="preserve">
-    <value>Đăng ký</value>
+    <value>Sign Up</value>
   </data>
   <data name="GuestModeInfo" xml:space="preserve">
-    <value>Chế độ khách cho phép bạn xem lịch.
-Đăng ký để tạo và đồng bộ sự kiện.</value>
+    <value>Guest mode lets you view the calendar.
+Sign up to create and sync events.</value>
   </data>
 
   <!-- Calendar Page -->
   <data name="Calendar" xml:space="preserve">
-    <value>Lịch Vạn Niên</value>
+    <value>Calendar</value>
   </data>
   <data name="PreviousMonth" xml:space="preserve">
-    <value>Tháng trước</value>
+    <value>Previous month</value>
   </data>
   <data name="NextMonth" xml:space="preserve">
-    <value>Tháng sau</value>
+    <value>Next month</value>
   </data>
   <data name="Today" xml:space="preserve">
-    <value>Hôm nay</value>
+    <value>Today</value>
   </data>
   <data name="GoToToday" xml:space="preserve">
-    <value>Đến hôm nay</value>
+    <value>Go to today</value>
   </data>
   <data name="CurrentMonthYear" xml:space="preserve">
-    <value>Tháng và năm hiện tại</value>
+    <value>Current month and year</value>
   </data>
   <data name="SyncStatus" xml:space="preserve">
-    <value>Trạng thái đồng bộ</value>
+    <value>Sync status</value>
   </data>
   <data name="Month" xml:space="preserve">
-    <value>Tháng:</value>
+    <value>Month:</value>
   </data>
   <data name="Go" xml:space="preserve">
-    <value>Đi</value>
+    <value>Go</value>
   </data>
   <data name="SelectMonthYear" xml:space="preserve">
-    <value>Chọn Tháng &amp; Năm</value>
+    <value>Select Month &amp; Year</value>
   </data>
   <data name="SelectMonth" xml:space="preserve">
-    <value>Chọn Tháng</value>
+    <value>Select Month</value>
   </data>
   <data name="SelectYear" xml:space="preserve">
-    <value>Chọn Năm</value>
+    <value>Select Year</value>
   </data>
   <data name="TodayLabel" xml:space="preserve">
-    <value>Hôm nay: </value>
+    <value>Today: </value>
   </data>
 
   <!-- Days of Week -->
   <data name="Sunday" xml:space="preserve">
-    <value>CN</value>
+    <value>Sun</value>
   </data>
   <data name="Monday" xml:space="preserve">
-    <value>T2</value>
+    <value>Mon</value>
   </data>
   <data name="Tuesday" xml:space="preserve">
-    <value>T3</value>
+    <value>Tue</value>
   </data>
   <data name="Wednesday" xml:space="preserve">
-    <value>T4</value>
+    <value>Wed</value>
   </data>
   <data name="Thursday" xml:space="preserve">
-    <value>T5</value>
+    <value>Thu</value>
   </data>
   <data name="Friday" xml:space="preserve">
-    <value>T6</value>
+    <value>Fri</value>
   </data>
   <data name="Saturday" xml:space="preserve">
-    <value>T7</value>
+    <value>Sat</value>
   </data>
 
   <!-- Upcoming Holidays Section -->
   <data name="UpcomingHolidaysTitle" xml:space="preserve">
-    <value>Ngày Lễ Sắp Tới ({0} Ngày Tiếp Theo)</value>
+    <value>Upcoming Holidays (Next {0} Days)</value>
   </data>
   <data name="NoUpcomingHolidays" xml:space="preserve">
-    <value>Không có ngày lễ sắp tới trong khoảng thời gian này</value>
+    <value>No upcoming holidays in this period</value>
   </data>
 
   <!-- Year Holidays Section -->
   <data name="VietnameseHolidays" xml:space="preserve">
-    <value>Ngày Lễ Việt Nam</value>
+    <value>Vietnamese Holidays</value>
   </data>
 
   <!-- Holiday Detail Page -->
   <data name="GregorianDate" xml:space="preserve">
-    <value>Lịch Dương</value>
+    <value>Gregorian Date</value>
   </data>
   <data name="LunarDate" xml:space="preserve">
-    <value>Lịch Âm</value>
+    <value>Lunar Date</value>
   </data>
   <data name="PublicHoliday" xml:space="preserve">
-    <value>Ngày Lễ Chính Thức</value>
+    <value>Public Holiday</value>
   </data>
   <data name="AboutThisHoliday" xml:space="preserve">
-    <value>Về Ngày Lễ Này</value>
+    <value>About This Holiday</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Văn Hóa</value>
+    <value>Culture</value>
   </data>
 
   <!-- Settings Page -->
   <data name="Settings" xml:space="preserve">
-    <value>Cài đặt</value>
+    <value>Settings</value>
   </data>
   <data name="DisplaySettings" xml:space="preserve">
-    <value>Cài Đặt Hiển Thị</value>
+    <value>Display Settings</value>
   </data>
   <data name="CulturalBackground" xml:space="preserve">
-    <value>Hình Nền Văn Hóa</value>
+    <value>Cultural Background</value>
   </data>
   <data name="CulturalBackgroundDesc" xml:space="preserve">
-    <value>Hiển thị hình ảnh văn hóa truyền thống Việt Nam</value>
+    <value>Display traditional Vietnamese cultural imagery</value>
   </data>
   <data name="ShowLunarDates" xml:space="preserve">
-    <value>Hiển Thị Ngày Âm Lịch</value>
+    <value>Show Lunar Dates</value>
   </data>
   <data name="ShowLunarDatesDesc" xml:space="preserve">
-    <value>Hiển thị ngày âm lịch trên lưới lịch</value>
+    <value>Display lunar calendar dates on calendar grid</value>
   </data>
   <data name="UpcomingHolidaysRange" xml:space="preserve">
-    <value>Phạm Vi Ngày Lễ Sắp Tới</value>
+    <value>Upcoming Holidays Range</value>
   </data>
   <data name="UpcomingHolidaysRangeDesc" xml:space="preserve">
-    <value>Số ngày hiển thị ngày lễ sắp tới</value>
+    <value>Number of days to show upcoming holidays</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Ngôn Ngữ</value>
+    <value>Language</value>
   </data>
   <data name="LanguageDesc" xml:space="preserve">
-    <value>Chọn ngôn ngữ ưa thích của bạn</value>
+    <value>Choose your preferred language</value>
   </data>
   <data name="InteractionSettings" xml:space="preserve">
-    <value>Cài Đặt Tương Tác</value>
+    <value>Interaction Settings</value>
   </data>
   <data name="HapticFeedback" xml:space="preserve">
-    <value>Phản Hồi Xúc Giác</value>
+    <value>Haptic Feedback</value>
   </data>
   <data name="HapticFeedbackDesc" xml:space="preserve">
-    <value>Rung khi nhấn nút (chỉ iOS)</value>
+    <value>Vibrate on button presses (iOS only)</value>
   </data>
   <data name="SyncAndOffline" xml:space="preserve">
-    <value>Đồng Bộ &amp; Ngoại Tuyến</value>
+    <value>Sync &amp; Offline</value>
   </data>
   <data name="ConnectionStatus" xml:space="preserve">
-    <value>Trạng Thái Kết Nối</value>
+    <value>Connection Status</value>
   </data>
   <data name="Online" xml:space="preserve">
-    <value>Trực tuyến</value>
+    <value>Online</value>
   </data>
   <data name="Offline" xml:space="preserve">
-    <value>Ngoại tuyến</value>
+    <value>Offline</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Đồng Bộ Lần Cuối</value>
+    <value>Last Sync</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Đồng Bộ Ngay</value>
+    <value>Sync Now</value>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Đang đồng bộ...</value>
+    <value>Syncing...</value>
   </data>
   <data name="DataAndStorage" xml:space="preserve">
-    <value>Dữ Liệu &amp; Lưu Trữ</value>
+    <value>Data &amp; Storage</value>
   </data>
   <data name="ClearCache" xml:space="preserve">
-    <value>Xóa Bộ Nhớ Đệm &amp; Dữ Liệu Ngoại Tuyến</value>
+    <value>Clear Cache &amp; Offline Data</value>
   </data>
   <data name="ResetSettings" xml:space="preserve">
-    <value>Đặt Lại Tất Cả Cài Đặt</value>
+    <value>Reset All Settings</value>
   </data>
   <data name="About" xml:space="preserve">
-    <value>Giới Thiệu</value>
+    <value>About</value>
   </data>
   <data name="AppVersion" xml:space="preserve">
-    <value>Phiên Bản Ứng Dụng</value>
+    <value>App Version</value>
   </data>
   <data name="AppVersionFormat" xml:space="preserve">
-    <value>Phiên Bản {0} (Build {1})</value>
+    <value>Version {0} (Build {1})</value>
   </data>
   <data name="AboutThisApp" xml:space="preserve">
-    <value>Về Ứng Dụng Này</value>
+    <value>About This App</value>
   </data>
 
   <!-- Diagnostics -->
   <data name="Diagnostics" xml:space="preserve">
-    <value>Chẩn Đoán</value>
+    <value>Diagnostics</value>
   </data>
   <data name="ViewDiagnosticLogs" xml:space="preserve">
-    <value>Xem Nhật Ký Chẩn Đoán</value>
+    <value>View Diagnostic Logs</value>
   </data>
   <data name="ClearLogs" xml:space="preserve">
-    <value>Xóa Nhật Ký</value>
+    <value>Clear Logs</value>
   </data>
   <data name="LogServiceNotAvailable" xml:space="preserve">
-    <value>Dịch vụ nhật ký không khả dụng</value>
+    <value>Log service not available</value>
   </data>
   <data name="LogsTitle" xml:space="preserve">
-    <value>Nhật Ký</value>
+    <value>Logs</value>
   </data>
   <data name="NoLogsAvailable" xml:space="preserve">
-    <value>Chưa có nhật ký nào.</value>
+    <value>No logs available yet.</value>
   </data>
   <data name="DiagnosticLogsTitle" xml:space="preserve">
-    <value>Nhật Ký Chẩn Đoán</value>
+    <value>Diagnostic Logs</value>
   </data>
   <data name="FailedToLoadLogs" xml:space="preserve">
-    <value>Không thể tải nhật ký: {0}</value>
+    <value>Failed to load logs: {0}</value>
   </data>
   <data name="ClearLogsConfirmTitle" xml:space="preserve">
-    <value>Xóa Nhật Ký</value>
+    <value>Clear Logs</value>
   </data>
   <data name="ClearLogsConfirmMessage" xml:space="preserve">
-    <value>Bạn có chắc chắn muốn xóa tất cả nhật ký chẩn đoán không?</value>
+    <value>Are you sure you want to delete all diagnostic logs?</value>
   </data>
   <data name="LogsClearedSuccess" xml:space="preserve">
-    <value>Đã xóa nhật ký chẩn đoán thành công.</value>
+    <value>Diagnostic logs cleared successfully.</value>
   </data>
   <data name="FailedToClearLogs" xml:space="preserve">
-    <value>Không thể xóa nhật ký: {0}</value>
+    <value>Failed to clear logs: {0}</value>
   </data>
 
   <!-- Sync Messages -->
   <data name="SyncComplete" xml:space="preserve">
-    <value>Đồng Bộ Hoàn Tất</value>
+    <value>Sync Complete</value>
   </data>
   <data name="SyncCompleteMessage" xml:space="preserve">
-    <value>Dữ liệu lịch đã được đồng bộ thành công.</value>
+    <value>Calendar data has been synchronized successfully.</value>
   </data>
   <data name="SyncFailed" xml:space="preserve">
-    <value>Đồng Bộ Thất Bại</value>
+    <value>Sync Failed</value>
   </data>
   <data name="SyncFailedMessage" xml:space="preserve">
-    <value>Không thể đồng bộ dữ liệu lịch. Vui lòng thử lại sau.</value>
+    <value>Failed to synchronize calendar data. Please try again later.</value>
   </data>
   <data name="SyncError" xml:space="preserve">
-    <value>Lỗi Đồng Bộ</value>
+    <value>Sync Error</value>
   </data>
   <data name="SyncErrorMessage" xml:space="preserve">
-    <value>Đã xảy ra lỗi trong quá trình đồng bộ: {0}</value>
+    <value>An error occurred during sync: {0}</value>
   </data>
   <data name="OfflineMessage" xml:space="preserve">
-    <value>Không thể đồng bộ khi ngoại tuyến. Vui lòng kiểm tra kết nối internet.</value>
+    <value>Cannot sync while offline. Please check your internet connection.</value>
   </data>
   <data name="ErrorTitle" xml:space="preserve">
-    <value>Lỗi</value>
+    <value>Error</value>
   </data>
   <data name="SyncServiceNotAvailable" xml:space="preserve">
-    <value>Dịch vụ đồng bộ không khả dụng</value>
+    <value>Sync service not available</value>
   </data>
 
   <!-- Cache/Storage Messages -->
   <data name="Success" xml:space="preserve">
-    <value>Thành Công</value>
+    <value>Success</value>
   </data>
   <data name="CacheClearedMessage" xml:space="preserve">
-    <value>Đã xóa bộ nhớ đệm và dữ liệu ngoại tuyến thành công</value>
+    <value>Cache and offline data cleared successfully</value>
   </data>
   <data name="ClearCacheError" xml:space="preserve">
-    <value>Không thể xóa bộ nhớ đệm: {0}</value>
+    <value>Failed to clear cache: {0}</value>
   </data>
 
   <!-- About Dialog -->
   <data name="AboutMessage" xml:space="preserve">
-    <value>Lịch Âm Việt Nam
+    <value>Vietnamese Lunar Calendar
 
-Ứng dụng lịch đẹp hiển thị cả lịch dương và lịch âm Việt Nam cùng các ngày lễ truyền thống.
+A beautiful calendar app that displays both Gregorian and Vietnamese Lunar dates with traditional holidays.
 
-© 2025 Bản quyền đã được bảo hộ.</value>
+© 2025 All rights reserved.</value>
   </data>
 
   <!-- Reset Settings Dialog -->
   <data name="ResetSettingsTitle" xml:space="preserve">
-    <value>Đặt Lại Cài Đặt</value>
+    <value>Reset Settings</value>
   </data>
   <data name="ResetSettingsMessage" xml:space="preserve">
-    <value>Bạn có chắc chắn muốn đặt lại tất cả cài đặt về giá trị mặc định không?</value>
+    <value>Are you sure you want to reset all settings to default values?</value>
   </data>
   <data name="SettingsResetMessage" xml:space="preserve">
-    <value>Đã đặt lại cài đặt về giá trị mặc định</value>
+    <value>Settings have been reset to default values</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Có</value>
+    <value>Yes</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Không</value>
+    <value>No</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Hủy</value>
+    <value>Cancel</value>
   </data>
 
   <!-- Time Formats -->
   <data name="JustNow" xml:space="preserve">
-    <value>Vừa xong</value>
+    <value>Just now</value>
   </data>
   <data name="MinutesAgo" xml:space="preserve">
-    <value>{0} phút trước</value>
+    <value>{0} minutes ago</value>
   </data>
   <data name="HoursAgo" xml:space="preserve">
-    <value>{0} giờ trước</value>
+    <value>{0} hours ago</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Chưa bao giờ</value>
+    <value>Never</value>
   </data>
 
   <!-- Months -->
   <data name="January" xml:space="preserve">
-    <value>Tháng Một</value>
+    <value>January</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>Tháng Hai</value>
+    <value>February</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>Tháng Ba</value>
+    <value>March</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>Tháng Tư</value>
+    <value>April</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>Tháng Năm</value>
+    <value>May</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>Tháng Sáu</value>
+    <value>June</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>Tháng Bảy</value>
+    <value>July</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>Tháng Tám</value>
+    <value>August</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>Tháng Chín</value>
+    <value>September</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>Tháng Mười</value>
+    <value>October</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>Tháng Mười Một</value>
+    <value>November</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>Tháng Mười Hai</value>
+    <value>December</value>
   </data>
 
   <!-- Language Names -->
   <data name="LanguageEnglish" xml:space="preserve">
-    <value>English (Tiếng Anh)</value>
+    <value>English</value>
   </data>
   <data name="LanguageVietnamese" xml:space="preserve">
-    <value>Tiếng Việt</value>
+    <value>Tiếng Việt (Vietnamese)</value>
   </data>
 
   <!-- Restart Required -->
   <data name="RestartRequired" xml:space="preserve">
-    <value>Yêu Cầu Khởi Động Lại</value>
+    <value>Restart Required</value>
   </data>
   <data name="RestartRequiredMessage" xml:space="preserve">
-    <value>Vui lòng khởi động lại ứng dụng để áp dụng ngôn ngữ mới.</value>
+    <value>Please restart the app to apply the new language.</value>
   </data>
 
   <!-- Upcoming Holidays -->
   <data name="UpcomingHolidaysFormat" xml:space="preserve">
-    <value>Ngày Lễ Sắp Tới ({0} Ngày)</value>
+    <value>Upcoming Holidays (Next {0} Days)</value>
   </data>
   <data name="NoUpcomingHolidaysMessage" xml:space="preserve">
-    <value>Không có ngày lễ sắp tới trong khoảng thời gian này</value>
+    <value>No upcoming holidays in this period</value>
   </data>
 
   <!-- Holiday Display -->
   <data name="LunarLabel" xml:space="preserve">
-    <value>Âm Lịch:</value>
+    <value>Lunar:</value>
   </data>
   <data name="YearOfThe" xml:space="preserve">
-    <value>Năm</value>
+    <value>Year of the</value>
   </data>
 
   <!-- Animal Signs -->
   <data name="AnimalRat" xml:space="preserve">
-    <value>Tý</value>
+    <value>Rat</value>
   </data>
   <data name="AnimalOx" xml:space="preserve">
-    <value>Sửu</value>
+    <value>Ox</value>
   </data>
   <data name="AnimalTiger" xml:space="preserve">
-    <value>Dần</value>
+    <value>Tiger</value>
   </data>
   <data name="AnimalRabbit" xml:space="preserve">
-    <value>Mão</value>
+    <value>Rabbit</value>
   </data>
   <data name="AnimalDragon" xml:space="preserve">
-    <value>Thìn</value>
+    <value>Dragon</value>
   </data>
   <data name="AnimalSnake" xml:space="preserve">
-    <value>Tỵ</value>
+    <value>Snake</value>
   </data>
   <data name="AnimalHorse" xml:space="preserve">
-    <value>Ngọ</value>
+    <value>Horse</value>
   </data>
   <data name="AnimalGoat" xml:space="preserve">
-    <value>Mùi</value>
+    <value>Goat</value>
   </data>
   <data name="AnimalMonkey" xml:space="preserve">
-    <value>Thân</value>
+    <value>Monkey</value>
   </data>
   <data name="AnimalRooster" xml:space="preserve">
-    <value>Dậu</value>
+    <value>Rooster</value>
   </data>
   <data name="AnimalDog" xml:space="preserve">
-    <value>Tuất</value>
+    <value>Dog</value>
   </data>
   <data name="AnimalPig" xml:space="preserve">
-    <value>Hợi</value>
+    <value>Pig</value>
   </data>
 
   <!-- Holiday Types -->
   <data name="MajorDay" xml:space="preserve">
-    <value>Ngày Trọng Đại</value>
+    <value>Major Day</value>
   </data>
   <data name="TraditionalFestival" xml:space="preserve">
-    <value>Lễ Hội Truyền Thống</value>
+    <value>Traditional Festival</value>
   </data>
   <data name="SeasonalCelebration" xml:space="preserve">
-    <value>Lễ Kỷ Niệm Theo Mùa</value>
+    <value>Seasonal Celebration</value>
   </data>
 
   <!-- Holiday Names and Descriptions -->
   <!-- Tết Nguyên Đán (3 days) -->
   <data name="Holiday_TetNguyenDan1_Name" xml:space="preserve">
-    <value>Tết Nguyên Đán (Mùng 1)</value>
+    <value>Lunar New Year (Day 1)</value>
   </data>
   <data name="Holiday_TetNguyenDan1_Description" xml:space="preserve">
-    <value>Tết Âm Lịch - Ngày lễ quan trọng nhất của người Việt Nam, đánh dấu sự khởi đầu của mùa xuân và năm âm lịch mới</value>
+    <value>Lunar New Year - The most important Vietnamese holiday celebrating the beginning of spring and the new lunar year</value>
   </data>
   <data name="Holiday_TetNguyenDan2_Name" xml:space="preserve">
-    <value>Tết Nguyên Đán (Mùng 2)</value>
+    <value>Lunar New Year (Day 2)</value>
   </data>
   <data name="Holiday_TetNguyenDan2_Description" xml:space="preserve">
-    <value>Ngày thứ hai của Tết Nguyên Đán - Tiếp tục các buổi họp mặt gia đình và thờ cúng tổ tiên</value>
+    <value>Second day of Lunar New Year - Continuation of family celebrations and ancestral worship</value>
   </data>
   <data name="Holiday_TetNguyenDan3_Name" xml:space="preserve">
-    <value>Tết Nguyên Đán (Mùng 3)</value>
+    <value>Lunar New Year (Day 3)</value>
   </data>
   <data name="Holiday_TetNguyenDan3_Description" xml:space="preserve">
-    <value>Ngày thứ ba của Tết Nguyên Đán - Ngày cuối cùng của các ngày Tết chính</value>
+    <value>Third day of Lunar New Year - Final day of the main Tet celebrations</value>
   </data>
 
   <!-- Giỗ Tổ Hùng Vương -->
   <data name="Holiday_HungKings_Name" xml:space="preserve">
-    <value>Giỗ Tổ Hùng Vương</value>
+    <value>Hung Kings' Commemoration Day</value>
   </data>
   <data name="Holiday_HungKings_Description" xml:space="preserve">
-    <value>Tưởng nhớ các vua Hùng, những người sáng lập huyền thoại của Việt Nam</value>
+    <value>Commemorating the Hung Kings, the legendary founders of Vietnam</value>
   </data>
 
   <!-- Tết Dương Lịch -->
   <data name="Holiday_NewYear_Name" xml:space="preserve">
-    <value>Tết Dương Lịch</value>
+    <value>New Year's Day</value>
   </data>
   <data name="Holiday_NewYear_Description" xml:space="preserve">
-    <value>Ngày đầu tiên của năm dương lịch quốc tế</value>
+    <value>International New Year's Day - The first day of the Gregorian calendar year</value>
   </data>
 
   <!-- Ngày Giải Phóng Miền Nam -->
   <data name="Holiday_ReunificationDay_Name" xml:space="preserve">
-    <value>Ngày Giải Phóng Miền Nam</value>
+    <value>Reunification Day</value>
   </data>
   <data name="Holiday_ReunificationDay_Description" xml:space="preserve">
-    <value>Kỷ niệm ngày thống nhất đất nước vào ngày 30 tháng 4 năm 1975</value>
+    <value>Celebrating the reunification of Vietnam on April 30, 1975</value>
   </data>
 
   <!-- Ngày Quốc Tế Lao Động -->
   <data name="Holiday_LaborDay_Name" xml:space="preserve">
-    <value>Ngày Quốc Tế Lao Động</value>
+    <value>International Labor Day</value>
   </data>
   <data name="Holiday_LaborDay_Description" xml:space="preserve">
-    <value>Tôn vinh người lao động và phong trào lao động trên toàn thế giới</value>
+    <value>Honoring workers and the labor movement worldwide</value>
   </data>
 
   <!-- Quốc Khánh -->
   <data name="Holiday_NationalDay_Name" xml:space="preserve">
-    <value>Quốc Khánh</value>
+    <value>National Day</value>
   </data>
   <data name="Holiday_NationalDay_Description" xml:space="preserve">
-    <value>Kỷ niệm Tuyên Ngôn Độc Lập của Việt Nam vào ngày 2 tháng 9 năm 1945</value>
+    <value>Celebrating Vietnam's Declaration of Independence on September 2, 1945</value>
   </data>
 
   <!-- Tết Nguyên Tiêu -->
   <data name="Holiday_LanternFestival_Name" xml:space="preserve">
-    <value>Tết Nguyên Tiêu</value>
+    <value>Lantern Festival</value>
   </data>
   <data name="Holiday_LanternFestival_Description" xml:space="preserve">
-    <value>Rằm tháng Giêng âm lịch - Thời gian trưng bày đèn lồng và sum họp gia đình</value>
+    <value>First full moon of the lunar year - A time for lantern displays and family gatherings</value>
   </data>
 
   <!-- Tết Hàn Thực -->
   <data name="Holiday_ColdFood_Name" xml:space="preserve">
-    <value>Tết Hàn Thực</value>
+    <value>Cold Food Festival</value>
   </data>
   <data name="Holiday_ColdFood_Description" xml:space="preserve">
-    <value>Lễ hội truyền thống tưởng nhớ tổ tiên, được tổ chức bằng cách ăn đồ ăn lạnh</value>
+    <value>Traditional festival honoring ancestors, observed by eating cold food</value>
   </data>
 
   <!-- Tết Đoan Ngọ -->
   <data name="Holiday_DragonBoat_Name" xml:space="preserve">
-    <value>Tết Đoan Ngọ</value>
+    <value>Dragon Boat Festival</value>
   </data>
   <data name="Holiday_DragonBoat_Description" xml:space="preserve">
-    <value>Lễ hội xua đuổi tà ma và bệnh tật, được tổ chức với các món ăn đặc biệt</value>
+    <value>Festival to ward off evil spirits and diseases, celebrated with special foods</value>
   </data>
 
   <!-- Vu Lan -->
   <data name="Holiday_Ullambana_Name" xml:space="preserve">
-    <value>Vu Lan</value>
+    <value>Vu Lan Festival</value>
   </data>
   <data name="Holiday_Ullambana_Description" xml:space="preserve">
-    <value>Lễ hội Phật giáo tôn vinh cha mẹ và tổ tiên, đặc biệt là mẹ</value>
+    <value>Buddhist festival honoring parents and ancestors, especially mothers</value>
   </data>
 
   <!-- Tết Trung Thu -->
   <data name="Holiday_MidAutumn_Name" xml:space="preserve">
-    <value>Tết Trung Thu</value>
+    <value>Mid-Autumn Festival</value>
   </data>
   <data name="Holiday_MidAutumn_Description" xml:space="preserve">
-    <value>Lễ hội của thiếu nhi, kỷ niệm trăng thu với đèn lồng và bánh trung thu</value>
+    <value>Children's festival celebrating the harvest moon with lanterns and mooncakes</value>
   </data>
 
   <!-- Tết Trùng Cửu -->
   <data name="Holiday_DoubleNinth_Name" xml:space="preserve">
-    <value>Tết Trùng Cửu</value>
+    <value>Double Ninth Festival</value>
   </data>
   <data name="Holiday_DoubleNinth_Description" xml:space="preserve">
-    <value>Lễ hội truyền thống vào ngày chín tháng chín âm lịch, tôn vinh người cao tuổi</value>
+    <value>Traditional festival on the ninth day of the ninth lunar month, honoring elders</value>
   </data>
 
   <!-- Rằm Tháng Giêng -->
   <data name="Holiday_FirstFullMoon_Name" xml:space="preserve">
-    <value>Rằm Tháng Giêng</value>
+    <value>First Full Moon</value>
   </data>
   <data name="Holiday_FirstFullMoon_Description" xml:space="preserve">
-    <value>Rằm đầu tiên của năm âm lịch - Thời gian trưng bày đèn lồng và sum họp gia đình</value>
+    <value>First full moon of the lunar year - A time for lantern displays and family gatherings</value>
   </data>
 
   <!-- Tết Thanh Minh -->
   <data name="Holiday_TombSweeping_Name" xml:space="preserve">
-    <value>Tết Thanh Minh</value>
+    <value>Tomb Sweeping Festival</value>
   </data>
   <data name="Holiday_TombSweeping_Description" xml:space="preserve">
-    <value>Thời gian viếng và dọn dẹp mộ tổ tiên, tưởng nhớ các thành viên gia đình đã khuất</value>
+    <value>Time to visit and clean ancestral graves, honoring deceased family members</value>
   </data>
 
   <!-- Rằm Tháng Bảy -->
   <data name="Holiday_GhostFestival_Name" xml:space="preserve">
-    <value>Rằm Tháng Bảy</value>
+    <value>Ghost Festival</value>
   </data>
   <data name="Holiday_GhostFestival_Description" xml:space="preserve">
-    <value>Lễ hội cho các linh hồn lang thang và tổ tiên trong tháng bảy âm lịch</value>
+    <value>Festival for wandering souls and ancestral spirits during the seventh lunar month</value>
   </data>
 
   <!-- Tết Ông Công Ông Táo -->
   <data name="Holiday_KitchenGods_Name" xml:space="preserve">
-    <value>Tết Ông Công Ông Táo</value>
+    <value>Kitchen Gods Festival</value>
   </data>
   <data name="Holiday_KitchenGods_Description" xml:space="preserve">
-    <value>Tiễn Ông Táo về trời để báo cáo về năm của gia đình</value>
+    <value>Sending the Kitchen Gods to heaven to report on the family's year</value>
   </data>
 
   <!-- Giao Thừa -->
   <data name="Holiday_NewYearsEve_Name" xml:space="preserve">
-    <value>Giao Thừa</value>
+    <value>Lunar New Year's Eve</value>
   </data>
   <data name="Holiday_NewYearsEve_Description" xml:space="preserve">
-    <value>Đêm giao thừa - Đoàn tụ gia đình và đón năm mới</value>
+    <value>The eve of Lunar New Year - Family reunion and welcoming the new year</value>
   </data>
 
-  <!-- Lunar Special Days (Mùng 1 và Rằm) -->
+  <!-- Lunar Special Days (1st and 15th of each lunar month) -->
   <data name="LunarSpecialDay_FirstDay_Name" xml:space="preserve">
-    <value>Mùng 1</value>
+    <value>First Day</value>
   </data>
   <data name="LunarSpecialDay_FirstDay_Description" xml:space="preserve">
-    <value>Ngày đầu tháng âm lịch - Thời điểm khởi đầu mới và những khởi sự tốt lành</value>
+    <value>The first day of the lunar month - A time for new beginnings and fresh starts</value>
   </data>
   <data name="LunarSpecialDay_FullMoon_Name" xml:space="preserve">
-    <value>Rằm</value>
+    <value>Full Moon Day</value>
   </data>
   <data name="LunarSpecialDay_FullMoon_Description" xml:space="preserve">
-    <value>Ngày 15 tháng âm lịch - Ngày trăng tròn, truyền thống là thời gian cầu nguyện và dâng lễ</value>
+    <value>The 15th day of the lunar month - Full moon day, traditionally a time for prayers and offerings</value>
   </data>
   <data name="LunarSpecialDay" xml:space="preserve">
-    <value>Ngày Đặc Biệt Âm Lịch</value>
+    <value>Lunar Special Day</value>
   </data>
   <data name="YearHolidays" xml:space="preserve">
-    <value>Ngày Lễ</value>
+    <value>Holidays</value>
   </data>
   <data name="NoHolidaysFound" xml:space="preserve">
-    <value>Không tìm thấy lễ nào trong năm này</value>
-  </data>
-
-  <!-- Sexagenary Cycle (Can Chi / Stem-Branch) -->
-  <!-- Heavenly Stems - Vietnamese -->
-  <data name="HeavenlyStem_Jia" xml:space="preserve">
-    <value>Giáp</value>
-    <comment>甲 - Thiên Can thứ nhất</comment>
-  </data>
-  <data name="HeavenlyStem_Yi" xml:space="preserve">
-    <value>Ất</value>
-    <comment>乙 - Thiên Can thứ hai</comment>
-  </data>
-  <data name="HeavenlyStem_Bing" xml:space="preserve">
-    <value>Bính</value>
-    <comment>丙 - Thiên Can thứ ba</comment>
-  </data>
-  <data name="HeavenlyStem_Ding" xml:space="preserve">
-    <value>Đinh</value>
-    <comment>丁 - Thiên Can thứ tư</comment>
-  </data>
-  <data name="HeavenlyStem_Wu" xml:space="preserve">
-    <value>Mậu</value>
-    <comment>戊 - Thiên Can thứ năm</comment>
-  </data>
-  <data name="HeavenlyStem_Ji" xml:space="preserve">
-    <value>Kỷ</value>
-    <comment>己 - Thiên Can thứ sáu</comment>
-  </data>
-  <data name="HeavenlyStem_Geng" xml:space="preserve">
-    <value>Canh</value>
-    <comment>庚 - Thiên Can thứ bảy</comment>
-  </data>
-  <data name="HeavenlyStem_Xin" xml:space="preserve">
-    <value>Tân</value>
-    <comment>辛 - Thiên Can thứ tám</comment>
-  </data>
-  <data name="HeavenlyStem_Ren" xml:space="preserve">
-    <value>Nhâm</value>
-    <comment>壬 - Thiên Can thứ chín</comment>
-  </data>
-  <data name="HeavenlyStem_Gui" xml:space="preserve">
-    <value>Quý</value>
-    <comment>癸 - Thiên Can thứ mười</comment>
-  </data>
-
-  <!-- Earthly Branches / Zodiac Animals - Vietnamese -->
-  <data name="EarthlyBranch_Zi" xml:space="preserve">
-    <value>Tý</value>
-    <comment>子 - Địa Chi thứ nhất (Chuột)</comment>
-  </data>
-  <data name="EarthlyBranch_Chou" xml:space="preserve">
-    <value>Sửu</value>
-    <comment>丑 - Địa Chi thứ hai (Trâu)</comment>
-  </data>
-  <data name="EarthlyBranch_Yin" xml:space="preserve">
-    <value>Dần</value>
-    <comment>寅 - Địa Chi thứ ba (Dần)</comment>
-  </data>
-  <data name="EarthlyBranch_Mao" xml:space="preserve">
-    <value>Mão</value>
-    <comment>卯 - Địa Chi thứ tư (Mèo)</comment>
-  </data>
-  <data name="EarthlyBranch_Chen" xml:space="preserve">
-    <value>Thìn</value>
-    <comment>辰 - Địa Chi thứ năm (Rồng)</comment>
-  </data>
-  <data name="EarthlyBranch_Si" xml:space="preserve">
-    <value>Tỵ</value>
-    <comment>巳 - Địa Chi thứ sáu (Rắn)</comment>
-  </data>
-  <data name="EarthlyBranch_Wu" xml:space="preserve">
-    <value>Ngọ</value>
-    <comment>午 - Địa Chi thứ bảy (Ngựa)</comment>
-  </data>
-  <data name="EarthlyBranch_Wei" xml:space="preserve">
-    <value>Mùi</value>
-    <comment>未 - Địa Chi thứ tám (Dê)</comment>
-  </data>
-  <data name="EarthlyBranch_Shen" xml:space="preserve">
-    <value>Thân</value>
-    <comment>申 - Địa Chi thứ chín (Khỉ)</comment>
-  </data>
-  <data name="EarthlyBranch_You" xml:space="preserve">
-    <value>Dậu</value>
-    <comment>酉 - Địa Chi thứ mười (Gà)</comment>
-  </data>
-  <data name="EarthlyBranch_Xu" xml:space="preserve">
-    <value>Tuất</value>
-    <comment>戌 - Địa Chi thứ mười một (Chó)</comment>
-  </data>
-  <data name="EarthlyBranch_Hai" xml:space="preserve">
-    <value>Hợi</value>
-    <comment>亥 - Địa Chi thứ mười hai (Heo)</comment>
-  </data>
-
-  <!-- Five Elements - Vietnamese -->
-  <data name="FiveElement_Wood" xml:space="preserve">
-    <value>Mộc</value>
-    <comment>木</comment>
-  </data>
-  <data name="FiveElement_Fire" xml:space="preserve">
-    <value>Hỏa</value>
-    <comment>火</comment>
-  </data>
-  <data name="FiveElement_Earth" xml:space="preserve">
-    <value>Thổ</value>
-    <comment>土</comment>
-  </data>
-  <data name="FiveElement_Metal" xml:space="preserve">
-    <value>Kim</value>
-    <comment>金</comment>
-  </data>
-  <data name="FiveElement_Water" xml:space="preserve">
-    <value>Thủy</value>
-    <comment>水</comment>
-  </data>
-
-  <!-- Sexagenary Labels - Vietnamese -->
-  <data name="SexagenaryYear" xml:space="preserve">
-    <value>Năm</value>
-  </data>
-  <data name="SexagenaryMonth" xml:space="preserve">
-    <value>Tháng</value>
-  </data>
-  <data name="SexagenaryDay" xml:space="preserve">
-    <value>Ngày</value>
-  </data>
-  <data name="SexagenaryHour" xml:space="preserve">
-    <value>Giờ</value>
+    <value>No holidays found for this year</value>
   </data>
 </root>

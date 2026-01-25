@@ -47,6 +47,7 @@ public static class MauiProgram
 		// Register Core Calculation Services (NO API REQUIRED - Bundled Architecture)
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.ILunarCalculationService, LunarCalendar.Core.Services.LunarCalculationService>();
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.IHolidayCalculationService, LunarCalendar.Core.Services.HolidayCalculationService>();
+		builder.Services.AddSingleton<LunarCalendar.Core.Services.ISexagenaryService, LunarCalendar.Core.Services.SexagenaryService>();
 
 		// Register App Services (LogService already registered above)
 		builder.Services.AddSingleton<ILocalizationService, LocalizationService>();

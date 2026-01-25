@@ -671,4 +671,133 @@ A beautiful calendar app that displays both Gregorian and Vietnamese Lunar dates
   <data name="NoHolidaysFound" xml:space="preserve">
     <value>No holidays found for this year</value>
   </data>
+
+  <!-- Sexagenary Cycle (Can Chi / Stem-Branch) -->
+  <!-- Heavenly Stems -->
+  <data name="HeavenlyStem_Jia" xml:space="preserve">
+    <value>Wood</value>
+    <comment>甲 (Giáp) - First Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Yi" xml:space="preserve">
+    <value>Wood</value>
+    <comment>乙 (Ất) - Second Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Bing" xml:space="preserve">
+    <value>Fire</value>
+    <comment>丙 (Bính) - Third Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Ding" xml:space="preserve">
+    <value>Fire</value>
+    <comment>丁 (Đinh) - Fourth Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Wu" xml:space="preserve">
+    <value>Earth</value>
+    <comment>戊 (Mậu) - Fifth Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Ji" xml:space="preserve">
+    <value>Earth</value>
+    <comment>己 (Kỷ) - Sixth Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Geng" xml:space="preserve">
+    <value>Metal</value>
+    <comment>庚 (Canh) - Seventh Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Xin" xml:space="preserve">
+    <value>Metal</value>
+    <comment>辛 (Tân) - Eighth Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Ren" xml:space="preserve">
+    <value>Water</value>
+    <comment>壬 (Nhâm) - Ninth Heavenly Stem</comment>
+  </data>
+  <data name="HeavenlyStem_Gui" xml:space="preserve">
+    <value>Water</value>
+    <comment>癸 (Quý) - Tenth Heavenly Stem</comment>
+  </data>
+
+  <!-- Earthly Branches / Zodiac Animals -->
+  <data name="EarthlyBranch_Zi" xml:space="preserve">
+    <value>Rat</value>
+    <comment>子 (Tý) - First Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Chou" xml:space="preserve">
+    <value>Ox</value>
+    <comment>丑 (Sửu) - Second Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Yin" xml:space="preserve">
+    <value>Tiger</value>
+    <comment>寅 (Dần) - Third Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Mao" xml:space="preserve">
+    <value>Rabbit</value>
+    <comment>卯 (Mão) - Fourth Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Chen" xml:space="preserve">
+    <value>Dragon</value>
+    <comment>辰 (Thìn) - Fifth Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Si" xml:space="preserve">
+    <value>Snake</value>
+    <comment>巳 (Tỵ) - Sixth Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Wu" xml:space="preserve">
+    <value>Horse</value>
+    <comment>午 (Ngọ) - Seventh Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Wei" xml:space="preserve">
+    <value>Goat</value>
+    <comment>未 (Mùi) - Eighth Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Shen" xml:space="preserve">
+    <value>Monkey</value>
+    <comment>申 (Thân) - Ninth Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_You" xml:space="preserve">
+    <value>Rooster</value>
+    <comment>酉 (Dậu) - Tenth Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Xu" xml:space="preserve">
+    <value>Dog</value>
+    <comment>戌 (Tuất) - Eleventh Earthly Branch</comment>
+  </data>
+  <data name="EarthlyBranch_Hai" xml:space="preserve">
+    <value>Pig</value>
+    <comment>亥 (Hợi) - Twelfth Earthly Branch</comment>
+  </data>
+
+  <!-- Five Elements -->
+  <data name="FiveElement_Wood" xml:space="preserve">
+    <value>Wood</value>
+    <comment>木 (Mộc)</comment>
+  </data>
+  <data name="FiveElement_Fire" xml:space="preserve">
+    <value>Fire</value>
+    <comment>火 (Hỏa)</comment>
+  </data>
+  <data name="FiveElement_Earth" xml:space="preserve">
+    <value>Earth</value>
+    <comment>土 (Thổ)</comment>
+  </data>
+  <data name="FiveElement_Metal" xml:space="preserve">
+    <value>Metal</value>
+    <comment>金 (Kim)</comment>
+  </data>
+  <data name="FiveElement_Water" xml:space="preserve">
+    <value>Water</value>
+    <comment>水 (Thủy)</comment>
+  </data>
+
+  <!-- Sexagenary Labels -->
+  <data name="SexagenaryYear" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="SexagenaryMonth" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="SexagenaryDay" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="SexagenaryHour" xml:space="preserve">
+    <value>Hour</value>
+  </data>
 </root>
