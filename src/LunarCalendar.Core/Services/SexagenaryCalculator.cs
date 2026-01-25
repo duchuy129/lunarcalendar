@@ -58,13 +58,10 @@ public static class SexagenaryCalculator
         info.MonthStem = monthStem;
         info.MonthBranch = monthBranch;
         
-        // Calculate hour stem-branch if time component is significant
-        if (date.TimeOfDay.TotalSeconds > 0)
-        {
-            var (hourStem, hourBranch) = CalculateHourStemBranch(date.TimeOfDay, (int)dayStem);
-            info.HourStem = hourStem;
-            info.HourBranch = hourBranch;
-        }
+        // Always calculate hour stem-branch (time defaults to midnight if not specified)
+        var (hourStem, hourBranch) = CalculateHourStemBranch(date.TimeOfDay, (int)dayStem);
+        info.HourStem = hourStem;
+        info.HourBranch = hourBranch;
         
         return info;
     }
@@ -78,12 +75,12 @@ public static class SexagenaryCalculator
     {
         int jdn = CalculateJulianDayNumber(date);
         
-        // Calculate stem: (JDN + 10) mod 10
-        // Reference: Jan 1, 1984 (JDN 2445700) = Jia Zi (0, 0)
-        // For any JDN: stem_index = (JDN + 10) mod 10, branch_index = (JDN + 0) mod 12
-        int stemIndex = (jdn + 10) % 10;
+        // Reference: Jan 1, 1984 (JDN 2,445,700) = Jia Zi (甲子) - the cycle start day
+        // JDN 2,445,700 % 10 = 0 (Jia), JDN 2,445,700 % 12 = 0 (Zi)
+        // Therefore: stem_index = JDN mod 10, branch_index = JDN mod 12
+        int stemIndex = jdn % 10;
         
-        // Calculate branch: (JDN + 0) mod 12
+        // Calculate branch: JDN mod 12
         int branchIndex = jdn % 12;
         
         return ((HeavenlyStem)stemIndex, (EarthlyBranch)branchIndex);

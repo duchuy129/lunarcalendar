@@ -79,7 +79,8 @@ public class SexagenaryService : ISexagenaryService
         var result = new Dictionary<DateTime, SexagenaryInfo>();
         var currentDate = startDate.Date;
         
-        while (currentDate <= endDate.Date)
+        // Note: endDate is exclusive (like standard C# range conventions)
+        while (currentDate < endDate.Date)
         {
             result[currentDate] = GetSexagenaryInfo(currentDate);
             currentDate = currentDate.AddDays(1);
