@@ -239,29 +239,40 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             var upcomingSnapshot = UpcomingHolidays.ToList();
             var yearSnapshot = YearHolidays.ToList();
             
-            // Refresh all localized holiday occurrences in upcoming holidays
-            foreach (var holiday in upcomingSnapshot)
+            // T060: Recreate localized holiday occurrences to update year stem-branch with new language
+            // Clear and rebuild collections to apply language-specific formatting
+            UpcomingHolidays.Clear();
+            foreach (var localizedHoliday in upcomingSnapshot)
             {
                 try
                 {
-                    holiday?.RefreshLocalizedProperties();
+                    // Recreate with updated language-specific year stem-branch
+                    var updated = CreateLocalizedHolidayOccurrence(localizedHoliday.HolidayOccurrence);
+                    UpcomingHolidays.Add(updated);
                 }
                 catch (Exception)
                 {
-                    // Silent failure - individual holiday refresh is non-critical
+                    // Fallback: keep original with property refresh
+                    localizedHoliday?.RefreshLocalizedProperties();
+                    UpcomingHolidays.Add(localizedHoliday);
                 }
             }
 
-            // Refresh all localized holiday occurrences in year holidays
-            foreach (var holiday in yearSnapshot)
+            // T060: Same for year holidays
+            YearHolidays.Clear();
+            foreach (var localizedHoliday in yearSnapshot)
             {
                 try
                 {
-                    holiday?.RefreshLocalizedProperties();
+                    // Recreate with updated language-specific year stem-branch
+                    var updated = CreateLocalizedHolidayOccurrence(localizedHoliday.HolidayOccurrence);
+                    YearHolidays.Add(updated);
                 }
                 catch (Exception)
                 {
-                    // Silent failure - individual holiday refresh is non-critical
+                    // Fallback: keep original with property refresh
+                    localizedHoliday?.RefreshLocalizedProperties();
+                    YearHolidays.Add(localizedHoliday);
                 }
             }
         }
