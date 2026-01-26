@@ -40,6 +40,36 @@ public static class SexagenaryFormatterHelper
     }
 
     /// <summary>
+    /// Format day stem-branch based on current language (for lunar dates only)
+    /// Vietnamese: "Ngày Nhâm Dần" (day prefix + stem-branch)
+    /// English: "Day Ren Yin (Tiger)" (day prefix + stem-branch with animal)
+    /// Chinese: "日壬寅" (day character + stem-branch characters)
+    /// </summary>
+    public static string FormatDayStemBranch(HeavenlyStem stem, EarthlyBranch branch)
+    {
+        var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        
+        if (currentCulture == "vi")
+        {
+            // Vietnamese: "Ngày" prefix + stem + branch
+            var stemName = GetVietnameseStemName(stem);
+            var branchName = GetVietnameseBranchName(branch);
+            return $"Ngày {stemName} {branchName}";
+        }
+        else if (currentCulture == "zh")
+        {
+            // Chinese: "日" prefix + characters for stem + branch
+            return $"日{GetChineseStemName(stem)}{GetChineseBranchName(branch)}";
+        }
+        else
+        {
+            // English: "Day" prefix + Stem + Branch (Animal name)
+            var animalName = GetAnimalNameFromBranch(branch);
+            return $"Day {stem} {branch} ({animalName})";
+        }
+    }
+
+    /// <summary>
     /// Get Vietnamese name for heavenly stem
     /// </summary>
     private static string GetVietnameseStemName(HeavenlyStem stem)

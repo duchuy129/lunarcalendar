@@ -905,8 +905,8 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
     }
 
     /// <summary>
-    /// T060: Create LocalizedHolidayOccurrence with year stem-branch information
-    /// This ensures consistent year display across all pages (Calendar, Holiday Detail, Year Holidays)
+    /// T060: Create LocalizedHolidayOccurrence with year and day stem-branch information
+    /// This ensures consistent year/day display across all pages (Calendar, Holiday Detail, Year Holidays)
     /// </summary>
     private LocalizedHolidayOccurrence CreateLocalizedHolidayOccurrence(HolidayOccurrence holidayOccurrence)
     {
@@ -930,11 +930,19 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
                 };
                 
                 localized.YearStemBranchFormatted = $"{yearPrefix} {yearStemBranchText}";
+                
+                // Calculate and set day stem-branch (only for lunar dates)
+                var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(holidayOccurrence.GregorianDate);
+                var dayStemBranchText = SexagenaryFormatterHelper.FormatDayStemBranch(
+                    sexagenaryInfo.DayStem, 
+                    sexagenaryInfo.DayBranch);
+                
+                localized.DayStemBranchFormatted = dayStemBranchText;
             }
             catch (Exception ex)
             {
-                _logService.LogWarning($"Failed to calculate year stem-branch for holiday: {ex.Message}", "CalendarViewModel.CreateLocalizedHolidayOccurrence");
-                // Leave YearStemBranchFormatted as null - will fall back to animal sign
+                _logService.LogWarning($"Failed to calculate stem-branch for holiday: {ex.Message}", "CalendarViewModel.CreateLocalizedHolidayOccurrence");
+                // Leave YearStemBranchFormatted and DayStemBranchFormatted as null - will fall back to animal sign
             }
         }
         

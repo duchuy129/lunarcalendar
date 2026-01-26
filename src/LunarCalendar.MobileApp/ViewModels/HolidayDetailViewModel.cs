@@ -55,6 +55,9 @@ public partial class HolidayDetailViewModel : BaseViewModel
     private string _animalSignDisplay = string.Empty;
 
     [ObservableProperty]
+    private string _dayStemBranchDisplay = string.Empty;
+
+    [ObservableProperty]
     private bool _isPublicHoliday;
 
     [ObservableProperty]
@@ -152,7 +155,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
         };
 
         // T060: Display full stem-branch (e.g., "Năm Ất Tỵ") instead of just animal sign
-        // Calculate year stem-branch from the Gregorian date
+        // Calculate year and day stem-branch from the Gregorian date
         if (holidayOccurrence.Holiday.HasLunarDate)
         {
             try
@@ -187,16 +190,23 @@ public partial class HolidayDetailViewModel : BaseViewModel
                     };
                     
                     AnimalSignDisplay = $" - {yearPrefix} {yearStemBranchText}";
+                    
+                    // Calculate and set day stem-branch (only for lunar dates)
+                    var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(holidayOccurrence.GregorianDate);
+                    DayStemBranchDisplay = SexagenaryFormatterHelper.FormatDayStemBranch(
+                        sexagenaryInfo.DayStem, 
+                        sexagenaryInfo.DayBranch);
                 }
                 else
                 {
                     // Fallback if lunar date not found
                     AnimalSignDisplay = string.Empty;
+                    DayStemBranchDisplay = string.Empty;
                 }
             }
             catch (Exception ex)
             {
-                _logService.LogWarning($"Failed to calculate year stem-branch: {ex.Message}", "HolidayDetailViewModel.InitializeAsync");
+                _logService.LogWarning($"Failed to calculate stem-branch: {ex.Message}", "HolidayDetailViewModel.InitializeAsync");
                 
                 // Fallback to original animal sign display
                 if (!string.IsNullOrEmpty(holidayOccurrence.AnimalSign))
@@ -208,6 +218,8 @@ public partial class HolidayDetailViewModel : BaseViewModel
                 {
                     AnimalSignDisplay = string.Empty;
                 }
+                
+                DayStemBranchDisplay = string.Empty;
             }
         }
         else
@@ -272,7 +284,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
             }
             LunarDateFormatted = lunarText;
 
-            // T060: Update year stem-branch display (use stored lunar year)
+            // T060: Update year and day stem-branch display (use stored lunar year)
             try
             {
                 var lunarYear = HolidayOccurrence.LunarYear; // Use the stored lunar year from holiday calculation
@@ -288,6 +300,12 @@ public partial class HolidayDetailViewModel : BaseViewModel
                 };
                 
                 AnimalSignDisplay = $" - {yearPrefix} {yearStemBranchText}";
+                
+                // Update day stem-branch with new language
+                var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(HolidayOccurrence.GregorianDate);
+                DayStemBranchDisplay = SexagenaryFormatterHelper.FormatDayStemBranch(
+                    sexagenaryInfo.DayStem, 
+                    sexagenaryInfo.DayBranch);
             }
             catch
             {

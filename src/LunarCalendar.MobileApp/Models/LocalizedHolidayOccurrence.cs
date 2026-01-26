@@ -20,6 +20,13 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
     [ObservableProperty]
     private string? _yearStemBranchFormatted;
 
+    /// <summary>
+    /// Optional day stem-branch formatted string (e.g., "Ngày Nhâm Dần" or "Day Ren Yin (Tiger)")
+    /// Set by ViewModels that have access to ISexagenaryService. Only applies to lunar dates.
+    /// </summary>
+    [ObservableProperty]
+    private string? _dayStemBranchFormatted;
+
     public LocalizedHolidayOccurrence(HolidayOccurrence holidayOccurrence)
     {
         HolidayOccurrence = holidayOccurrence;

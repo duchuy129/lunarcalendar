@@ -216,7 +216,7 @@ public partial class YearHolidaysViewModel : ObservableObject, IDisposable
     {
         var localized = new LocalizedHolidayOccurrence(holidayOccurrence);
         
-        // Calculate and set year stem-branch if it's a lunar holiday
+        // Calculate and set year and day stem-branch if it's a lunar holiday
         if (holidayOccurrence.Holiday.HasLunarDate)
         {
             try
@@ -234,11 +234,19 @@ public partial class YearHolidaysViewModel : ObservableObject, IDisposable
                 };
                 
                 localized.YearStemBranchFormatted = $"{yearPrefix} {yearStemBranchText}";
+                
+                // Calculate and set day stem-branch (only for lunar dates)
+                var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(holidayOccurrence.GregorianDate);
+                var dayStemBranchText = SexagenaryFormatterHelper.FormatDayStemBranch(
+                    sexagenaryInfo.DayStem, 
+                    sexagenaryInfo.DayBranch);
+                
+                localized.DayStemBranchFormatted = dayStemBranchText;
             }
             catch (Exception ex)
             {
-                _logService.LogWarning($"Failed to calculate year stem-branch for holiday: {ex.Message}", "YearHolidaysViewModel.CreateLocalizedHolidayOccurrence");
-                // Leave YearStemBranchFormatted as null - will fall back to animal sign
+                _logService.LogWarning($"Failed to calculate stem-branch for holiday: {ex.Message}", "YearHolidaysViewModel.CreateLocalizedHolidayOccurrence");
+                // Leave YearStemBranchFormatted and DayStemBranchFormatted as null - will fall back to animal sign
             }
         }
         
