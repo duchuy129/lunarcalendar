@@ -208,8 +208,7 @@
                 
                 <!-- Stem-Branch (Can Chi) with Element Indicator -->
                 <HorizontalStackLayout HorizontalOptions="Center" 
-                                       Spacing="6"
-                                       IsVisible="{Binding TodayStemBranch, Converter={StaticResource StringNotEmptyConverter}}">
+                                       Spacing="6">
                     <!-- Five Element Color Indicator -->
                     <Ellipse WidthRequest="10"
                              HeightRequest="10"

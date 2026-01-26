@@ -464,18 +464,21 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             var todayLunar = lunarDates.FirstOrDefault(ld => ld.GregorianDate.Date == DateTime.Today);
             if (todayLunar != null)
             {
-                // Show lunar date with animal sign
-                // English: "11/15, Year of the Snake"
-                // Vietnamese: "Ngày 11 Tháng 15, Năm Tỵ"
-                var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
-                
+                // Calculate year stem-branch and format with animal sign
+                // English: "11/15, Year of the Yi Si (Snake)"
+                // Vietnamese: "Ngày 11 Tháng 15, Năm Ất Tỵ"
+                var (yearStem, yearBranch) = Core.Services.SexagenaryCalculator.CalculateYearStemBranch(todayLunar.LunarYear);
+                var localizedYearName = FormatYearStemBranch(yearStem, yearBranch);
                 
                 TodayLunarDisplay = DateFormatterHelper.FormatLunarDateWithYear(
                     todayLunar.LunarDay, 
                     todayLunar.LunarMonth, 
-                    localizedAnimalSign);
+                    localizedYearName);
                 
             }
+
+            // Load today's stem-branch (Can Chi) - CRITICAL: Load on initial calendar load
+            await LoadTodaySexagenaryInfoAsync();
 
             // Create calendar days
             var days = new List<CalendarDay>();
@@ -579,13 +582,14 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             
             if (todayLunar != null)
             {
-                var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
-                
+                // Calculate year stem-branch and format with animal sign
+                var (yearStem, yearBranch) = Core.Services.SexagenaryCalculator.CalculateYearStemBranch(todayLunar.LunarYear);
+                var localizedYearName = FormatYearStemBranch(yearStem, yearBranch);
                 
                 TodayLunarDisplay = DateFormatterHelper.FormatLunarDateWithYear(
                     todayLunar.LunarDay, 
                     todayLunar.LunarMonth, 
-                    localizedAnimalSign);
+                    localizedYearName);
                 
             }
             
@@ -609,28 +613,28 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             var sexagenaryInfo = await Task.Run(() => _sexagenaryService.GetSexagenaryInfo(today));
             
             // Format stem-branch display based on current language
-            var currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             
             string stemName, branchName;
             
             if (currentCulture == "vi")
             {
-                // Vietnamese names
+                // Vietnamese names with "Ngày" prefix
                 stemName = GetVietnameseStemName(sexagenaryInfo.DayStem);
                 branchName = GetVietnameseBranchName(sexagenaryInfo.DayBranch);
-                TodayStemBranch = $"{stemName} {branchName}";
+                TodayStemBranch = $"Ngày {stemName} {branchName}";
             }
             else if (currentCulture == "zh")
             {
-                // Chinese characters
-                TodayStemBranch = sexagenaryInfo.GetDayChineseString();
+                // Chinese characters with 日 prefix (meaning "day")
+                TodayStemBranch = $"日{sexagenaryInfo.GetDayChineseString()}";
             }
             else
             {
-                // English names
+                // English names with "Day" prefix
                 stemName = sexagenaryInfo.DayStem.ToString();
                 branchName = sexagenaryInfo.DayBranch.ToString();
-                TodayStemBranch = $"{stemName} {branchName}";
+                TodayStemBranch = $"Day {stemName} {branchName}";
             }
             
             // Set element color for visual indicator
@@ -703,6 +707,103 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             Core.Models.FiveElement.Metal => Color.FromArgb("#9E9E9E"),    // Gray/Silver
             Core.Models.FiveElement.Water => Color.FromArgb("#2196F3"),    // Blue
             _ => Colors.Gray
+        };
+    }
+
+    /// <summary>
+    /// Format year stem-branch based on current language
+    /// Vietnamese: "Ất Tỵ" (just stem-branch)
+    /// English: "Yi Si (Snake)" (stem-branch with animal name)
+    /// </summary>
+    private string FormatYearStemBranch(Core.Models.HeavenlyStem stem, Core.Models.EarthlyBranch branch)
+    {
+        var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        
+        if (currentCulture == "vi")
+        {
+            // Vietnamese: Just stem + branch
+            var stemName = GetVietnameseStemName(stem);
+            var branchName = GetVietnameseBranchName(branch);
+            return $"{stemName} {branchName}";
+        }
+        else if (currentCulture == "zh")
+        {
+            // Chinese: Characters for stem + branch
+            return GetChineseStemName(stem) + GetChineseBranchName(branch);
+        }
+        else
+        {
+            // English: Stem + Branch (Animal name)
+            var animalName = GetAnimalNameFromBranch(branch);
+            return $"{stem} {branch} ({animalName})";
+        }
+    }
+
+    /// <summary>
+    /// Get Chinese character for heavenly stem
+    /// </summary>
+    private string GetChineseStemName(Core.Models.HeavenlyStem stem)
+    {
+        return stem switch
+        {
+            Core.Models.HeavenlyStem.Jia => "甲",
+            Core.Models.HeavenlyStem.Yi => "乙",
+            Core.Models.HeavenlyStem.Bing => "丙",
+            Core.Models.HeavenlyStem.Ding => "丁",
+            Core.Models.HeavenlyStem.Wu => "戊",
+            Core.Models.HeavenlyStem.Ji => "己",
+            Core.Models.HeavenlyStem.Geng => "庚",
+            Core.Models.HeavenlyStem.Xin => "辛",
+            Core.Models.HeavenlyStem.Ren => "壬",
+            Core.Models.HeavenlyStem.Gui => "癸",
+            _ => stem.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get Chinese character for earthly branch
+    /// </summary>
+    private string GetChineseBranchName(Core.Models.EarthlyBranch branch)
+    {
+        return branch switch
+        {
+            Core.Models.EarthlyBranch.Zi => "子",
+            Core.Models.EarthlyBranch.Chou => "丑",
+            Core.Models.EarthlyBranch.Yin => "寅",
+            Core.Models.EarthlyBranch.Mao => "卯",
+            Core.Models.EarthlyBranch.Chen => "辰",
+            Core.Models.EarthlyBranch.Si => "巳",
+            Core.Models.EarthlyBranch.Wu => "午",
+            Core.Models.EarthlyBranch.Wei => "未",
+            Core.Models.EarthlyBranch.Shen => "申",
+            Core.Models.EarthlyBranch.You => "酉",
+            Core.Models.EarthlyBranch.Xu => "戌",
+            Core.Models.EarthlyBranch.Hai => "亥",
+            _ => branch.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get animal name from earthly branch (English name for localization)
+    /// </summary>
+    private string GetAnimalNameFromBranch(Core.Models.EarthlyBranch branch)
+    {
+        // Return English animal name which will be localized by LocalizationHelper
+        return branch switch
+        {
+            Core.Models.EarthlyBranch.Zi => "Rat",
+            Core.Models.EarthlyBranch.Chou => "Ox",
+            Core.Models.EarthlyBranch.Yin => "Tiger",
+            Core.Models.EarthlyBranch.Mao => "Rabbit",
+            Core.Models.EarthlyBranch.Chen => "Dragon",
+            Core.Models.EarthlyBranch.Si => "Snake",
+            Core.Models.EarthlyBranch.Wu => "Horse",
+            Core.Models.EarthlyBranch.Wei => "Goat",
+            Core.Models.EarthlyBranch.Shen => "Monkey",
+            Core.Models.EarthlyBranch.You => "Rooster",
+            Core.Models.EarthlyBranch.Xu => "Dog",
+            Core.Models.EarthlyBranch.Hai => "Pig",
+            _ => "Snake" // Default fallback
         };
     }
 
