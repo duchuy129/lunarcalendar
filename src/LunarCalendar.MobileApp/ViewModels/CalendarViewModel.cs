@@ -893,6 +893,43 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         }
     }
 
+    /// <summary>
+    /// T060: Create LocalizedHolidayOccurrence with year stem-branch information
+    /// This ensures consistent year display across all pages (Calendar, Holiday Detail, Year Holidays)
+    /// </summary>
+    private LocalizedHolidayOccurrence CreateLocalizedHolidayOccurrence(HolidayOccurrence holidayOccurrence)
+    {
+        var localized = new LocalizedHolidayOccurrence(holidayOccurrence);
+        
+        // Calculate and set year stem-branch if it's a lunar holiday
+        if (holidayOccurrence.Holiday.HasLunarDate)
+        {
+            try
+            {
+                var lunarYear = holidayOccurrence.GregorianDate.Year;
+                var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
+                var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
+                
+                var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                var yearPrefix = currentCulture switch
+                {
+                    "vi" => "Năm",
+                    "zh" => "年",
+                    _ => "Year"
+                };
+                
+                localized.YearStemBranchFormatted = $"{yearPrefix} {yearStemBranchText}";
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to calculate year stem-branch for holiday: {ex.Message}", "CalendarViewModel.CreateLocalizedHolidayOccurrence");
+                // Leave YearStemBranchFormatted as null - will fall back to animal sign
+            }
+        }
+        
+        return localized;
+    }
+
     [RelayCommand]
     async Task YearSelectedAsync()
     {
@@ -1084,10 +1121,10 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
                     // Clear existing items instead of replacing collection
                     YearHolidays.Clear();
                     
-                    // Add new items one by one
+                    // Add new items one by one with year stem-branch information (T060)
                     foreach (var holiday in filteredHolidays)
                     {
-                        YearHolidays.Add(new LocalizedHolidayOccurrence(holiday));
+                        YearHolidays.Add(CreateLocalizedHolidayOccurrence(holiday));
                     }
                     
                 }
@@ -1168,9 +1205,10 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
 
             // CRITICAL iOS FIX: Create NEW collection instead of modifying existing one
             // This is atomic and prevents CALayer rendering crashes during collection updates
+            // T060: Use CreateLocalizedHolidayOccurrence to include year stem-branch
 
             var newCollection = new ObservableCollection<LocalizedHolidayOccurrence>(
-                upcomingHolidays.Select(h => new LocalizedHolidayOccurrence(h))
+                upcomingHolidays.Select(h => CreateLocalizedHolidayOccurrence(h))
             );
 
             // Replace entire collection reference on main thread - atomic operation

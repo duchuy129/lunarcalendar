@@ -12,6 +12,13 @@ namespace LunarCalendar.MobileApp.Models;
 public partial class LocalizedHolidayOccurrence : ObservableObject
 {
     public HolidayOccurrence HolidayOccurrence { get; }
+    
+    /// <summary>
+    /// Optional year stem-branch formatted string (e.g., "Năm Ất Tỵ" or "Year Yi Si (Snake)")
+    /// Set by ViewModels that have access to ISexagenaryService
+    /// </summary>
+    [ObservableProperty]
+    private string? _yearStemBranchFormatted;
 
     public LocalizedHolidayOccurrence(HolidayOccurrence holidayOccurrence)
     {
@@ -62,9 +69,15 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
                 Holiday.LunarDay, 
                 Holiday.LunarMonth);
 
-            // Add animal sign for all lunar holidays
-            if (!string.IsNullOrEmpty(AnimalSign))
+            // T060: Use full stem-branch year if available (e.g., "Năm Ất Tỵ")
+            // Otherwise fall back to animal sign only
+            if (!string.IsNullOrWhiteSpace(YearStemBranchFormatted))
             {
+                lunarText += $" - {YearStemBranchFormatted}";
+            }
+            else if (!string.IsNullOrEmpty(AnimalSign))
+            {
+                // Fallback to animal sign only (backward compatibility)
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(AnimalSign);
                 lunarText += $" - {AppResources.YearOfThe} {localizedAnimalSign}";
             }
