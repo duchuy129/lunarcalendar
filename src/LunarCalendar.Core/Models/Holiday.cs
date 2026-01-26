@@ -26,6 +26,7 @@ public class HolidayOccurrence
     public Holiday Holiday { get; set; } = null!;
     public DateTime GregorianDate { get; set; }
     public string AnimalSign { get; set; } = string.Empty;
+    public int LunarYear { get; set; } // Added: Stores the correct lunar year for stem-branch calculation
 
     // Computed properties for iOS compatibility - avoids nested bindings
     public bool HasLunarDate => Holiday?.HasLunarDate ?? false;

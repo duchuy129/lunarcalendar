@@ -157,26 +157,42 @@ public partial class HolidayDetailViewModel : BaseViewModel
         {
             try
             {
-                // Get the lunar year from the Gregorian date
-                // For dates before Lunar New Year, use previous year
-                var lunarYear = holidayOccurrence.GregorianDate.Year;
-                
-                // Get year stem-branch from sexagenary service
-                var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
-                
-                // Format using the shared helper for consistency
-                var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
-                
-                // Vietnamese: "Năm Ất Tỵ", English: "Year Yi Si (Snake)", Chinese: "年乙巳"
-                var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                var yearPrefix = currentCulture switch
+                // CRITICAL: Get the correct lunar year by converting the Gregorian date
+                // This handles cases where Gregorian January/February falls in the previous lunar year
+                var lunarDates = await _calendarService.GetMonthLunarDatesAsync(
+                    holidayOccurrence.GregorianDate.Year,
+                    holidayOccurrence.GregorianDate.Month);
+
+                var lunarDate = lunarDates.FirstOrDefault(ld =>
+                    ld.GregorianDate.Date == holidayOccurrence.GregorianDate.Date);
+
+                if (lunarDate != null)
                 {
-                    "vi" => "Năm",
-                    "zh" => "年",
-                    _ => "Year"
-                };
-                
-                AnimalSignDisplay = $" - {yearPrefix} {yearStemBranchText}";
+                    // Use the actual lunar year from the converted date
+                    var lunarYear = lunarDate.LunarYear;
+                    
+                    // Get year stem-branch from sexagenary service
+                    var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
+                    
+                    // Format using the shared helper for consistency
+                    var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
+                    
+                    // Vietnamese: "Năm Ất Tỵ", English: "Year Yi Si (Snake)", Chinese: "年乙巳"
+                    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                    var yearPrefix = currentCulture switch
+                    {
+                        "vi" => "Năm",
+                        "zh" => "年",
+                        _ => "Year"
+                    };
+                    
+                    AnimalSignDisplay = $" - {yearPrefix} {yearStemBranchText}";
+                }
+                else
+                {
+                    // Fallback if lunar date not found
+                    AnimalSignDisplay = string.Empty;
+                }
             }
             catch (Exception ex)
             {
@@ -256,10 +272,10 @@ public partial class HolidayDetailViewModel : BaseViewModel
             }
             LunarDateFormatted = lunarText;
 
-            // T060: Update year stem-branch display (same logic as InitializeAsync)
+            // T060: Update year stem-branch display (use stored lunar year)
             try
             {
-                var lunarYear = HolidayOccurrence.GregorianDate.Year;
+                var lunarYear = HolidayOccurrence.LunarYear; // Use the stored lunar year from holiday calculation
                 var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
                 var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
                 

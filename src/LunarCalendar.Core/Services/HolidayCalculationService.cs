@@ -39,7 +39,8 @@ public class HolidayCalculationService : IHolidayCalculationService
                 {
                     Holiday = holiday,
                     GregorianDate = gregorianDate,
-                    AnimalSign = lunarInfo.AnimalSign
+                    AnimalSign = lunarInfo.AnimalSign,
+                    LunarYear = lunarInfo.LunarYear // Added: Store the correct lunar year
                 });
             }
             // Handle Lunar-based holidays
@@ -89,7 +90,8 @@ public class HolidayCalculationService : IHolidayCalculationService
                             {
                                 Holiday = holiday,
                                 GregorianDate = gregorianDate30,
-                                AnimalSign = lunarInfo30.AnimalSign
+                                AnimalSign = lunarInfo30.AnimalSign,
+                                LunarYear = lunarInfo30.LunarYear // Added: Store the correct lunar year
                             });
                         }
                     }
@@ -120,7 +122,8 @@ public class HolidayCalculationService : IHolidayCalculationService
                     {
                         Holiday = holiday,
                         GregorianDate = gregorianDate,
-                        AnimalSign = lunarInfo.AnimalSign
+                        AnimalSign = lunarInfo.AnimalSign,
+                        LunarYear = lunarInfo.LunarYear // Added: Store the correct lunar year
                     });
                 }
             }
@@ -211,7 +214,8 @@ public class HolidayCalculationService : IHolidayCalculationService
                     {
                         Holiday = holiday,
                         GregorianDate = gregorianDate,
-                        AnimalSign = lunarInfo.AnimalSign
+                        AnimalSign = lunarInfo.AnimalSign,
+                        LunarYear = lunarInfo.LunarYear // Added: Store the correct lunar year
                     });
                 }
             }

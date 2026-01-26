@@ -906,7 +906,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         {
             try
             {
-                var lunarYear = holidayOccurrence.GregorianDate.Year;
+                var lunarYear = holidayOccurrence.LunarYear; // Use the stored lunar year from holiday calculation
                 var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
                 var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
                 
