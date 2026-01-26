@@ -35,41 +35,59 @@ This document outlines the development roadmap for Phases 2 and 3, focusing on a
 ### Sprint 9: Sexagenary Cycle Foundation (2 weeks)
 
 #### Backend Tasks
-- [ ] Research and implement Sexagenary cycle (Can Chi / 干支) calculation algorithm
-- [ ] Create data models for:
-  - 10 Heavenly Stems (Thiên Can / 天干): Giáp, Ất, Bính, Đinh, Mậu, Kỷ, Canh, Tân, Nhâm, Quý
-  - 12 Earthly Branches (Địa Chi / 地支): Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi
-  - Five elements (Ngũ hành / 五行): Metal, Wood, Water, Fire, Earth
-- [ ] Implement calculation for:
-  - Year stem-branch (Năm Can Chi)
-  - Month stem-branch (Tháng Can Chi)
-  - Day stem-branch (Ngày Can Chi)
-  - Hour stem-branch (Giờ Can Chi)
-- [ ] Create API endpoints:
-  - `GET /api/calendar/sexagenary/{date}` - Get full sexagenary info for a date
-  - `GET /api/calendar/year-info/{year}` - Get year's zodiac animal and element
-- [ ] Write comprehensive unit tests for cycle calculations
-- [ ] Add localization support for stem-branch names (Vietnamese, Chinese, English)
+- [x] **T041**: Research and implement Sexagenary cycle (Can Chi / 干支) calculation algorithm ✅
+- [x] **T042**: Create data models for:
+  - [x] 10 Heavenly Stems (Thiên Can / 天干): Giáp, Ất, Bính, Đinh, Mậu, Kỷ, Canh, Tân, Nhâm, Quý ✅
+  - [x] 12 Earthly Branches (Địa Chi / 地支): Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi ✅
+  - [x] Five elements (Ngũ hành / 五行): Metal, Wood, Water, Fire, Earth ✅
+- [x] **T043**: Implement calculation for:
+  - [x] Year stem-branch (Năm Can Chi) ✅
+  - [x] Month stem-branch (Tháng Can Chi) ✅
+  - [x] Day stem-branch (Ngày Can Chi) - Empirically verified with JDN formula ✅
+  - [x] Hour stem-branch (Giờ Can Chi) ✅
+- [ ] **T044**: Create API endpoints:
+  - [ ] `GET /api/calendar/sexagenary/{date}` - Get full sexagenary info for a date
+  - [ ] `GET /api/calendar/year-info/{year}` - Get year's zodiac animal and element
+- [x] **T045**: Add localization support for stem-branch names (Vietnamese, Chinese, English) ✅
+- [ ] **T046**: Write comprehensive unit tests for cycle calculations (Backend)
+- [ ] **T047**: API integration testing with mobile app
+
+**Note**: Tasks T041-T043, T045 completed in Core library (offline-first architecture). API endpoints (T044) deferred to future sprint as mobile app operates offline with local calculations.
 
 #### Mobile Tasks
-- [ ] Create SexagenaryService for fetching cycle data
-- [ ] Design UI components for displaying:
-  - Daily stem-branch (Ngày Can Chi) on calendar cells
-  - Current day's full sexagenary info in header
-  - Visual element indicators (五行 symbols or colors)
-- [ ] Add "Today's Information" section showing:
-  - Date in Gregorian, Lunar, and Sexagenary formats
-  - Zodiac animal for the day
-  - Five element association
-- [ ] Implement caching for sexagenary data
-- [ ] Add educational tooltips explaining what stem-branch means
-- [ ] Test display on different screen sizes
+- [x] **T048**: Create SexagenaryService for fetching cycle data ✅
+- [x] **T049**: Implement day stem-branch calculation (Ngày Can Chi) ✅
+- [x] **T050**: Implement year stem-branch calculation (Năm Can Chi) ✅
+- [x] **T051**: Implement month stem-branch calculation (Tháng Can Chi) ✅
+- [x] **T052**: Update CalendarViewModel with today's Can Chi ✅
+- [x] **T053**: Design UI components for displaying:
+  - [x] Daily stem-branch (Ngày Can Chi) on calendar cells
+  - [x] Current day's full sexagenary info in header ✅
+  - [x] Visual element indicators (五行 symbols or colors) ✅
+- [x] **T054**: Add "Today's Information" section showing:
+  - [x] Date in Gregorian, Lunar, and Sexagenary formats ✅
+  - [x] Zodiac animal for the day ✅
+  - [x] Five element association ✅
+- [x] **T055**: Add language-specific formatting (Vietnamese, English, Chinese) ✅
+- [ ] **T056**: Write unit tests for day stem-branch calculation
+- [ ] **T057**: Write unit tests for year stem-branch calculation
+- [ ] **T058**: Write unit tests for month stem-branch calculation
+- [ ] **T059**: Write integration tests for sexagenary display
+- [ ] **T060**: Ensure stem-branch consistency across holiday pages
+  - [ ] Update HolidayDetailViewModel to show full year stem-branch (e.g., "Năm Ất Tỵ" instead of "Năm Tỵ")
+  - [ ] Update upcoming holidays year display in CalendarViewModel
+  - [ ] Update YearHolidaysViewModel to show full stem-branch format
+  - [ ] Reuse existing FormatYearStemBranch() helper method
+  - [ ] Test consistency across all three pages (Calendar, Holiday Detail, Year Holidays)
 
 #### Deliverables
 - ✅ Full sexagenary cycle calculation working for any date
-- ✅ Year, month, day, and hour stem-branch displayed
+- ✅ Year, month, day, and hour stem-branch displayed on calendar page
 - ✅ Users can see traditional Chinese/Vietnamese date representation
-- ✅ Educational information helps users understand the system
+- ✅ Language switching works correctly (Vietnamese, English, Chinese)
+- ✅ iOS initialization bug fixed - stem-branch displays on app launch
+- ⏳ Unit tests for calculation accuracy (T056-T059)
+- ⏳ Stem-branch consistency across all holiday pages (T060)
 
 ---
 
