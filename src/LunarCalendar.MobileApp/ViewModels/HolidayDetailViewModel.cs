@@ -104,7 +104,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
         if (holidayOccurrence.Holiday.HasLunarDate)
         {
             // This is a lunar-based holiday, use the holiday's lunar date with formatter
-            lunarDateText = DateFormatterHelper.FormatLunarDateWithLabel(
+            lunarDateText = DateFormatterHelper.FormatLunarDate(
                 holidayOccurrence.Holiday.LunarDay, 
                 holidayOccurrence.Holiday.LunarMonth);
             if (holidayOccurrence.Holiday.IsLeapMonth)
@@ -126,7 +126,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
                 if (lunarDate != null)
                 {
-                    lunarDateText = DateFormatterHelper.FormatLunarDateWithLabel(
+                    lunarDateText = DateFormatterHelper.FormatLunarDate(
                         lunarDate.LunarDay, 
                         lunarDate.LunarMonth);
                 }

@@ -141,10 +141,6 @@
                     <!-- Day Stem-Branch -->
                     <VerticalStackLayout Spacing="4"
                                         IsVisible="{Binding HasLunarDate}">
-                        <Label Text="{ext:Translate DayStemBranch}"
-                               FontSize="12"
-                               TextColor="{DynamicResource Gray600}"
-                               FontAttributes="Bold"/>
                         <Label Text="{Binding DayStemBranchDisplay}"
                                FontSize="16"
                                TextColor="{DynamicResource Gray900}"

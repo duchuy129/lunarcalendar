@@ -72,9 +72,13 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
         {
             if (!HasLunarDate) return string.Empty;
 
-            var lunarText = DateFormatterHelper.FormatLunarDateWithLabel(
-                Holiday.LunarDay, 
-                Holiday.LunarMonth);
+            // Use ActualLunarDay/ActualLunarMonth if available (fixes Giao Thừa 12/29 vs 12/30 issue)
+            var lunarDay = HolidayOccurrence.ActualLunarDay > 0 ? HolidayOccurrence.ActualLunarDay : Holiday.LunarDay;
+            var lunarMonth = HolidayOccurrence.ActualLunarMonth > 0 ? HolidayOccurrence.ActualLunarMonth : Holiday.LunarMonth;
+
+            var lunarText = DateFormatterHelper.FormatLunarDate(
+                lunarDay, 
+                lunarMonth);
 
             // T060: Use full stem-branch year if available (e.g., "Năm Ất Tỵ")
             // Otherwise fall back to animal sign only

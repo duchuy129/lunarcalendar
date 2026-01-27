@@ -40,7 +40,10 @@ public class HolidayCalculationService : IHolidayCalculationService
                     Holiday = holiday,
                     GregorianDate = gregorianDate,
                     AnimalSign = lunarInfo.AnimalSign,
-                    LunarYear = lunarInfo.LunarYear // Added: Store the correct lunar year
+                    LunarYear = lunarInfo.LunarYear,
+                    // Gregorian holidays don't have actual lunar dates - leave as 0
+                    ActualLunarMonth = 0,
+                    ActualLunarDay = 0
                 });
             }
             // Handle Lunar-based holidays
@@ -91,7 +94,9 @@ public class HolidayCalculationService : IHolidayCalculationService
                                 Holiday = holiday,
                                 GregorianDate = gregorianDate30,
                                 AnimalSign = lunarInfo30.AnimalSign,
-                                LunarYear = lunarInfo30.LunarYear // Added: Store the correct lunar year
+                                LunarYear = lunarInfo30.LunarYear,
+                                ActualLunarMonth = lunarInfo30.LunarMonth, // Store actual lunar month
+                                ActualLunarDay = lunarInfo30.LunarDay // Store actual lunar day (30)
                             });
                         }
                     }
@@ -123,7 +128,9 @@ public class HolidayCalculationService : IHolidayCalculationService
                         Holiday = holiday,
                         GregorianDate = gregorianDate,
                         AnimalSign = lunarInfo.AnimalSign,
-                        LunarYear = lunarInfo.LunarYear // Added: Store the correct lunar year
+                        LunarYear = lunarInfo.LunarYear,
+                        ActualLunarMonth = lunarInfo.LunarMonth, // Store actual lunar month
+                        ActualLunarDay = lunarInfo.LunarDay // Store actual lunar day (may be 29 instead of 30)
                     });
                 }
             }
@@ -215,7 +222,9 @@ public class HolidayCalculationService : IHolidayCalculationService
                         Holiday = holiday,
                         GregorianDate = gregorianDate,
                         AnimalSign = lunarInfo.AnimalSign,
-                        LunarYear = lunarInfo.LunarYear // Added: Store the correct lunar year
+                        LunarYear = lunarInfo.LunarYear,
+                        ActualLunarMonth = lunarInfo.LunarMonth, // Store actual lunar month
+                        ActualLunarDay = lunarInfo.LunarDay // Store actual lunar day
                     });
                 }
             }

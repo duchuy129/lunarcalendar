@@ -183,7 +183,7 @@
                                                Padding="20">
                                 <Label Text="{x:Static strings:AppResources.NoHolidaysFound}"
                                       FontSize="14"
-                                      TextColor="{StaticResource Gray600}"
+                                      TextColor="{DynamicResource Gray600}"
                                       HorizontalTextAlignment="Center"/>
                             </VerticalStackLayout>
                         </CollectionView.EmptyView>
@@ -255,11 +255,11 @@
                                         <Label Text="{Binding HolidayName}"
                                               FontSize="16"
                                               FontAttributes="Bold"
-                                              TextColor="{StaticResource Gray900}"/>
+                                              TextColor="{DynamicResource Gray900}"/>
 
                                         <Label Text="{Binding GregorianDateFormatted}"
                                               FontSize="12"
-                                              TextColor="{StaticResource Gray600}"/>
+                                              TextColor="{DynamicResource Gray600}"/>
 
                                         <!-- Lunar date display -->
                                         <Label Text="{Binding LunarDateDisplay}"
@@ -272,14 +272,14 @@
                                         <!-- Day Stem-Branch display -->
                                         <Label Text="{Binding DayStemBranchFormatted}"
                                               FontSize="12"
-                                              TextColor="{StaticResource Gray700}"
+                                              TextColor="{DynamicResource Gray700}"
                                               FontAttributes="Italic"
                                               Margin="0,2,0,0"
                                               IsVisible="{Binding HasLunarDate}"/>
 
                                         <Label Text="{Binding HolidayDescription}"
                                               FontSize="11"
-                                              TextColor="{StaticResource Gray500}"
+                                              TextColor="{DynamicResource Gray500}"
                                               LineBreakMode="WordWrap"/>
                                     </VerticalStackLayout>
                                 </Grid>

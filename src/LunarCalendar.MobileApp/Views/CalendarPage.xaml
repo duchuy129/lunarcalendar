@@ -221,16 +221,6 @@
                            FontAttributes="None"
                            TextColor="#F0FFFFFF"
                            VerticalOptions="Center"/>
-                    
-                    <!-- Info Icon for tooltip/explanation -->
-                    <Label Text="ⓘ"
-                           FontSize="14"
-                           TextColor="#C0FFFFFF"
-                           VerticalOptions="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ShowSexagenaryInfoCommand}"/>
-                        </Label.GestureRecognizers>
-                    </Label>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Border>
