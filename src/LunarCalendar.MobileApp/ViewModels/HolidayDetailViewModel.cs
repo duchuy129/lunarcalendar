@@ -13,14 +13,19 @@ public partial class HolidayDetailViewModel : BaseViewModel
 {
     private readonly ICalendarService _calendarService;
     private readonly ILogService _logService;
+    private readonly Core.Services.ISexagenaryService _sexagenaryService;
 
     [ObservableProperty]
     private bool _showCulturalBackground = true;
 
-    public HolidayDetailViewModel(ICalendarService calendarService, ILogService logService)
+    public HolidayDetailViewModel(
+        ICalendarService calendarService, 
+        ILogService logService,
+        Core.Services.ISexagenaryService sexagenaryService)
     {
         _calendarService = calendarService;
         _logService = logService;
+        _sexagenaryService = sexagenaryService;
 
         // Initialize settings
         ShowCulturalBackground = SettingsViewModel.GetShowCulturalBackground();
@@ -48,6 +53,9 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
     [ObservableProperty]
     private string _animalSignDisplay = string.Empty;
+
+    [ObservableProperty]
+    private string _dayStemBranchDisplay = string.Empty;
 
     [ObservableProperty]
     private bool _isPublicHoliday;
@@ -96,7 +104,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
         if (holidayOccurrence.Holiday.HasLunarDate)
         {
             // This is a lunar-based holiday, use the holiday's lunar date with formatter
-            lunarDateText = DateFormatterHelper.FormatLunarDateWithLabel(
+            lunarDateText = DateFormatterHelper.FormatLunarDate(
                 holidayOccurrence.Holiday.LunarDay, 
                 holidayOccurrence.Holiday.LunarMonth);
             if (holidayOccurrence.Holiday.IsLeapMonth)
@@ -118,7 +126,7 @@ public partial class HolidayDetailViewModel : BaseViewModel
 
                 if (lunarDate != null)
                 {
-                    lunarDateText = DateFormatterHelper.FormatLunarDateWithLabel(
+                    lunarDateText = DateFormatterHelper.FormatLunarDate(
                         lunarDate.LunarDay, 
                         lunarDate.LunarMonth);
                 }
@@ -146,12 +154,73 @@ public partial class HolidayDetailViewModel : BaseViewModel
             _ => string.Empty
         };
 
-        // Set animal sign display for all lunar holidays - localized version
-        if (!string.IsNullOrEmpty(holidayOccurrence.AnimalSign) &&
-            holidayOccurrence.Holiday.HasLunarDate)
+        // T060: Display full stem-branch (e.g., "Năm Ất Tỵ") instead of just animal sign
+        // Calculate year and day stem-branch from the Gregorian date
+        if (holidayOccurrence.Holiday.HasLunarDate)
         {
-            var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(holidayOccurrence.AnimalSign);
-            AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";
+            try
+            {
+                // CRITICAL: Get the correct lunar year by converting the Gregorian date
+                // This handles cases where Gregorian January/February falls in the previous lunar year
+                var lunarDates = await _calendarService.GetMonthLunarDatesAsync(
+                    holidayOccurrence.GregorianDate.Year,
+                    holidayOccurrence.GregorianDate.Month);
+
+                var lunarDate = lunarDates.FirstOrDefault(ld =>
+                    ld.GregorianDate.Date == holidayOccurrence.GregorianDate.Date);
+
+                if (lunarDate != null)
+                {
+                    // Use the actual lunar year from the converted date
+                    var lunarYear = lunarDate.LunarYear;
+                    
+                    // Get year stem-branch from sexagenary service
+                    var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
+                    
+                    // Format using the shared helper for consistency
+                    var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
+                    
+                    // Vietnamese: "Năm Ất Tỵ", English: "Year Yi Si (Snake)", Chinese: "年乙巳"
+                    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                    var yearPrefix = currentCulture switch
+                    {
+                        "vi" => "Năm",
+                        "zh" => "年",
+                        _ => "Year"
+                    };
+                    
+                    AnimalSignDisplay = $" - {yearPrefix} {yearStemBranchText}";
+                    
+                    // Calculate and set day stem-branch (only for lunar dates)
+                    var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(holidayOccurrence.GregorianDate);
+                    DayStemBranchDisplay = SexagenaryFormatterHelper.FormatDayStemBranch(
+                        sexagenaryInfo.DayStem, 
+                        sexagenaryInfo.DayBranch);
+                }
+                else
+                {
+                    // Fallback if lunar date not found
+                    AnimalSignDisplay = string.Empty;
+                    DayStemBranchDisplay = string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to calculate stem-branch: {ex.Message}", "HolidayDetailViewModel.InitializeAsync");
+                
+                // Fallback to original animal sign display
+                if (!string.IsNullOrEmpty(holidayOccurrence.AnimalSign))
+                {
+                    var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(holidayOccurrence.AnimalSign);
+                    AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";
+                }
+                else
+                {
+                    AnimalSignDisplay = string.Empty;
+                }
+                
+                DayStemBranchDisplay = string.Empty;
+            }
         }
         else
         {
@@ -215,15 +284,41 @@ public partial class HolidayDetailViewModel : BaseViewModel
             }
             LunarDateFormatted = lunarText;
 
-            // Update animal sign with localized version for all lunar holidays
-            if (!string.IsNullOrEmpty(HolidayOccurrence.AnimalSign))
+            // T060: Update year and day stem-branch display (use stored lunar year)
+            try
             {
-                var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(HolidayOccurrence.AnimalSign);
-                AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";
+                var lunarYear = HolidayOccurrence.LunarYear; // Use the stored lunar year from holiday calculation
+                var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
+                var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
+                
+                var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                var yearPrefix = currentCulture switch
+                {
+                    "vi" => "Năm",
+                    "zh" => "年",
+                    _ => "Year"
+                };
+                
+                AnimalSignDisplay = $" - {yearPrefix} {yearStemBranchText}";
+                
+                // Update day stem-branch with new language
+                var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(HolidayOccurrence.GregorianDate);
+                DayStemBranchDisplay = SexagenaryFormatterHelper.FormatDayStemBranch(
+                    sexagenaryInfo.DayStem, 
+                    sexagenaryInfo.DayBranch);
             }
-            else
+            catch
             {
-                AnimalSignDisplay = string.Empty;
+                // Fallback to animal sign only
+                if (!string.IsNullOrEmpty(HolidayOccurrence.AnimalSign))
+                {
+                    var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(HolidayOccurrence.AnimalSign);
+                    AnimalSignDisplay = $" - {AppResources.YearOfThe} {localizedAnimalSign}";
+                }
+                else
+                {
+                    AnimalSignDisplay = string.Empty;
+                }
             }
 
             LunarDateWithAnimalSign = lunarText + AnimalSignDisplay;

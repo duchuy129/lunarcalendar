@@ -20,6 +20,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
     private readonly IConnectivityService _connectivityService;
     private readonly ISyncService _syncService;
     private readonly ILogService _logService;
+    private readonly Core.Services.ISexagenaryService _sexagenaryService;
 
     private bool _disposed = false;
 
@@ -31,6 +32,12 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
 
     [ObservableProperty]
     private string _todayLunarDisplay = "Loading...";
+
+    [ObservableProperty]
+    private string _todayStemBranch = string.Empty;
+
+    [ObservableProperty]
+    private Color _todayElementColor = Colors.Gray;
 
     [ObservableProperty]
     private ObservableCollection<CalendarDay> _calendarDays = new();
@@ -130,7 +137,8 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         IHapticService hapticService,
         IConnectivityService connectivityService,
         ISyncService syncService,
-        ILogService logService)
+        ILogService logService,
+        Core.Services.ISexagenaryService sexagenaryService)
     {
         _calendarService = calendarService;
         _userModeService = userModeService;
@@ -139,6 +147,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         _connectivityService = connectivityService;
         _syncService = syncService;
         _logService = logService;
+        _sexagenaryService = sexagenaryService;
         
         _logService.LogInfo("CalendarViewModel initialized", "CalendarViewModel");
 
@@ -230,29 +239,40 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             var upcomingSnapshot = UpcomingHolidays.ToList();
             var yearSnapshot = YearHolidays.ToList();
             
-            // Refresh all localized holiday occurrences in upcoming holidays
-            foreach (var holiday in upcomingSnapshot)
+            // T060: Recreate localized holiday occurrences to update year stem-branch with new language
+            // Clear and rebuild collections to apply language-specific formatting
+            UpcomingHolidays.Clear();
+            foreach (var localizedHoliday in upcomingSnapshot)
             {
                 try
                 {
-                    holiday?.RefreshLocalizedProperties();
+                    // Recreate with updated language-specific year stem-branch
+                    var updated = CreateLocalizedHolidayOccurrence(localizedHoliday.HolidayOccurrence);
+                    UpcomingHolidays.Add(updated);
                 }
                 catch (Exception)
                 {
-                    // Silent failure - individual holiday refresh is non-critical
+                    // Fallback: keep original with property refresh
+                    localizedHoliday?.RefreshLocalizedProperties();
+                    UpcomingHolidays.Add(localizedHoliday);
                 }
             }
 
-            // Refresh all localized holiday occurrences in year holidays
-            foreach (var holiday in yearSnapshot)
+            // T060: Same for year holidays
+            YearHolidays.Clear();
+            foreach (var localizedHoliday in yearSnapshot)
             {
                 try
                 {
-                    holiday?.RefreshLocalizedProperties();
+                    // Recreate with updated language-specific year stem-branch
+                    var updated = CreateLocalizedHolidayOccurrence(localizedHoliday.HolidayOccurrence);
+                    YearHolidays.Add(updated);
                 }
                 catch (Exception)
                 {
-                    // Silent failure - individual holiday refresh is non-critical
+                    // Fallback: keep original with property refresh
+                    localizedHoliday?.RefreshLocalizedProperties();
+                    YearHolidays.Add(localizedHoliday);
                 }
             }
         }
@@ -455,18 +475,21 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             var todayLunar = lunarDates.FirstOrDefault(ld => ld.GregorianDate.Date == DateTime.Today);
             if (todayLunar != null)
             {
-                // Show lunar date with animal sign
-                // English: "11/15, Year of the Snake"
-                // Vietnamese: "Ngày 11 Tháng 15, Năm Tỵ"
-                var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
-                
+                // Calculate year stem-branch and format with animal sign
+                // English: "11/15, Year of the Yi Si (Snake)"
+                // Vietnamese: "Ngày 11 Tháng 15, Năm Ất Tỵ"
+                var (yearStem, yearBranch) = Core.Services.SexagenaryCalculator.CalculateYearStemBranch(todayLunar.LunarYear);
+                var localizedYearName = FormatYearStemBranch(yearStem, yearBranch);
                 
                 TodayLunarDisplay = DateFormatterHelper.FormatLunarDateWithYear(
                     todayLunar.LunarDay, 
                     todayLunar.LunarMonth, 
-                    localizedAnimalSign);
+                    localizedYearName);
                 
             }
+
+            // Load today's stem-branch (Can Chi) - CRITICAL: Load on initial calendar load
+            await LoadTodaySexagenaryInfoAsync();
 
             // Create calendar days
             var days = new List<CalendarDay>();
@@ -570,20 +593,229 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             
             if (todayLunar != null)
             {
-                var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(todayLunar.AnimalSign);
-                
+                // Calculate year stem-branch and format with animal sign
+                var (yearStem, yearBranch) = Core.Services.SexagenaryCalculator.CalculateYearStemBranch(todayLunar.LunarYear);
+                var localizedYearName = FormatYearStemBranch(yearStem, yearBranch);
                 
                 TodayLunarDisplay = DateFormatterHelper.FormatLunarDateWithYear(
                     todayLunar.LunarDay, 
                     todayLunar.LunarMonth, 
-                    localizedAnimalSign);
+                    localizedYearName);
                 
             }
+            
+            // Load today's stem-branch (Can Chi)
+            await LoadTodaySexagenaryInfoAsync();
         }
         catch (Exception ex)
         {
             _logService.LogError("Failed to load today's lunar display", ex, "CalendarViewModel.LoadTodayLunarDisplay");
         }
+    }
+
+    /// <summary>
+    /// Load today's stem-branch (Can Chi / 干支) information
+    /// </summary>
+    private async Task LoadTodaySexagenaryInfoAsync()
+    {
+        try
+        {
+            var today = DateTime.Today;
+            var sexagenaryInfo = await Task.Run(() => _sexagenaryService.GetSexagenaryInfo(today));
+            
+            // Format stem-branch display based on current language
+            var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            
+            string stemName, branchName;
+            
+            if (currentCulture == "vi")
+            {
+                // Vietnamese names with "Ngày" prefix
+                stemName = GetVietnameseStemName(sexagenaryInfo.DayStem);
+                branchName = GetVietnameseBranchName(sexagenaryInfo.DayBranch);
+                TodayStemBranch = $"Ngày {stemName} {branchName}";
+            }
+            else if (currentCulture == "zh")
+            {
+                // Chinese characters with 日 prefix (meaning "day")
+                TodayStemBranch = $"日{sexagenaryInfo.GetDayChineseString()}";
+            }
+            else
+            {
+                // English names with "Day" prefix
+                stemName = sexagenaryInfo.DayStem.ToString();
+                branchName = sexagenaryInfo.DayBranch.ToString();
+                TodayStemBranch = $"Day {stemName} {branchName}";
+            }
+            
+            // Set element color for visual indicator
+            TodayElementColor = GetElementColor(sexagenaryInfo.DayElement);
+            
+            _logService.LogInfo($"Today's stem-branch: {TodayStemBranch}", "CalendarViewModel.LoadTodaySexagenaryInfo");
+        }
+        catch (Exception ex)
+        {
+            _logService.LogError("Failed to load today's stem-branch", ex, "CalendarViewModel.LoadTodaySexagenaryInfo");
+            TodayStemBranch = "—";
+            TodayElementColor = Colors.Gray;
+        }
+    }
+
+    /// <summary>
+    /// Get Vietnamese name for heavenly stem
+    /// </summary>
+    private string GetVietnameseStemName(Core.Models.HeavenlyStem stem)
+    {
+        return stem switch
+        {
+            Core.Models.HeavenlyStem.Jia => "Giáp",
+            Core.Models.HeavenlyStem.Yi => "Ất",
+            Core.Models.HeavenlyStem.Bing => "Bính",
+            Core.Models.HeavenlyStem.Ding => "Đinh",
+            Core.Models.HeavenlyStem.Wu => "Mậu",
+            Core.Models.HeavenlyStem.Ji => "Kỷ",
+            Core.Models.HeavenlyStem.Geng => "Canh",
+            Core.Models.HeavenlyStem.Xin => "Tân",
+            Core.Models.HeavenlyStem.Ren => "Nhâm",
+            Core.Models.HeavenlyStem.Gui => "Quý",
+            _ => stem.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get Vietnamese name for earthly branch
+    /// </summary>
+    private string GetVietnameseBranchName(Core.Models.EarthlyBranch branch)
+    {
+        return branch switch
+        {
+            Core.Models.EarthlyBranch.Zi => "Tý",
+            Core.Models.EarthlyBranch.Chou => "Sửu",
+            Core.Models.EarthlyBranch.Yin => "Dần",
+            Core.Models.EarthlyBranch.Mao => "Mão",
+            Core.Models.EarthlyBranch.Chen => "Thìn",
+            Core.Models.EarthlyBranch.Si => "Tỵ",
+            Core.Models.EarthlyBranch.Wu => "Ngọ",
+            Core.Models.EarthlyBranch.Wei => "Mùi",
+            Core.Models.EarthlyBranch.Shen => "Thân",
+            Core.Models.EarthlyBranch.You => "Dậu",
+            Core.Models.EarthlyBranch.Xu => "Tuất",
+            Core.Models.EarthlyBranch.Hai => "Hợi",
+            _ => branch.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get color associated with Five Element
+    /// </summary>
+    private Color GetElementColor(Core.Models.FiveElement element)
+    {
+        return element switch
+        {
+            Core.Models.FiveElement.Wood => Color.FromArgb("#4CAF50"),    // Green
+            Core.Models.FiveElement.Fire => Color.FromArgb("#F44336"),     // Red
+            Core.Models.FiveElement.Earth => Color.FromArgb("#8D6E63"),    // Brown
+            Core.Models.FiveElement.Metal => Color.FromArgb("#9E9E9E"),    // Gray/Silver
+            Core.Models.FiveElement.Water => Color.FromArgb("#2196F3"),    // Blue
+            _ => Colors.Gray
+        };
+    }
+
+    /// <summary>
+    /// Format year stem-branch based on current language
+    /// Vietnamese: "Ất Tỵ" (just stem-branch)
+    /// English: "Yi Si (Snake)" (stem-branch with animal name)
+    /// </summary>
+    private string FormatYearStemBranch(Core.Models.HeavenlyStem stem, Core.Models.EarthlyBranch branch)
+    {
+        var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        
+        if (currentCulture == "vi")
+        {
+            // Vietnamese: Just stem + branch
+            var stemName = GetVietnameseStemName(stem);
+            var branchName = GetVietnameseBranchName(branch);
+            return $"{stemName} {branchName}";
+        }
+        else if (currentCulture == "zh")
+        {
+            // Chinese: Characters for stem + branch
+            return GetChineseStemName(stem) + GetChineseBranchName(branch);
+        }
+        else
+        {
+            // English: Stem + Branch (Animal name)
+            var animalName = GetAnimalNameFromBranch(branch);
+            return $"{stem} {branch} ({animalName})";
+        }
+    }
+
+    /// <summary>
+    /// Get Chinese character for heavenly stem
+    /// </summary>
+    private string GetChineseStemName(Core.Models.HeavenlyStem stem)
+    {
+        return stem switch
+        {
+            Core.Models.HeavenlyStem.Jia => "甲",
+            Core.Models.HeavenlyStem.Yi => "乙",
+            Core.Models.HeavenlyStem.Bing => "丙",
+            Core.Models.HeavenlyStem.Ding => "丁",
+            Core.Models.HeavenlyStem.Wu => "戊",
+            Core.Models.HeavenlyStem.Ji => "己",
+            Core.Models.HeavenlyStem.Geng => "庚",
+            Core.Models.HeavenlyStem.Xin => "辛",
+            Core.Models.HeavenlyStem.Ren => "壬",
+            Core.Models.HeavenlyStem.Gui => "癸",
+            _ => stem.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get Chinese character for earthly branch
+    /// </summary>
+    private string GetChineseBranchName(Core.Models.EarthlyBranch branch)
+    {
+        return branch switch
+        {
+            Core.Models.EarthlyBranch.Zi => "子",
+            Core.Models.EarthlyBranch.Chou => "丑",
+            Core.Models.EarthlyBranch.Yin => "寅",
+            Core.Models.EarthlyBranch.Mao => "卯",
+            Core.Models.EarthlyBranch.Chen => "辰",
+            Core.Models.EarthlyBranch.Si => "巳",
+            Core.Models.EarthlyBranch.Wu => "午",
+            Core.Models.EarthlyBranch.Wei => "未",
+            Core.Models.EarthlyBranch.Shen => "申",
+            Core.Models.EarthlyBranch.You => "酉",
+            Core.Models.EarthlyBranch.Xu => "戌",
+            Core.Models.EarthlyBranch.Hai => "亥",
+            _ => branch.ToString()
+        };
+    }
+
+    /// <summary>
+    /// Get animal name from earthly branch (English name for localization)
+    /// </summary>
+    private string GetAnimalNameFromBranch(Core.Models.EarthlyBranch branch)
+    {
+        // Return English animal name which will be localized by LocalizationHelper
+        return branch switch
+        {
+            Core.Models.EarthlyBranch.Zi => "Rat",
+            Core.Models.EarthlyBranch.Chou => "Ox",
+            Core.Models.EarthlyBranch.Yin => "Tiger",
+            Core.Models.EarthlyBranch.Mao => "Rabbit",
+            Core.Models.EarthlyBranch.Chen => "Dragon",
+            Core.Models.EarthlyBranch.Si => "Snake",
+            Core.Models.EarthlyBranch.Wu => "Horse",
+            Core.Models.EarthlyBranch.Wei => "Goat",
+            Core.Models.EarthlyBranch.Shen => "Monkey",
+            Core.Models.EarthlyBranch.You => "Rooster",
+            Core.Models.EarthlyBranch.Xu => "Dog",
+            Core.Models.EarthlyBranch.Hai => "Pig",
+            _ => "Snake" // Default fallback
+        };
     }
 
     private void UpdateUserModeText()
@@ -670,6 +902,51 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             // FIX: Notify that the collection has changed to force Picker refresh
             OnPropertyChanged(nameof(AvailableYears));
         }
+    }
+
+    /// <summary>
+    /// T060: Create LocalizedHolidayOccurrence with year and day stem-branch information
+    /// This ensures consistent year/day display across all pages (Calendar, Holiday Detail, Year Holidays)
+    /// </summary>
+    private LocalizedHolidayOccurrence CreateLocalizedHolidayOccurrence(HolidayOccurrence holidayOccurrence)
+    {
+        var localized = new LocalizedHolidayOccurrence(holidayOccurrence);
+        
+        // Calculate and set year stem-branch if it's a lunar holiday
+        if (holidayOccurrence.Holiday.HasLunarDate)
+        {
+            try
+            {
+                var lunarYear = holidayOccurrence.LunarYear; // Use the stored lunar year from holiday calculation
+                var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
+                var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
+                
+                var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                var yearPrefix = currentCulture switch
+                {
+                    "vi" => "Năm",
+                    "zh" => "年",
+                    _ => "Year"
+                };
+                
+                localized.YearStemBranchFormatted = $"{yearPrefix} {yearStemBranchText}";
+                
+                // Calculate and set day stem-branch (only for lunar dates)
+                var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(holidayOccurrence.GregorianDate);
+                var dayStemBranchText = SexagenaryFormatterHelper.FormatDayStemBranch(
+                    sexagenaryInfo.DayStem, 
+                    sexagenaryInfo.DayBranch);
+                
+                localized.DayStemBranchFormatted = dayStemBranchText;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to calculate stem-branch for holiday: {ex.Message}", "CalendarViewModel.CreateLocalizedHolidayOccurrence");
+                // Leave YearStemBranchFormatted and DayStemBranchFormatted as null - will fall back to animal sign
+            }
+        }
+        
+        return localized;
     }
 
     [RelayCommand]
@@ -798,6 +1075,35 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         }
     }
 
+    [RelayCommand]
+    async Task ShowSexagenaryInfoAsync()
+    {
+        // Add haptic feedback
+        _hapticService.PerformClick();
+
+        try
+        {
+            // Get localized strings for the dialog
+            var title = AppResources.WhatIsCanChiTitle ?? "What is Stem-Branch (Can Chi)?";
+            var message = AppResources.WhatIsCanChiMessage ?? 
+                "The Sexagenary Cycle (Can Chi / 干支) is a traditional Chinese system of 60 combinations formed by pairing 10 Heavenly Stems with 12 Earthly Branches. Each day, month, and year has its own stem-branch designation.\n\n" +
+                "This ancient system is used for:\n" +
+                "• Dating and timekeeping\n" +
+                "• Astrology and fortune-telling\n" +
+                "• Traditional medicine\n" +
+                "• Feng shui\n\n" +
+                "The current stem-branch represents today's position in this 60-day cycle.";
+            
+            var okButton = AppResources.OK ?? "OK";
+
+            await Application.Current.MainPage.DisplayAlert(title, message, okButton);
+        }
+        catch (Exception ex)
+        {
+            _logService.LogError("Failed to show sexagenary info", ex, "CalendarViewModel.ShowSexagenaryInfo");
+        }
+    }
+
     private async Task LoadYearHolidaysAsync()
     {
         // Prevent concurrent updates
@@ -834,10 +1140,10 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
                     // Clear existing items instead of replacing collection
                     YearHolidays.Clear();
                     
-                    // Add new items one by one
+                    // Add new items one by one with year stem-branch information (T060)
                     foreach (var holiday in filteredHolidays)
                     {
-                        YearHolidays.Add(new LocalizedHolidayOccurrence(holiday));
+                        YearHolidays.Add(CreateLocalizedHolidayOccurrence(holiday));
                     }
                     
                 }
@@ -918,9 +1224,10 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
 
             // CRITICAL iOS FIX: Create NEW collection instead of modifying existing one
             // This is atomic and prevents CALayer rendering crashes during collection updates
+            // T060: Use CreateLocalizedHolidayOccurrence to include year stem-branch
 
             var newCollection = new ObservableCollection<LocalizedHolidayOccurrence>(
-                upcomingHolidays.Select(h => new LocalizedHolidayOccurrence(h))
+                upcomingHolidays.Select(h => CreateLocalizedHolidayOccurrence(h))
             );
 
             // Replace entire collection reference on main thread - atomic operation

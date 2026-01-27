@@ -12,6 +12,20 @@ namespace LunarCalendar.MobileApp.Models;
 public partial class LocalizedHolidayOccurrence : ObservableObject
 {
     public HolidayOccurrence HolidayOccurrence { get; }
+    
+    /// <summary>
+    /// Optional year stem-branch formatted string (e.g., "Năm Ất Tỵ" or "Year Yi Si (Snake)")
+    /// Set by ViewModels that have access to ISexagenaryService
+    /// </summary>
+    [ObservableProperty]
+    private string? _yearStemBranchFormatted;
+
+    /// <summary>
+    /// Optional day stem-branch formatted string (e.g., "Ngày Nhâm Dần" or "Day Ren Yin (Tiger)")
+    /// Set by ViewModels that have access to ISexagenaryService. Only applies to lunar dates.
+    /// </summary>
+    [ObservableProperty]
+    private string? _dayStemBranchFormatted;
 
     public LocalizedHolidayOccurrence(HolidayOccurrence holidayOccurrence)
     {
@@ -58,13 +72,23 @@ public partial class LocalizedHolidayOccurrence : ObservableObject
         {
             if (!HasLunarDate) return string.Empty;
 
-            var lunarText = DateFormatterHelper.FormatLunarDateWithLabel(
-                Holiday.LunarDay, 
-                Holiday.LunarMonth);
+            // Use ActualLunarDay/ActualLunarMonth if available (fixes Giao Thừa 12/29 vs 12/30 issue)
+            var lunarDay = HolidayOccurrence.ActualLunarDay > 0 ? HolidayOccurrence.ActualLunarDay : Holiday.LunarDay;
+            var lunarMonth = HolidayOccurrence.ActualLunarMonth > 0 ? HolidayOccurrence.ActualLunarMonth : Holiday.LunarMonth;
 
-            // Add animal sign for all lunar holidays
-            if (!string.IsNullOrEmpty(AnimalSign))
+            var lunarText = DateFormatterHelper.FormatLunarDate(
+                lunarDay, 
+                lunarMonth);
+
+            // T060: Use full stem-branch year if available (e.g., "Năm Ất Tỵ")
+            // Otherwise fall back to animal sign only
+            if (!string.IsNullOrWhiteSpace(YearStemBranchFormatted))
             {
+                lunarText += $" - {YearStemBranchFormatted}";
+            }
+            else if (!string.IsNullOrEmpty(AnimalSign))
+            {
+                // Fallback to animal sign only (backward compatibility)
                 var localizedAnimalSign = LocalizationHelper.GetLocalizedAnimalSign(AnimalSign);
                 lunarText += $" - {AppResources.YearOfThe} {localizedAnimalSign}";
             }

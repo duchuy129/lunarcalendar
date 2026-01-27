@@ -133,6 +133,20 @@
                                FontAttributes="Bold"/>
                     </VerticalStackLayout>
 
+                    <!-- Separator (only show if day stem-branch exists) -->
+                    <BoxView HeightRequest="1"
+                             BackgroundColor="{DynamicResource Gray200}"
+                             IsVisible="{Binding HasLunarDate}"/>
+
+                    <!-- Day Stem-Branch -->
+                    <VerticalStackLayout Spacing="4"
+                                        IsVisible="{Binding HasLunarDate}">
+                        <Label Text="{Binding DayStemBranchDisplay}"
+                               FontSize="16"
+                               TextColor="{DynamicResource Gray900}"
+                               FontAttributes="Italic"/>
+                    </VerticalStackLayout>
+
                     <!-- Separator (only show if public holiday) -->
                     <BoxView HeightRequest="1"
                              BackgroundColor="{DynamicResource Gray200}"

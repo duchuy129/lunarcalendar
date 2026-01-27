@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -6,6 +7,7 @@ using LunarCalendar.Core.Models;
 using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Resources.Strings;
+using LunarCalendar.MobileApp.Helpers;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -14,6 +16,7 @@ public partial class YearHolidaysViewModel : ObservableObject, IDisposable
     private readonly IHolidayService _holidayService;
     private readonly ILogService _logService;
     private readonly IHapticService _hapticService;
+    private readonly Core.Services.ISexagenaryService _sexagenaryService;
     private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
     private volatile bool _isLanguageChanging = false;
     private bool _disposed = false;
@@ -36,11 +39,16 @@ public partial class YearHolidaysViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private bool _showCulturalBackground = true;
 
-    public YearHolidaysViewModel(IHolidayService holidayService, ILogService logService, IHapticService hapticService)
+    public YearHolidaysViewModel(
+        IHolidayService holidayService, 
+        ILogService logService, 
+        IHapticService hapticService,
+        Core.Services.ISexagenaryService sexagenaryService)
     {
         _holidayService = holidayService;
         _logService = logService;
         _hapticService = hapticService;
+        _sexagenaryService = sexagenaryService;
 
         // Initialize available years - wide range for year picker
         // Users can navigate to any year using previous/next buttons
@@ -200,6 +208,51 @@ public partial class YearHolidaysViewModel : ObservableObject, IDisposable
         }
     }
 
+    /// <summary>
+    /// T060: Create LocalizedHolidayOccurrence with year stem-branch information
+    /// This ensures consistent year display across all pages (Calendar, Holiday Detail, Year Holidays)
+    /// </summary>
+    private LocalizedHolidayOccurrence CreateLocalizedHolidayOccurrence(HolidayOccurrence holidayOccurrence)
+    {
+        var localized = new LocalizedHolidayOccurrence(holidayOccurrence);
+        
+        // Calculate and set year and day stem-branch if it's a lunar holiday
+        if (holidayOccurrence.Holiday.HasLunarDate)
+        {
+            try
+            {
+                var lunarYear = holidayOccurrence.LunarYear; // Use the stored lunar year from holiday calculation
+                var (yearStem, yearBranch, _) = _sexagenaryService.GetYearInfo(lunarYear);
+                var yearStemBranchText = SexagenaryFormatterHelper.FormatYearStemBranch(yearStem, yearBranch);
+                
+                var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                var yearPrefix = currentCulture switch
+                {
+                    "vi" => "Năm",
+                    "zh" => "年",
+                    _ => "Year"
+                };
+                
+                localized.YearStemBranchFormatted = $"{yearPrefix} {yearStemBranchText}";
+                
+                // Calculate and set day stem-branch (only for lunar dates)
+                var sexagenaryInfo = _sexagenaryService.GetSexagenaryInfo(holidayOccurrence.GregorianDate);
+                var dayStemBranchText = SexagenaryFormatterHelper.FormatDayStemBranch(
+                    sexagenaryInfo.DayStem, 
+                    sexagenaryInfo.DayBranch);
+                
+                localized.DayStemBranchFormatted = dayStemBranchText;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to calculate stem-branch for holiday: {ex.Message}", "YearHolidaysViewModel.CreateLocalizedHolidayOccurrence");
+                // Leave YearStemBranchFormatted and DayStemBranchFormatted as null - will fall back to animal sign
+            }
+        }
+        
+        return localized;
+    }
+
     private async Task LoadYearHolidaysAsync()
     {
         // Skip if language change is in progress
@@ -235,8 +288,9 @@ public partial class YearHolidaysViewModel : ObservableObject, IDisposable
 
             // CRITICAL iOS FIX: Create NEW ObservableCollection and replace entire reference
             // This is the SAME pattern used in CalendarViewModel.LoadUpcomingHolidaysAsync
+            // T060: Use CreateLocalizedHolidayOccurrence to include year stem-branch
             var newCollection = new ObservableCollection<LocalizedHolidayOccurrence>(
-                filteredHolidays.Select(h => new LocalizedHolidayOccurrence(h))
+                filteredHolidays.Select(h => CreateLocalizedHolidayOccurrence(h))
             );
 
             // Replace entire collection reference on main thread - atomic operation

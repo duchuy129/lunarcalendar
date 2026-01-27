@@ -375,6 +375,18 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
             }
         }
 
+        public static string WhatIsCanChiTitle {
+            get {
+                return ResourceManager.GetString("WhatIsCanChiTitle", resourceCulture);
+            }
+        }
+
+        public static string WhatIsCanChiMessage {
+            get {
+                return ResourceManager.GetString("WhatIsCanChiMessage", resourceCulture);
+            }
+        }
+
         public static string JustNow {
             get {
                 return ResourceManager.GetString("JustNow", resourceCulture);

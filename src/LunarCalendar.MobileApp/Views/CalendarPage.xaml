@@ -15,6 +15,7 @@
             <converters:IntToBoolConverter x:Key="IntToBoolConverter"/>
             <converters:MonthIndexConverter x:Key="MonthIndexConverter"/>
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -170,7 +171,7 @@
                 Margin="12,4,12,4"
                 Background="{DynamicResource TodayGreen}"
                 StrokeThickness="0"
-                HeightRequest="56">
+                HeightRequest="76">
             <Border.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
                     <On Platform="iOS" Value="16,10" />
@@ -186,21 +187,42 @@
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="18"/>
             </Border.StrokeShape>
-            <Label HorizontalOptions="Center"
-                   VerticalOptions="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{ext:Translate TodayLabel}"
-                              FontSize="19"
-                              FontAttributes="Bold"
-                              TextColor="White"/>
-                        <Span Text="{Binding TodayLunarDisplay}"
-                              FontSize="19"
-                              FontAttributes="Bold"
-                              TextColor="White"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="4">
+                <!-- Today + Lunar Date -->
+                <Label HorizontalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{ext:Translate TodayLabel}"
+                                  FontSize="19"
+                                  FontAttributes="Bold"
+                                  TextColor="White"/>
+                            <Span Text="{Binding TodayLunarDisplay}"
+                                  FontSize="19"
+                                  FontAttributes="Bold"
+                                  TextColor="White"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                
+                <!-- Stem-Branch (Can Chi) with Element Indicator -->
+                <HorizontalStackLayout HorizontalOptions="Center" 
+                                       Spacing="6">
+                    <!-- Five Element Color Indicator -->
+                    <Ellipse WidthRequest="10"
+                             HeightRequest="10"
+                             Fill="{Binding TodayElementColor}"
+                             VerticalOptions="Center"/>
+                    
+                    <!-- Stem-Branch Text (Can Chi / 干支) -->
+                    <Label Text="{Binding TodayStemBranch}"
+                           FontSize="14"
+                           FontAttributes="None"
+                           TextColor="#F0FFFFFF"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
         </Border>
 
         <!-- Day of Week Header - Fixed height for consistency -->
@@ -505,6 +527,14 @@
                                           TextColor="{DynamicResource LunarRed}"
                                           FontAttributes="Bold"
                                           Margin="0,4,0,0"
+                                          IsVisible="{Binding HasLunarDate}"/>
+
+                                    <!-- Day Stem-Branch display -->
+                                    <Label Text="{Binding DayStemBranchFormatted}"
+                                          FontSize="12"
+                                          TextColor="{DynamicResource Gray700}"
+                                          FontAttributes="Italic"
+                                          Margin="0,2,0,0"
                                           IsVisible="{Binding HasLunarDate}"/>
 
                                     <Label Text="{Binding HolidayDescription}"

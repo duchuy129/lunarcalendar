@@ -164,6 +164,9 @@
   <data name="LunarDate" xml:space="preserve">
     <value>Lịch Âm</value>
   </data>
+  <data name="DayStemBranch" xml:space="preserve">
+    <value>Can Chi Ngày</value>
+  </data>
   <data name="PublicHoliday" xml:space="preserve">
     <value>Ngày Lễ Chính Thức</value>
   </data>
@@ -670,5 +673,134 @@
   </data>
   <data name="NoHolidaysFound" xml:space="preserve">
     <value>Không tìm thấy lễ nào trong năm này</value>
+  </data>
+
+  <!-- Sexagenary Cycle (Can Chi / Stem-Branch) -->
+  <!-- Heavenly Stems - Vietnamese -->
+  <data name="HeavenlyStem_Jia" xml:space="preserve">
+    <value>Giáp</value>
+    <comment>甲 - Thiên Can thứ nhất</comment>
+  </data>
+  <data name="HeavenlyStem_Yi" xml:space="preserve">
+    <value>Ất</value>
+    <comment>乙 - Thiên Can thứ hai</comment>
+  </data>
+  <data name="HeavenlyStem_Bing" xml:space="preserve">
+    <value>Bính</value>
+    <comment>丙 - Thiên Can thứ ba</comment>
+  </data>
+  <data name="HeavenlyStem_Ding" xml:space="preserve">
+    <value>Đinh</value>
+    <comment>丁 - Thiên Can thứ tư</comment>
+  </data>
+  <data name="HeavenlyStem_Wu" xml:space="preserve">
+    <value>Mậu</value>
+    <comment>戊 - Thiên Can thứ năm</comment>
+  </data>
+  <data name="HeavenlyStem_Ji" xml:space="preserve">
+    <value>Kỷ</value>
+    <comment>己 - Thiên Can thứ sáu</comment>
+  </data>
+  <data name="HeavenlyStem_Geng" xml:space="preserve">
+    <value>Canh</value>
+    <comment>庚 - Thiên Can thứ bảy</comment>
+  </data>
+  <data name="HeavenlyStem_Xin" xml:space="preserve">
+    <value>Tân</value>
+    <comment>辛 - Thiên Can thứ tám</comment>
+  </data>
+  <data name="HeavenlyStem_Ren" xml:space="preserve">
+    <value>Nhâm</value>
+    <comment>壬 - Thiên Can thứ chín</comment>
+  </data>
+  <data name="HeavenlyStem_Gui" xml:space="preserve">
+    <value>Quý</value>
+    <comment>癸 - Thiên Can thứ mười</comment>
+  </data>
+
+  <!-- Earthly Branches / Zodiac Animals - Vietnamese -->
+  <data name="EarthlyBranch_Zi" xml:space="preserve">
+    <value>Tý</value>
+    <comment>子 - Địa Chi thứ nhất (Chuột)</comment>
+  </data>
+  <data name="EarthlyBranch_Chou" xml:space="preserve">
+    <value>Sửu</value>
+    <comment>丑 - Địa Chi thứ hai (Trâu)</comment>
+  </data>
+  <data name="EarthlyBranch_Yin" xml:space="preserve">
+    <value>Dần</value>
+    <comment>寅 - Địa Chi thứ ba (Dần)</comment>
+  </data>
+  <data name="EarthlyBranch_Mao" xml:space="preserve">
+    <value>Mão</value>
+    <comment>卯 - Địa Chi thứ tư (Mèo)</comment>
+  </data>
+  <data name="EarthlyBranch_Chen" xml:space="preserve">
+    <value>Thìn</value>
+    <comment>辰 - Địa Chi thứ năm (Rồng)</comment>
+  </data>
+  <data name="EarthlyBranch_Si" xml:space="preserve">
+    <value>Tỵ</value>
+    <comment>巳 - Địa Chi thứ sáu (Rắn)</comment>
+  </data>
+  <data name="EarthlyBranch_Wu" xml:space="preserve">
+    <value>Ngọ</value>
+    <comment>午 - Địa Chi thứ bảy (Ngựa)</comment>
+  </data>
+  <data name="EarthlyBranch_Wei" xml:space="preserve">
+    <value>Mùi</value>
+    <comment>未 - Địa Chi thứ tám (Dê)</comment>
+  </data>
+  <data name="EarthlyBranch_Shen" xml:space="preserve">
+    <value>Thân</value>
+    <comment>申 - Địa Chi thứ chín (Khỉ)</comment>
+  </data>
+  <data name="EarthlyBranch_You" xml:space="preserve">
+    <value>Dậu</value>
+    <comment>酉 - Địa Chi thứ mười (Gà)</comment>
+  </data>
+  <data name="EarthlyBranch_Xu" xml:space="preserve">
+    <value>Tuất</value>
+    <comment>戌 - Địa Chi thứ mười một (Chó)</comment>
+  </data>
+  <data name="EarthlyBranch_Hai" xml:space="preserve">
+    <value>Hợi</value>
+    <comment>亥 - Địa Chi thứ mười hai (Heo)</comment>
+  </data>
+
+  <!-- Five Elements - Vietnamese -->
+  <data name="FiveElement_Wood" xml:space="preserve">
+    <value>Mộc</value>
+    <comment>木</comment>
+  </data>
+  <data name="FiveElement_Fire" xml:space="preserve">
+    <value>Hỏa</value>
+    <comment>火</comment>
+  </data>
+  <data name="FiveElement_Earth" xml:space="preserve">
+    <value>Thổ</value>
+    <comment>土</comment>
+  </data>
+  <data name="FiveElement_Metal" xml:space="preserve">
+    <value>Kim</value>
+    <comment>金</comment>
+  </data>
+  <data name="FiveElement_Water" xml:space="preserve">
+    <value>Thủy</value>
+    <comment>水</comment>
+  </data>
+
+  <!-- Sexagenary Labels - Vietnamese -->
+  <data name="SexagenaryYear" xml:space="preserve">
+    <value>Năm</value>
+  </data>
+  <data name="SexagenaryMonth" xml:space="preserve">
+    <value>Tháng</value>
+  </data>
+  <data name="SexagenaryDay" xml:space="preserve">
+    <value>Ngày</value>
+  </data>
+  <data name="SexagenaryHour" xml:space="preserve">
+    <value>Giờ</value>
   </data>
 </root>
