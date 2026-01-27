@@ -103,10 +103,11 @@ public partial class HolidayDetailViewModel : BaseViewModel
         string lunarDateText;
         if (holidayOccurrence.Holiday.HasLunarDate)
         {
-            // This is a lunar-based holiday, use the holiday's lunar date with formatter
-            lunarDateText = DateFormatterHelper.FormatLunarDate(
-                holidayOccurrence.Holiday.LunarDay, 
-                holidayOccurrence.Holiday.LunarMonth);
+            // This is a lunar-based holiday, use actual lunar date if available (fixes Giao Thừa 12/29 vs 12/30)
+            var lunarDay = holidayOccurrence.ActualLunarDay > 0 ? holidayOccurrence.ActualLunarDay : holidayOccurrence.Holiday.LunarDay;
+            var lunarMonth = holidayOccurrence.ActualLunarMonth > 0 ? holidayOccurrence.ActualLunarMonth : holidayOccurrence.Holiday.LunarMonth;
+            
+            lunarDateText = DateFormatterHelper.FormatLunarDate(lunarDay, lunarMonth);
             if (holidayOccurrence.Holiday.IsLeapMonth)
             {
                 lunarDateText += " (Leap Month)";
