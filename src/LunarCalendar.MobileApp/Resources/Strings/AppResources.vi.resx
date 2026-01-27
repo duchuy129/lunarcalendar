@@ -164,6 +164,9 @@
   <data name="LunarDate" xml:space="preserve">
     <value>Lịch Âm</value>
   </data>
+  <data name="DayStemBranch" xml:space="preserve">
+    <value>Can Chi Ngày</value>
+  </data>
   <data name="PublicHoliday" xml:space="preserve">
     <value>Ngày Lễ Chính Thức</value>
   </data>

@@ -539,6 +539,14 @@
                                           Margin="0,4,0,0"
                                           IsVisible="{Binding HasLunarDate}"/>
 
+                                    <!-- Day Stem-Branch display -->
+                                    <Label Text="{Binding DayStemBranchFormatted}"
+                                          FontSize="12"
+                                          TextColor="{DynamicResource Gray700}"
+                                          FontAttributes="Italic"
+                                          Margin="0,2,0,0"
+                                          IsVisible="{Binding HasLunarDate}"/>
+
                                     <Label Text="{Binding HolidayDescription}"
                                           FontSize="11"
                                           TextColor="{DynamicResource Gray500}"
