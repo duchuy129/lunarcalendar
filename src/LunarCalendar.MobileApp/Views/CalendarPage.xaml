@@ -339,9 +339,11 @@
 
                         <VerticalStackLayout Spacing="2"
                                            Padding="2"
-                                           VerticalOptions="Center">
+                                           VerticalOptions="Center"
+                                           InputTransparent="True">
                             <!-- Gregorian Day -->
                             <Label Text="{Binding Day}"
+                                  InputTransparent="True"
                                   FontSize="16"
                                   FontAttributes="Bold"
                                   TextColor="{DynamicResource Gray900}"
@@ -364,6 +366,7 @@
 
                             <!-- Lunar Day -->
                             <Label Text="{Binding LunarDateDisplay}"
+                                  InputTransparent="True"
                                   FontSize="10"
                                   TextColor="{DynamicResource LunarRed}"
                                   HorizontalOptions="Center"
@@ -393,6 +396,7 @@
 
                             <!-- Holiday Name (if exists) -->
                             <Label Text="{Binding HolidayName}"
+                                  InputTransparent="True"
                                   FontSize="8"
                                   FontAttributes="Bold"
                                   TextColor="{Binding HolidayColor}"
