@@ -281,6 +281,12 @@
                            Background="#CCFFFFFF"
                            StrokeThickness="0"
                            HeightRequest="70">
+                        <!-- Add tap gesture recognizer for navigation -->
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CalendarViewModel}}, Path=SelectDateCommand}"
+                                CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
                         <!-- Subtle shadow for depth -->
                         <Border.Shadow>
                             <Shadow Brush="Black"

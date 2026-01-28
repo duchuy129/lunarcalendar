@@ -64,6 +64,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<YearHolidaysViewModel>();
 		builder.Services.AddTransient<HolidayDetailViewModel>();
 		builder.Services.AddTransient<SettingsViewModel>();
+		builder.Services.AddTransient<DateDetailViewModel>();
 
 		// Register Views
 		builder.Services.AddTransient<WelcomePage>();
@@ -71,6 +72,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<YearHolidaysPage>();
 		builder.Services.AddTransient<HolidayDetailPage>();
 		builder.Services.AddTransient<SettingsPage>();
+		builder.Services.AddTransient<DateDetailPage>();
 
 		return builder.Build();
 	}
