@@ -17,8 +17,8 @@ public class SexagenaryCalculatorTests
     // ========================================
     
     [Theory]
-    [InlineData(2026, 1, 25, HeavenlyStem.Ji, EarthlyBranch.Hai)] // Verified: Kỷ Hợi
-    [InlineData(2026, 1, 26, HeavenlyStem.Geng, EarthlyBranch.Zi)] // Verified: Canh Tý
+    [InlineData(2026, 1, 25, HeavenlyStem.Geng, EarthlyBranch.Xu)] // Verified: Canh Tuất
+    [InlineData(2026, 1, 26, HeavenlyStem.Xin, EarthlyBranch.Hai)] // Verified: Tân Hợi
     public void CalculateDayStemBranch_KnownDates_ShouldMatchReference(
         int year, int month, int day, 
         HeavenlyStem expectedStem, EarthlyBranch expectedBranch)
@@ -62,19 +62,19 @@ public class SexagenaryCalculatorTests
     public void CalculateDayStemBranch_ConsecutiveDays_ShouldFollowCycle()
     {
         // Arrange - Test that consecutive days follow the 60-day cycle
-        var startDate = new DateTime(2026, 1, 25); // Kỷ Hợi
+        var startDate = new DateTime(2026, 1, 25); // Canh Tuất
         
-        // Act & Assert - Next day should be Canh Tý
+        // Act & Assert - Next day should be Tân Hợi
         var day1 = SexagenaryCalculator.CalculateDayStemBranch(startDate);
         var day2 = SexagenaryCalculator.CalculateDayStemBranch(startDate.AddDays(1));
         
-        // Verify stem advances by 1 (Kỷ=5 -> Canh=6)
-        day1.Stem.Should().Be(HeavenlyStem.Ji);
-        day2.Stem.Should().Be(HeavenlyStem.Geng);
+        // Verify stem advances by 1 (Canh=6 -> Tân=7)
+        day1.Stem.Should().Be(HeavenlyStem.Geng);
+        day2.Stem.Should().Be(HeavenlyStem.Xin);
         
-        // Verify branch advances by 1 (Hợi=11 -> Tý=0)
-        day1.Branch.Should().Be(EarthlyBranch.Hai);
-        day2.Branch.Should().Be(EarthlyBranch.Zi);
+        // Verify branch advances by 1 (Tuất=10 -> Hợi=11)
+        day1.Branch.Should().Be(EarthlyBranch.Xu);
+        day2.Branch.Should().Be(EarthlyBranch.Hai);
     }
     
     [Fact]
