@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using LunarCalendar.Core.Models;
 using LunarCalendar.Core.Services;
 using LunarCalendar.MobileApp.Helpers;
+using LunarCalendar.MobileApp.Services;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 
@@ -213,15 +214,19 @@ public partial class DateDetailViewModel : BaseViewModel
     {
         try
         {
-            var holidays = await _holidayService.GetHolidaysForDateAsync(SelectedDate);
+            // Get holidays for the month and filter by date
+            var holidays = await _holidayService.GetHolidaysForMonthAsync(
+                SelectedDate.Year, SelectedDate.Month);
 
-            if (holidays.Any())
+            var dateHoliday = holidays.FirstOrDefault(h =>
+                h.GregorianDate.Date == SelectedDate.Date);
+
+            if (dateHoliday != null)
             {
                 HasHoliday = true;
-                var holiday = holidays.First();
-                HolidayName = holiday.Name;
-                HolidayDescription = holiday.Description ?? string.Empty;
-                HolidayColor = GetHolidayColor(holiday.Type);
+                HolidayName = dateHoliday.Holiday.Name;
+                HolidayDescription = dateHoliday.Holiday.Description ?? string.Empty;
+                HolidayColor = GetHolidayColor(dateHoliday.Holiday.Type);
             }
             else
             {
@@ -320,11 +325,10 @@ public partial class DateDetailViewModel : BaseViewModel
     {
         return type switch
         {
-            HolidayType.LunarNewYear => Color.FromArgb("#D32F2F"),    // Red
-            HolidayType.NationalHoliday => Color.FromArgb("#1976D2"), // Blue
+            HolidayType.MajorHoliday => Color.FromArgb("#D32F2F"),    // Red
             HolidayType.TraditionalFestival => Color.FromArgb("#F57C00"), // Orange
-            HolidayType.Memorial => Color.FromArgb("#7B1FA2"),        // Purple
-            HolidayType.SolarTerm => Color.FromArgb("#388E3C"),       // Green
+            HolidayType.SeasonalCelebration => Color.FromArgb("#388E3C"),       // Green
+            HolidayType.LunarSpecialDay => Color.FromArgb("#1976D2"), // Blue
             _ => Color.FromArgb("#757575")  // Gray
         };
     }
