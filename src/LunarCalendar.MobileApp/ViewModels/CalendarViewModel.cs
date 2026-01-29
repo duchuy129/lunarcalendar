@@ -634,11 +634,13 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
                 stemName = GetVietnameseStemName(sexagenaryInfo.DayStem);
                 branchName = GetVietnameseBranchName(sexagenaryInfo.DayBranch);
                 TodayStemBranch = $"Ngày {stemName} {branchName}";
+                _logService.LogInfo($"[VI] TodayStemBranch set to: '{TodayStemBranch}' (stem={stemName}, branch={branchName})", "CalendarViewModel.LoadTodaySexagenaryInfo");
             }
             else if (currentCulture == "zh")
             {
                 // Chinese characters with 日 prefix (meaning "day")
                 TodayStemBranch = $"日{sexagenaryInfo.GetDayChineseString()}";
+                _logService.LogInfo($"[ZH] TodayStemBranch set to: '{TodayStemBranch}'", "CalendarViewModel.LoadTodaySexagenaryInfo");
             }
             else
             {
@@ -646,6 +648,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
                 stemName = sexagenaryInfo.DayStem.ToString();
                 branchName = sexagenaryInfo.DayBranch.ToString();
                 TodayStemBranch = $"Day {stemName} {branchName}";
+                _logService.LogInfo($"[EN] TodayStemBranch set to: '{TodayStemBranch}' (stem={stemName}, branch={branchName})", "CalendarViewModel.LoadTodaySexagenaryInfo");
             }
             
             // Set element color for visual indicator
