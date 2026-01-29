@@ -1104,36 +1104,6 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         }
     }
 
-    /// <summary>
-    /// Navigate to DateDetailPage when a calendar cell is tapped
-    /// </summary>
-    [RelayCommand]
-    async Task SelectDateAsync(CalendarDay calendarDay)
-    {
-        if (calendarDay == null)
-            return;
-
-        // Add haptic feedback
-        _hapticService.PerformClick();
-
-        try
-        {
-            // Get DateDetailPage from DI
-            var dateDetailPage = Application.Current.Handler.MauiContext.Services
-                .GetRequiredService<Views.DateDetailPage>();
-
-            // Initialize ViewModel with selected date before navigation
-            await dateDetailPage.InitializeWithDateAsync(calendarDay.Date);
-
-            // Navigate
-            await Shell.Current.Navigation.PushAsync(dateDetailPage);
-        }
-        catch (Exception ex)
-        {
-            _logService.LogError("Failed to navigate to date detail", ex, "CalendarViewModel.SelectDate");
-        }
-    }
-
     private async Task LoadYearHolidaysAsync()
     {
         // Prevent concurrent updates
