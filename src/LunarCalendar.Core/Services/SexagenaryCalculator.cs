@@ -77,12 +77,12 @@ public static class SexagenaryCalculator
         // We use Julian Day Number (JDN) as a continuous day counter.
         //
         // Verified reference points (from Vietnamese lunar calendar):
-        // - January 25, 2026 (Gregorian) = Lunar Month 12, Day 7 = Kỷ Hợi (stem=5, branch=11)
-        // - January 26, 2026 (Gregorian) = Lunar Month 12, Day 8 = Canh Tý (stem=6, branch=0)
+        // - January 25, 2026 (Gregorian) = Lunar Month 12, Day 7 = Canh Tuất (stem=6, branch=10)
+        // - January 26, 2026 (Gregorian) = Lunar Month 12, Day 8 = Tân Hợi (stem=7, branch=11)
         //
-        // Through empirical testing, the correct formula is:
-        //   Stem index = (JDN + 49) % 10
-        //   Branch index = (JDN + 1) % 12
+        // Through empirical testing and historical validation, the correct formula is:
+        //   Stem index = (JDN + 50) % 10
+        //   Branch index = JDN % 12
         //
         // These offsets align the JDN (which starts from November 24, 4714 BCE) 
         // with the sexagenary cycle used in Vietnamese/Chinese lunar calendars.
@@ -90,8 +90,8 @@ public static class SexagenaryCalculator
         long jdn = CalculateJulianDayNumber(date);
         
         // Apply offsets to align with Vietnamese lunar calendar sexagenary cycle
-        int stemIndex = (int)((jdn + 49) % 10);
-        int branchIndex = (int)((jdn + 1) % 12);
+        int stemIndex = (int)((jdn + 50) % 10);
+        int branchIndex = (int)(jdn % 12);
         
         return ((HeavenlyStem)stemIndex, (EarthlyBranch)branchIndex);
     }

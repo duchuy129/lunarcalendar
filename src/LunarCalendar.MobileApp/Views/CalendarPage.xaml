@@ -171,11 +171,11 @@
                 Margin="12,4,12,4"
                 Background="{DynamicResource TodayGreen}"
                 StrokeThickness="0"
-                HeightRequest="76">
+                HeightRequest="86">
             <Border.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="16,10" />
-                    <On Platform="Android" Value="16,10" />
+                    <On Platform="iOS" Value="16,12" />
+                    <On Platform="Android" Value="16,12" />
                 </OnPlatform>
             </Border.Padding>
             <Border.Shadow>
@@ -189,7 +189,7 @@
             </Border.StrokeShape>
             <VerticalStackLayout HorizontalOptions="Center"
                                  VerticalOptions="Center"
-                                 Spacing="4">
+                                 Spacing="6">
                 <!-- Today + Lunar Date -->
                 <Label HorizontalOptions="Center">
                     <Label.FormattedText>
@@ -208,7 +208,7 @@
                 
                 <!-- Stem-Branch (Can Chi) with Element Indicator -->
                 <HorizontalStackLayout HorizontalOptions="Center" 
-                                       Spacing="6">
+                                       Spacing="8">
                     <!-- Five Element Color Indicator -->
                     <Ellipse WidthRequest="10"
                              HeightRequest="10"
@@ -217,10 +217,12 @@
                     
                     <!-- Stem-Branch Text (Can Chi / 干支) -->
                     <Label Text="{Binding TodayStemBranch}"
-                           FontSize="14"
+                           FontSize="15"
                            FontAttributes="None"
-                           TextColor="#F0FFFFFF"
-                           VerticalOptions="Center"/>
+                           FontFamily="OpenSansRegular"
+                           TextColor="White"
+                           VerticalOptions="Center"
+                           LineBreakMode="NoWrap"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Border>
@@ -281,6 +283,12 @@
                            Background="#CCFFFFFF"
                            StrokeThickness="0"
                            HeightRequest="70">
+                        <!-- Add tap gesture recognizer for navigation -->
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CalendarViewModel}}, Path=SelectDateCommand}"
+                                CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
                         <!-- Subtle shadow for depth -->
                         <Border.Shadow>
                             <Shadow Brush="Black"
@@ -333,9 +341,11 @@
 
                         <VerticalStackLayout Spacing="2"
                                            Padding="2"
-                                           VerticalOptions="Center">
+                                           VerticalOptions="Center"
+                                           InputTransparent="True">
                             <!-- Gregorian Day -->
                             <Label Text="{Binding Day}"
+                                  InputTransparent="True"
                                   FontSize="16"
                                   FontAttributes="Bold"
                                   TextColor="{DynamicResource Gray900}"
@@ -358,6 +368,7 @@
 
                             <!-- Lunar Day -->
                             <Label Text="{Binding LunarDateDisplay}"
+                                  InputTransparent="True"
                                   FontSize="10"
                                   TextColor="{DynamicResource LunarRed}"
                                   HorizontalOptions="Center"
@@ -387,6 +398,7 @@
 
                             <!-- Holiday Name (if exists) -->
                             <Label Text="{Binding HolidayName}"
+                                  InputTransparent="True"
                                   FontSize="8"
                                   FontAttributes="Bold"
                                   TextColor="{Binding HolidayColor}"
