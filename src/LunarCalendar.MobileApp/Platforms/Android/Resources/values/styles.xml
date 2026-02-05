@@ -4,5 +4,11 @@
         <!-- Use bottom navigation -->
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+        
+        <!-- Edge-to-edge display support for Android 15+ -->
+        <!-- Remove status bar and navigation bar colors to enable edge-to-edge -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 </resources>
