@@ -76,6 +76,11 @@
 		<AndroidCreatePackagePerAbi Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</AndroidCreatePackagePerAbi>
 		<EnableLLVM Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</EnableLLVM>
 		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</RunAOTCompilation>
+		
+		<!-- Android 15+ Support: Enable 16 KB page alignment for native libraries -->
+		<!-- This ensures compatibility with devices using 16 KB memory pages -->
+		<AndroidStripILAfterAOT Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidStripILAfterAOT>
+		<AndroidEnablePageAlignment Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidEnablePageAlignment>
 
 		<!-- iOS Release Settings - CRITICAL: Enable hybrid AOT + interpreter mode -->
 		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</RunAOTCompilation>
