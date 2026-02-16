@@ -1138,6 +1138,31 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         }
     }
 
+    [RelayCommand]
+    async Task NavigateToZodiacInfoAsync()
+    {
+        // Add haptic feedback
+        _hapticService.PerformClick();
+
+        try
+        {
+            // Get current year's zodiac animal
+            var animal = _zodiacService.GetAnimalForDate(CurrentMonth.Date);
+            
+            // Navigate to zodiac info page with the current animal
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "animal", animal.ToString() }
+            };
+
+            await Shell.Current.GoToAsync("zodiacinfo", navigationParameter);
+        }
+        catch (Exception ex)
+        {
+            _logService.LogError("Failed to navigate to zodiac info", ex, "CalendarViewModel.NavigateToZodiacInfo");
+        }
+    }
+
     private async Task LoadYearHolidaysAsync()
     {
         // Prevent concurrent updates
