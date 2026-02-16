@@ -8,7 +8,11 @@
 
 Implement comprehensive zodiac animal system that displays the current lunar year's zodiac animal, provides rich cultural educational content for all 12 animals, includes a compatibility checker, and shows elemental animal variations. This builds on Sprint 9's Sexagenary Cycle foundation by mapping Earthly Branches to zodiac animals and combining Heavenly Stems with animals to create the 60-year elemental cycle (e.g., Fire Horse, Metal Rat).
 
-**Technical Approach**: Create a new `ZodiacService` in LunarCalendar.Core that leverages existing Sprint 9 enums (`EarthlyBranch`, `ZodiacAnimal`, `FiveElement`) and `SexagenaryService` for calculations. Store comprehensive zodiac data in embedded JSON files (ZodiacData.json, ZodiacCompatibility.json) for offline-first support. Add new UI pages for zodiac browsing and compatibility checking using MAUI MVVM patterns. Integrate zodiac display into existing calendar header and date detail views. Use SVG vector graphics for zodiac animal icons to keep bundle size under 1.5 MB while supporting dark mode and scalability.
+**Technical Approach**: Create a new `ZodiacService` in LunarCalendar.Core that leverages existing Sprint 9 enums (`EarthlyBranch`, `ZodiacAnimal`, `FiveElement`) and `SexagenaryService` for calculations. Store comprehensive zodiac data in embedded JSON files (ZodiacData.json, ZodiacCompatibility.json) for offline-first support. Add new UI pages for zodiac browsing and compatibility checking using MAUI MVVM patterns. Integrate zodiac display into existing calendar header and date detail views.
+
+**Sprint 10 Decisions (fixed constraints)**:
+- **Zodiac “images”**: use **Unicode emoji** in code (no image assets in the bundle for Sprint 10). Optional SVG artwork can be added in a later polish sprint.
+- **Localization**: **Vietnamese + English only** for Sprint 10. Chinese UI localization is deferred to Sprint 14 (Chinese characters may appear as cultural reference content only).
 
 ---
 
@@ -41,7 +45,7 @@ Implement comprehensive zodiac animal system that displays the current lunar yea
 - **Offline-first**: All zodiac functionality must work without network
 - **Cultural accuracy**: Content validated by 2+ Vietnamese cultural SMEs
 - **Localization**: Vietnamese (12 Con Giáp) and English support (Chinese deferred to Sprint 14)
-- **Image size**: Using Unicode emoji for Sprint 10 (zero bundle impact)
+- **Image strategy**: Unicode emoji for Sprint 10 (zero bundle impact)
 - **JSON size**: ZodiacData.json must be < 100 KB for fast parsing
 
 **Scale/Scope**: 

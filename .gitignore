@@ -495,3 +495,6 @@ appsettings.*.json
 # Temporary files
 /tmp/
 *.tmp
+
+# Ignore stray data exports
+All countries _ regions*.csv
