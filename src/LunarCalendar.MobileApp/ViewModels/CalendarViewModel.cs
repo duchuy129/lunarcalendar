@@ -170,7 +170,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         _syncService = syncService;
         _logService = logService;
         _sexagenaryService = sexagenaryService;
-    _zodiacService = zodiacService;
+        _zodiacService = zodiacService;
         
         _logService.LogInfo("CalendarViewModel initialized", "CalendarViewModel");
 
@@ -1135,31 +1135,6 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         catch (Exception ex)
         {
             _logService.LogError("Failed to show sexagenary info", ex, "CalendarViewModel.ShowSexagenaryInfo");
-        }
-    }
-
-    [RelayCommand]
-    async Task NavigateToZodiacInfoAsync()
-    {
-        // Add haptic feedback
-        _hapticService.PerformClick();
-
-        try
-        {
-            // Get current year's zodiac animal
-            var animal = _zodiacService.GetAnimalForDate(CurrentMonth.Date);
-            
-            // Navigate to zodiac info page with the current animal
-            var navigationParameter = new Dictionary<string, object>
-            {
-                { "animal", animal.ToString() }
-            };
-
-            await Shell.Current.GoToAsync("zodiacinfo", navigationParameter);
-        }
-        catch (Exception ex)
-        {
-            _logService.LogError("Failed to navigate to zodiac info", ex, "CalendarViewModel.NavigateToZodiacInfo");
         }
     }
 

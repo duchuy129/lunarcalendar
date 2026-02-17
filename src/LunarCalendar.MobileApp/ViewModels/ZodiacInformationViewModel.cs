@@ -21,6 +21,9 @@ public partial class ZodiacInformationViewModel : BaseViewModel
     [ObservableProperty]
     private int _selectedIndex;
 
+    [ObservableProperty]
+    private bool _isDataLoaded = false;
+
     public ZodiacInformationViewModel(
         IZodiacDataRepository zodiacDataRepository,
         ILocalizationService localizationService)
@@ -29,6 +32,9 @@ public partial class ZodiacInformationViewModel : BaseViewModel
         _localizationService = localizationService;
 
         Title = "Zodiac Animals";
+        
+        // CRITICAL: Initialize empty collection to prevent CarouselView crash
+        ZodiacAnimals = new ObservableCollection<ZodiacInfoDisplayItem>();
     }
 
     public async Task InitializeAsync(ZodiacAnimal? initialAnimal = null)
@@ -63,11 +69,15 @@ public partial class ZodiacInformationViewModel : BaseViewModel
                 SelectedIndex = 0;
                 SelectedAnimal = ZodiacAnimals[0];
             }
+
+            // CRITICAL: Only show CarouselView AFTER data is fully loaded
+            IsDataLoaded = true;
         }
         catch (Exception ex)
         {
             // TODO: Show error toast/alert
             System.Diagnostics.Debug.WriteLine($"Error loading zodiac data: {ex.Message}");
+            throw; // Re-throw to be handled by caller
         }
         finally
         {
@@ -137,12 +147,12 @@ public class ZodiacInfoDisplayItem : ObservableObject
         ? _info.SignificanceVi
         : _info.SignificanceEn;
 
-    public string LuckyNumbersFormatted => string.Join(", ", _info.LuckyNumbers);
-    public string LuckyColorsFormatted => string.Join(", ", _info.LuckyColors);
-    public string LuckyDirectionsFormatted => string.Join(", ", _info.LuckyDirections);
+    public string LuckyNumbersFormatted => string.Join(", ", _info.LuckyNumbers ?? Array.Empty<int>());
+    public string LuckyColorsFormatted => string.Join(", ", _info.LuckyColors ?? Array.Empty<string>());
+    public string LuckyDirectionsFormatted => string.Join(", ", _info.LuckyDirections ?? Array.Empty<string>());
     
-    public string BestCompatibilityFormatted => string.Join(", ", _info.BestCompatibility);
-    public string ChallengeCompatibilityFormatted => string.Join(", ", _info.ChallengeCompatibility);
+    public string BestCompatibilityFormatted => string.Join(", ", _info.BestCompatibility ?? Array.Empty<string>());
+    public string ChallengeCompatibilityFormatted => string.Join(", ", _info.ChallengeCompatibility ?? Array.Empty<string>());
     
-    public string RecentYearsFormatted => string.Join(", ", _info.RecentYears);
+    public string RecentYearsFormatted => string.Join(", ", _info.RecentYears ?? Array.Empty<int>());
 }

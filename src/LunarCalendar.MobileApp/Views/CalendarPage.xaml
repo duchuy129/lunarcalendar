@@ -100,11 +100,7 @@
                TextColor="White"
                VerticalOptions="Center"
                IsVisible="{Binding CurrentYearZodiacEmoji, Converter={StaticResource StringNotEmptyConverter}}"
-               SemanticProperties.Description="Zodiac year icon">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding NavigateToZodiacInfoCommand}"/>
-                </Label.GestureRecognizers>
-            </Label>
+               SemanticProperties.Description="Zodiac year icon"/>
 
             <Button Text="{Binding MonthYearDisplay}"
                 Command="{Binding ShowMonthYearPickerCommand}"

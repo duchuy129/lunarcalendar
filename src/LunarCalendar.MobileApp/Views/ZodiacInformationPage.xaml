@@ -1,185 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:LunarCalendar.MobileApp.ViewModels"
              x:Class="LunarCalendar.MobileApp.Views.ZodiacInformationPage"
-             x:DataType="vm:ZodiacInformationViewModel"
-             Title="{Binding Title}">
+             Title="Zodiac Information">
     
-    <Grid RowDefinitions="Auto,*,Auto" Padding="0">
-        
-        <!-- Carousel View for browsing animals -->
-        <CarouselView Grid.Row="1" 
-                      ItemsSource="{Binding ZodiacAnimals}"
-                      CurrentItem="{Binding SelectedAnimal}"
-                      Position="{Binding SelectedIndex}"
-                      Loop="False"
-                      PeekAreaInsets="20">
-            <CarouselView.ItemTemplate>
-                <DataTemplate x:DataType="vm:ZodiacInfoDisplayItem">
-                    <ScrollView>
-                        <VerticalStackLayout Padding="20,0" Spacing="20">
-                            
-                            <!-- Animal Header -->
-                            <VerticalStackLayout Spacing="8" 
-                                               HorizontalOptions="Center"
-                                               Margin="0,20,0,0">
-                                <Label Text="{Binding Emoji}"
-                                       FontSize="80"
-                                       HorizontalOptions="Center"/>
-                                <Label Text="{Binding Name}"
-                                       FontSize="28"
-                                       FontAttributes="Bold"
-                                       HorizontalOptions="Center"/>
-                                <Label Text="{Binding ChineseName}"
-                                       FontSize="16"
-                                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
-                                       HorizontalOptions="Center"
-                                       IsVisible="{Binding ChineseName, Converter={StaticResource StringNotEmptyConverter}}"/>
-                            </VerticalStackLayout>
-
-                            <!-- Traits Section -->
-                            <VerticalStackLayout Spacing="8">
-                                <Label Text="Traits"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                                <Label Text="{Binding Traits}"
-                                       FontSize="14"
-                                       LineHeight="1.4"/>
-                            </VerticalStackLayout>
-
-                            <!-- Personality Section -->
-                            <VerticalStackLayout Spacing="8">
-                                <Label Text="Personality"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                                <Label Text="{Binding Personality}"
-                                       FontSize="14"
-                                       LineHeight="1.4"/>
-                            </VerticalStackLayout>
-
-                            <!-- Lucky Elements Section -->
-                            <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
-                                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
-                                   Padding="15"
-                                   CornerRadius="8"
-                                   HasShadow="False">
-                                <Grid RowDefinitions="Auto,Auto,Auto" 
-                                      ColumnDefinitions="Auto,*"
-                                      RowSpacing="12"
-                                      ColumnSpacing="12">
-                                    
-                                    <Label Grid.Row="0" Grid.Column="0"
-                                           Text="🔢"
-                                           FontSize="20"/>
-                                    <Label Grid.Row="0" Grid.Column="1"
-                                           FontSize="14">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Lucky Numbers: " FontAttributes="Bold"/>
-                                                <Span Text="{Binding LuckyNumbersFormatted}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
-                                    <Label Grid.Row="1" Grid.Column="0"
-                                           Text="🎨"
-                                           FontSize="20"/>
-                                    <Label Grid.Row="1" Grid.Column="1"
-                                           FontSize="14">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Lucky Colors: " FontAttributes="Bold"/>
-                                                <Span Text="{Binding LuckyColorsFormatted}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
-                                    <Label Grid.Row="2" Grid.Column="0"
-                                           Text="🧭"
-                                           FontSize="20"/>
-                                    <Label Grid.Row="2" Grid.Column="1"
-                                           FontSize="14">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Lucky Directions: " FontAttributes="Bold"/>
-                                                <Span Text="{Binding LuckyDirectionsFormatted}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </Grid>
-                            </Frame>
-
-                            <!-- Compatibility Section -->
-                            <VerticalStackLayout Spacing="12">
-                                <Label Text="Compatibility"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                                
-                                <HorizontalStackLayout Spacing="8">
-                                    <Label Text="✅" FontSize="20" VerticalOptions="Start"/>
-                                    <Label FontSize="14" VerticalOptions="Center">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Best: " FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Success}, Dark={StaticResource SuccessDark}}"/>
-                                                <Span Text="{Binding BestCompatibilityFormatted}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </HorizontalStackLayout>
-
-                                <HorizontalStackLayout Spacing="8">
-                                    <Label Text="⚠️" FontSize="20" VerticalOptions="Start"/>
-                                    <Label FontSize="14" VerticalOptions="Center">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Challenge: " FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Warning}, Dark={StaticResource WarningDark}}"/>
-                                                <Span Text="{Binding ChallengeCompatibilityFormatted}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
-
-                            <!-- Cultural Significance Section -->
-                            <VerticalStackLayout Spacing="8">
-                                <Label Text="Cultural Significance"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                                <Label Text="{Binding Significance}"
-                                       FontSize="14"
-                                       LineHeight="1.4"/>
-                            </VerticalStackLayout>
-
-                            <!-- Recent Years Section -->
-                            <VerticalStackLayout Spacing="8" Margin="0,0,0,20">
-                                <Label Text="Recent Years"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                                <Label Text="{Binding RecentYearsFormatted}"
-                                       FontSize="14"/>
-                            </VerticalStackLayout>
-
-                        </VerticalStackLayout>
-                    </ScrollView>
-                </DataTemplate>
-            </CarouselView.ItemTemplate>
-        </CarouselView>
-
-        <!-- Position Indicator -->
-        <IndicatorView Grid.Row="2"
-                       IndicatorColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
-                       SelectedIndicatorColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                       IndicatorsShape="Circle"
-                       ItemsSource="{Binding ZodiacAnimals}"
-                       Position="{Binding SelectedIndex}"
-                       HorizontalOptions="Center"
-                       Margin="0,0,0,10"/>
+    <!-- CRITICAL: Completely empty XAML - no bindings, no ViewModel reference
+         iOS crashes during Shell navigation if ANY controls reference ViewModel
+         All UI created programmatically in OnAppearing after navigation completes -->
+    <Grid x:Name="RootContainer" Padding="0">
+        <ActivityIndicator x:Name="LoadingIndicator"
+                          IsVisible="True"
+                          IsRunning="True"
+                          Color="Blue"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"/>
     </Grid>
     
 </ContentPage>
