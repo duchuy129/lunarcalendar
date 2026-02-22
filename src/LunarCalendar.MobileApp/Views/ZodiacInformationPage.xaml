@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LunarCalendar.MobileApp.Views.ZodiacInformationPage"
+             Title="Zodiac Information">
+    
+    <!-- CRITICAL: Completely empty XAML - no bindings, no ViewModel reference
+         iOS crashes during Shell navigation if ANY controls reference ViewModel
+         All UI created programmatically in OnAppearing after navigation completes -->
+    <Grid x:Name="RootContainer" Padding="0">
+        <ActivityIndicator x:Name="LoadingIndicator"
+                          IsVisible="True"
+                          IsRunning="True"
+                          Color="Blue"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"/>
+    </Grid>
+    
+</ContentPage>

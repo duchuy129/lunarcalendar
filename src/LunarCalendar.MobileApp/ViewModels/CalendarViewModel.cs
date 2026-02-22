@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using LunarCalendar.Core.Models;
+using LunarCalendar.Core.Services;
 using LunarCalendar.MobileApp.Models;
 using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.Resources.Strings;
@@ -21,6 +22,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
     private readonly ISyncService _syncService;
     private readonly ILogService _logService;
     private readonly Core.Services.ISexagenaryService _sexagenaryService;
+    private readonly LunarCalendar.Core.Services.IZodiacService _zodiacService;
 
     private bool _disposed = false;
 
@@ -35,6 +37,9 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
 
     [ObservableProperty]
     private string _todayStemBranch = string.Empty;
+
+    [ObservableProperty]
+    private string _currentYearZodiacEmoji = string.Empty;
 
     [ObservableProperty]
     private Color _todayElementColor = Colors.Gray;
@@ -130,6 +135,22 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
     private readonly SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
     private bool _isUpdatingHolidays = false;
 
+    private void UpdateZodiacHeader()
+    {
+        try
+        {
+            // Use a representative date in the currently displayed month.
+            var date = CurrentMonth.Date;
+            var animal = _zodiacService.GetAnimalForDate(date);
+
+            CurrentYearZodiacEmoji = ZodiacEmojiProvider.GetEmoji(animal);
+        }
+        catch
+        {
+            CurrentYearZodiacEmoji = string.Empty;
+        }
+    }
+
     public CalendarViewModel(
         ICalendarService calendarService,
         IUserModeService userModeService,
@@ -138,7 +159,8 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         IConnectivityService connectivityService,
         ISyncService syncService,
         ILogService logService,
-        Core.Services.ISexagenaryService sexagenaryService)
+        Core.Services.ISexagenaryService sexagenaryService,
+        LunarCalendar.Core.Services.IZodiacService zodiacService)
     {
         _calendarService = calendarService;
         _userModeService = userModeService;
@@ -148,6 +170,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         _syncService = syncService;
         _logService = logService;
         _sexagenaryService = sexagenaryService;
+        _zodiacService = zodiacService;
         
         _logService.LogInfo("CalendarViewModel initialized", "CalendarViewModel");
 
@@ -169,6 +192,8 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         _selectedCalendarYear = DateTime.Today.Year;
         _selectedCalendarMonth = DateTime.Today.Month;
 
+    UpdateZodiacHeader();
+
         UpdateUserModeText();
 
         // Monitor connectivity
@@ -179,7 +204,7 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         _syncService.SyncStatusChanged += OnSyncStatusChanged;
 
         // Subscribe to language changes
-        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, async (r, m) =>
+    WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, async (r, m) =>
         {
             // Give culture change time to fully propagate
             await Task.Delay(200);
@@ -210,6 +235,9 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             
             // Refresh calendar display (dates) without modifying collections
             await LoadCalendarAsync();
+
+            // Zodiac header includes localized text
+            UpdateZodiacHeader();
         });
     }
 
@@ -460,6 +488,9 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             // Sync picker values with current month
             SelectedCalendarYear = CurrentMonth.Year;
             SelectedCalendarMonth = CurrentMonth.Month;
+
+            // Update zodiac header for the currently displayed month (lunar-year based)
+            UpdateZodiacHeader();
 
             // Get lunar dates for the month
             var lunarDates = await _calendarService.GetMonthLunarDatesAsync(

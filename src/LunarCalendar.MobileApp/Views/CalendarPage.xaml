@@ -86,22 +86,35 @@
                        SemanticProperties.Hint="Navigate to the previous month in the calendar"/>
             </Border>
 
-            <StackLayout Grid.Row="0" Grid.Column="1"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"
-                        Padding="0"
-                        Spacing="2">
-                <Button Text="{Binding MonthYearDisplay}"
-                        Command="{Binding ShowMonthYearPickerCommand}"
-                        BackgroundColor="Transparent"
-                        TextColor="White"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        Padding="12,6"
-                        HeightRequest="36"
-                        HorizontalOptions="Center"
-                        SemanticProperties.Description="Current month and year - tap to change"
-                        SemanticProperties.Hint="Tap to select a different month and year"/>
+        <StackLayout Grid.Row="0" Grid.Column="1"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Padding="0"
+            Spacing="2">
+        <!-- Sprint 10: Zodiac + month header (keep on one line) -->
+        <HorizontalStackLayout HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Spacing="6">
+            <Label Text="{Binding CurrentYearZodiacEmoji}"
+               FontSize="18"
+               TextColor="White"
+               VerticalOptions="Center"
+               IsVisible="{Binding CurrentYearZodiacEmoji, Converter={StaticResource StringNotEmptyConverter}}"
+               SemanticProperties.Description="Zodiac year icon"/>
+
+            <Button Text="{Binding MonthYearDisplay}"
+                Command="{Binding ShowMonthYearPickerCommand}"
+                BackgroundColor="Transparent"
+                TextColor="White"
+                FontSize="18"
+                FontAttributes="Bold"
+                Padding="12,6"
+                HeightRequest="36"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                SemanticProperties.Description="Current month and year - tap to change"
+                SemanticProperties.Hint="Tap to select a different month and year"/>
+        </HorizontalStackLayout>
 
                 <!-- Online/Offline Status -->
                 <Label Text="{Binding SyncStatus}"
