@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Data\ZodiacData.json" />
+    <EmbeddedResource Include="Data\ZodiacCompatibility.json" />
   </ItemGroup>
 
   <ItemGroup>
