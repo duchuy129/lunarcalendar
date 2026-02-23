@@ -50,6 +50,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.ISexagenaryService, LunarCalendar.Core.Services.SexagenaryService>();
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.IZodiacService, LunarCalendar.Core.Services.ZodiacService>();
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.IZodiacDataRepository, LunarCalendar.Core.Services.ZodiacDataRepository>();
+		builder.Services.AddSingleton<LunarCalendar.Core.Services.IZodiacCompatibilityEngine, LunarCalendar.Core.Services.ZodiacCompatibilityEngine>();
 
 		// Register App Services (LogService already registered above)
 		builder.Services.AddSingleton<ILocalizationService, LocalizationService>();

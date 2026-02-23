@@ -69,7 +69,8 @@
                     StrokeThickness="0"
                     Padding="0"
                     WidthRequest="44"
-                    HeightRequest="44">
+                    HeightRequest="44"
+                    VerticalOptions="Center">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="22"/>
                 </Border.StrokeShape>
@@ -131,7 +132,8 @@
                     BackgroundColor="#40FFFFFF"
                     StrokeThickness="0"
                     Padding="16,8"
-                    Margin="0,0,8,0">
+                    Margin="0,0,8,0"
+                    VerticalOptions="Center">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
@@ -153,7 +155,8 @@
                     StrokeThickness="0"
                     Padding="0"
                     WidthRequest="44"
-                    HeightRequest="44">
+                    HeightRequest="44"
+                    VerticalOptions="Center">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="22"/>
                 </Border.StrokeShape>
@@ -184,7 +187,7 @@
                 Margin="12,4,12,4"
                 Background="{DynamicResource TodayGreen}"
                 StrokeThickness="0"
-                HeightRequest="86">
+                HeightRequest="108">
             <Border.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
                     <On Platform="iOS" Value="16,12" />
@@ -236,6 +239,22 @@
                            TextColor="White"
                            VerticalOptions="Center"
                            LineBreakMode="NoWrap"/>
+                </HorizontalStackLayout>
+
+                <!-- Sprint 10: Zodiac animal for today's lunar year -->
+                <HorizontalStackLayout HorizontalOptions="Center"
+                                       Spacing="5"
+                                       IsVisible="{Binding CurrentYearZodiacLabel, Converter={StaticResource StringNotEmptyConverter}}">
+                    <Label Text="{Binding CurrentYearZodiacEmoji}"
+                           FontSize="14"
+                           VerticalOptions="Center"
+                           SemanticProperties.Description="Zodiac animal emoji"/>
+                    <Label Text="{Binding CurrentYearZodiacLabel}"
+                           FontSize="13"
+                           TextColor="White"
+                           Opacity="0.9"
+                           VerticalOptions="Center"
+                           SemanticProperties.Description="Zodiac year description"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Border>

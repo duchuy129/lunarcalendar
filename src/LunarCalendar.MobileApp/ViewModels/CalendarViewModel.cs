@@ -42,6 +42,9 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
     private string _currentYearZodiacEmoji = string.Empty;
 
     [ObservableProperty]
+    private string _currentYearZodiacLabel = string.Empty;
+
+    [ObservableProperty]
     private Color _todayElementColor = Colors.Gray;
 
     [ObservableProperty]
@@ -144,11 +147,61 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
             var animal = _zodiacService.GetAnimalForDate(date);
 
             CurrentYearZodiacEmoji = ZodiacEmojiProvider.GetEmoji(animal);
+
+            // Build elemental animal label (e.g., "Year of the Fire Horse" / "Năm Bính Ngọ")
+            var elemental = _zodiacService.GetElementalAnimalForDate(date);
+            var elementName = GetLocalizedElementName(elemental.Element);
+            var animalName = GetLocalizedAnimalName(animal);
+            var yearOfThe = AppResources.YearOfThe;
+            CurrentYearZodiacLabel = $"{yearOfThe} {elementName} {animalName}";
         }
         catch
         {
             CurrentYearZodiacEmoji = string.Empty;
+            CurrentYearZodiacLabel = string.Empty;
         }
+    }
+
+    /// <summary>
+    /// Gets the localized element name using AppResources (FiveElement_*).
+    /// </summary>
+    private static string GetLocalizedElementName(Core.Models.FiveElement element)
+    {
+        var key = $"FiveElement_{element}";
+        return AppResources.ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? element.ToString();
+    }
+
+    /// <summary>
+    /// Gets the localized animal name using AppResources (EarthlyBranch_*).
+    /// </summary>
+    private static string GetLocalizedAnimalName(Core.Models.ZodiacAnimal animal)
+    {
+        // Map ZodiacAnimal enum to the EarthlyBranch resource key suffix
+        var branchKey = animal switch
+        {
+            Core.Models.ZodiacAnimal.Rat => "EarthlyBranch_Zi",
+            Core.Models.ZodiacAnimal.Ox => "EarthlyBranch_Chou",
+            Core.Models.ZodiacAnimal.Tiger => "EarthlyBranch_Yin",
+            Core.Models.ZodiacAnimal.Rabbit => "EarthlyBranch_Mao",
+            Core.Models.ZodiacAnimal.Dragon => "EarthlyBranch_Chen",
+            Core.Models.ZodiacAnimal.Snake => "EarthlyBranch_Si",
+            Core.Models.ZodiacAnimal.Horse => "EarthlyBranch_Wu",
+            Core.Models.ZodiacAnimal.Goat => "EarthlyBranch_Wei",
+            Core.Models.ZodiacAnimal.Monkey => "EarthlyBranch_Shen",
+            Core.Models.ZodiacAnimal.Rooster => "EarthlyBranch_You",
+            Core.Models.ZodiacAnimal.Dog => "EarthlyBranch_Xu",
+            Core.Models.ZodiacAnimal.Pig => "EarthlyBranch_Hai",
+            _ => null
+        };
+
+        if (branchKey != null)
+        {
+            var result = AppResources.ResourceManager.GetString(branchKey, CultureInfo.CurrentUICulture);
+            if (!string.IsNullOrEmpty(result))
+                return result;
+        }
+
+        return animal.ToString();
     }
 
     public CalendarViewModel(
