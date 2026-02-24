@@ -880,6 +880,9 @@ The current stem-branch represents today's position in this 60-day cycle.</value
   <data name="RatingChallenging" xml:space="preserve">
     <value>Challenging</value>
   </data>
+  <data name="ShareResult" xml:space="preserve">
+    <value>Share Result</value>
+  </data>
 
   <!-- Zodiac Information Page (T040/T041) -->
   <data name="ZodiacInformation" xml:space="preserve">

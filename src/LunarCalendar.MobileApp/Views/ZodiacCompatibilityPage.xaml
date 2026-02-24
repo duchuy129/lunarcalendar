@@ -236,6 +236,21 @@
                            TextColor="#4B5563"
                            LineBreakMode="WordWrap"
                            HorizontalTextAlignment="Center"/>
+
+                    <!-- T043: Share result button -->
+                    <Button Text="{ext:Translate ShareResult}"
+                            Command="{Binding ShareResultCommand}"
+                            BackgroundColor="Transparent"
+                            BorderColor="{DynamicResource Primary}"
+                            BorderWidth="1.5"
+                            TextColor="{DynamicResource Primary}"
+                            CornerRadius="12"
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            HeightRequest="44"
+                            HorizontalOptions="Fill"
+                            SemanticProperties.Description="Share compatibility result"
+                            SemanticProperties.Hint="Share this zodiac compatibility result with others"/>
                 </VerticalStackLayout>
             </Border>
 

@@ -64,10 +64,13 @@
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectAnimalCommand}"
                                                           CommandParameter="{Binding .}"/>
                                 </Border.GestureRecognizers>
+                                <!-- T071: per-animal accessibility — screen readers announce e.g. "🐴 Horse — tap for details" -->
                                 <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
                                     <Label Text="{Binding Emoji}"
                                            FontSize="40"
-                                           HorizontalOptions="Center"/>
+                                           HorizontalOptions="Center"
+                                           SemanticProperties.Description="{Binding Name}"
+                                           SemanticProperties.Hint="Tap for details"/>
                                     <Label Text="{Binding Name}"
                                            FontSize="15"
                                            FontAttributes="Bold"
@@ -110,7 +113,9 @@
                         <HorizontalStackLayout Spacing="12">
                             <Label Text="{Binding Emoji}"
                                    FontSize="44"
-                                   VerticalOptions="Center"/>
+                                   VerticalOptions="Center"
+                                   SemanticProperties.Description="{Binding Name}"
+                                   SemanticProperties.Hint="Zodiac animal symbol"/>
                             <VerticalStackLayout Spacing="2" VerticalOptions="Center">
                                 <Label Text="{Binding Name}"
                                        FontSize="20"

@@ -118,6 +118,38 @@ public partial class ZodiacCompatibilityViewModel : BaseViewModel
         "Challenging" => "#DC2626",
         _             => "#4B5563"
     };
+
+    /// <summary>
+    /// T043: Share the compatibility result via the native platform share sheet.
+    /// Uses MAUI Essentials Share.RequestAsync — works on iOS and Android.
+    /// </summary>
+    [RelayCommand]
+    private async Task ShareResultAsync()
+    {
+        if (!HasResult) return;
+
+        var isVi = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi";
+
+        var title = isVi
+            ? $"Tương hợp: {ResultAnimalPair}"
+            : $"Compatibility: {ResultAnimalPair}";
+
+        var body = isVi
+            ? $"{ResultEmoji1} {ResultEmoji2} {ResultAnimalPair}\n" +
+              $"Điểm: {ResultScore}/100 — {ResultRatingLocalized}\n\n" +
+              $"{ResultDescription}\n\n" +
+              $"📅 Lịch Âm Dương"
+            : $"{ResultEmoji1} {ResultEmoji2} {ResultAnimalPair}\n" +
+              $"Score: {ResultScore}/100 — {ResultRatingLocalized}\n\n" +
+              $"{ResultDescription}\n\n" +
+              $"📅 Lunar Calendar";
+
+        await Share.RequestAsync(new ShareTextRequest
+        {
+            Title = title,
+            Text  = body
+        });
+    }
 }
 
 /// <summary>

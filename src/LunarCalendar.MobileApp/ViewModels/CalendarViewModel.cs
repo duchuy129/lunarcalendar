@@ -1162,6 +1162,28 @@ public partial class CalendarViewModel : BaseViewModel, IDisposable
         }
     }
 
+    /// <summary>
+    /// T041: Navigate to the Zodiac Information page (tap on header zodiac emoji).
+    /// Opens to the animal for the currently displayed lunar month.
+    /// </summary>
+    [RelayCommand]
+    async Task OpenZodiacInfoAsync()
+    {
+        _hapticService.PerformClick();
+        try
+        {
+            var animal = _zodiacService.GetAnimalForDate(CurrentMonth.Date);
+            // Pass the enum name so ZodiacInformationPage can parse it with Enum.TryParse<ZodiacAnimal>
+            await Shell.Current.GoToAsync($"zodiacinfo?animal={animal}");
+        }
+        catch (Exception ex)
+        {
+            _logService.LogError("Failed to navigate to zodiac info", ex, "CalendarViewModel.OpenZodiacInfo");
+            // Fallback: navigate without query parameter
+            try { await Shell.Current.GoToAsync("zodiacinfo"); } catch { /* ignore */ }
+        }
+    }
+
     [RelayCommand]
     async Task ShowSexagenaryInfoAsync()
     {

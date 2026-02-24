@@ -864,6 +864,9 @@
   <data name="RatingChallenging" xml:space="preserve">
     <value>Thử Thách</value>
   </data>
+  <data name="ShareResult" xml:space="preserve">
+    <value>Chia Sẻ Kết Quả</value>
+  </data>
 
   <!-- Zodiac Information Page (T040/T041) -->
   <data name="ZodiacInformation" xml:space="preserve">
