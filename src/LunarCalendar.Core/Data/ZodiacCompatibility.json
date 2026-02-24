@@ -1,0 +1,626 @@
+[
+  {
+    "Animal1": "Rat",
+    "Animal2": "Rat",
+    "Score": 70,
+    "Rating": "Good",
+    "DescriptionEn": "Two Rats understand each other well. Both are resourceful and social, creating a harmonious relationship built on mutual understanding.",
+    "DescriptionVi": "Hai người tuổi Tý hiểu nhau rất rõ. Cả hai đều tháo vát và hòa đồng, tạo nên mối quan hệ hài hòa dựa trên sự thấu hiểu."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Ox",
+    "Score": 90,
+    "Rating": "Excellent",
+    "DescriptionEn": "Rat and Ox make an excellent pair. The Rat's cleverness complements the Ox's diligence, creating a balanced and supportive partnership.",
+    "DescriptionVi": "Tý và Sửu là cặp đôi tuyệt vời. Sự thông minh của Tý bổ sung cho sự siêng năng của Sửu, tạo nên mối quan hệ cân bằng và hỗ trợ lẫn nhau."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Tiger",
+    "Score": 60,
+    "Rating": "Fair",
+    "DescriptionEn": "Rat and Tiger have different approaches to life. With effort, they can appreciate each other's strengths, though conflicts may arise.",
+    "DescriptionVi": "Tý và Dần có cách tiếp cận cuộc sống khác nhau. Với sự nỗ lực, họ có thể đánh giá cao điểm mạnh của nhau, dù có thể xảy ra xung đột."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Rabbit",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Rat and Rabbit can coexist peacefully but may lack deep emotional connection. They have different social needs and communication styles.",
+    "DescriptionVi": "Tý và Mão có thể chung sống hòa bình nhưng có thể thiếu kết nối cảm xúc sâu sắc. Họ có nhu cầu xã hội và phong cách giao tiếp khác nhau."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Dragon",
+    "Score": 92,
+    "Rating": "Excellent",
+    "DescriptionEn": "Rat and Dragon are a power couple. The Rat admires the Dragon's charisma, while the Dragon values the Rat's intelligence and loyalty.",
+    "DescriptionVi": "Tý và Thìn là cặp đôi quyền lực. Tý ngưỡng mộ sức hấp dẫn của Thìn, trong khi Thìn đánh giá cao trí thông minh và lòng trung thành của Tý."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Snake",
+    "Score": 65,
+    "Rating": "Good",
+    "DescriptionEn": "Rat and Snake are both clever and strategic. They can form a good intellectual bond, though trust may take time to build.",
+    "DescriptionVi": "Tý và Tỵ đều thông minh và chiến lược. Họ có thể tạo mối liên kết trí tuệ tốt, dù sự tin tưởng cần thời gian để xây dựng."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Horse",
+    "Score": 35,
+    "Rating": "Challenging",
+    "DescriptionEn": "Rat and Horse are opposite signs and often clash. Their fundamentally different temperaments make lasting harmony difficult.",
+    "DescriptionVi": "Tý và Ngọ là hai cung đối lập và thường xung đột. Tính khí khác biệt cơ bản khiến sự hòa hợp lâu dài trở nên khó khăn."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Goat",
+    "Score": 50,
+    "Rating": "Fair",
+    "DescriptionEn": "Rat and Goat have different values and priorities. The practical Rat may frustrate the dreamy Goat, requiring patience from both sides.",
+    "DescriptionVi": "Tý và Mùi có giá trị và ưu tiên khác nhau. Tý thực tế có thể làm Mùi mơ mộng thất vọng, cần sự kiên nhẫn từ cả hai phía."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Monkey",
+    "Score": 88,
+    "Rating": "Excellent",
+    "DescriptionEn": "Rat and Monkey are a lively, fun-loving pair. Both are witty and energetic, creating an exciting and stimulating relationship.",
+    "DescriptionVi": "Tý và Thân là cặp đôi sôi nổi, vui vẻ. Cả hai đều hóm hỉnh và tràn đầy năng lượng, tạo nên mối quan hệ thú vị và đầy cảm hứng."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Rooster",
+    "Score": 45,
+    "Rating": "Challenging",
+    "DescriptionEn": "Rat and Rooster may struggle with communication. The Rat's flexibility clashes with the Rooster's perfectionism.",
+    "DescriptionVi": "Tý và Dậu có thể gặp khó khăn trong giao tiếp. Sự linh hoạt của Tý xung đột với chủ nghĩa hoàn hảo của Dậu."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Dog",
+    "Score": 65,
+    "Rating": "Good",
+    "DescriptionEn": "Rat and Dog share loyalty and honesty. They can build a solid friendship, though the Dog's idealism may sometimes clash with the Rat's pragmatism.",
+    "DescriptionVi": "Tý và Tuất cùng chia sẻ lòng trung thành và sự trung thực. Họ có thể xây dựng tình bạn vững chắc, dù lý tưởng của Tuất đôi khi xung đột với thực dụng của Tý."
+  },
+  {
+    "Animal1": "Rat",
+    "Animal2": "Pig",
+    "Score": 75,
+    "Rating": "Good",
+    "DescriptionEn": "Rat and Pig enjoy each other's company. The Pig's generosity and the Rat's charm create a warm and pleasant relationship.",
+    "DescriptionVi": "Tý và Hợi thích ở bên nhau. Sự hào phóng của Hợi và sự duyên dáng của Tý tạo nên mối quan hệ ấm áp và dễ chịu."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Ox",
+    "Score": 72,
+    "Rating": "Good",
+    "DescriptionEn": "Two Oxen share a strong work ethic and stability. They build a reliable partnership, though stubbornness from both sides may cause friction.",
+    "DescriptionVi": "Hai người tuổi Sửu cùng chia sẻ đạo đức làm việc và sự ổn định. Họ xây dựng mối quan hệ đáng tin cậy, dù sự cố chấp từ cả hai phía có thể gây xích mích."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Tiger",
+    "Score": 40,
+    "Rating": "Challenging",
+    "DescriptionEn": "Ox and Tiger often clash due to strong, opposing personalities. The Ox's patience is tested by the Tiger's impulsiveness.",
+    "DescriptionVi": "Sửu và Dần thường xung đột do tính cách mạnh mẽ, đối lập. Sự kiên nhẫn của Sửu bị thử thách bởi sự bốc đồng của Dần."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Rabbit",
+    "Score": 60,
+    "Rating": "Fair",
+    "DescriptionEn": "Ox and Rabbit can find common ground through their shared love of peace. The Rabbit's gentleness softens the Ox's rigidity.",
+    "DescriptionVi": "Sửu và Mão có thể tìm được tiếng nói chung qua tình yêu hòa bình. Sự dịu dàng của Mão làm mềm sự cứng nhắc của Sửu."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Dragon",
+    "Score": 45,
+    "Rating": "Challenging",
+    "DescriptionEn": "Ox and Dragon both want to lead, creating power struggles. Their strong wills make compromise difficult.",
+    "DescriptionVi": "Sửu và Thìn đều muốn dẫn đầu, tạo ra cuộc tranh giành quyền lực. Ý chí mạnh mẽ khiến việc thỏa hiệp trở nên khó khăn."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Snake",
+    "Score": 87,
+    "Rating": "Excellent",
+    "DescriptionEn": "Ox and Snake form a deeply compatible pair. The Snake's wisdom pairs beautifully with the Ox's reliability and strength.",
+    "DescriptionVi": "Sửu và Tỵ tạo thành cặp đôi rất hòa hợp. Sự khôn ngoan của Tỵ kết hợp tuyệt vời với sự đáng tin cậy và mạnh mẽ của Sửu."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Horse",
+    "Score": 40,
+    "Rating": "Challenging",
+    "DescriptionEn": "Ox and Horse have very different lifestyles. The Ox prefers stability while the Horse craves freedom and adventure.",
+    "DescriptionVi": "Sửu và Ngọ có lối sống rất khác nhau. Sửu thích sự ổn định trong khi Ngọ khao khát tự do và phiêu lưu."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Goat",
+    "Score": 38,
+    "Rating": "Challenging",
+    "DescriptionEn": "Ox and Goat are a traditionally challenging match. The methodical Ox may find the Goat too whimsical, while the Goat finds the Ox too rigid.",
+    "DescriptionVi": "Sửu và Mùi là cặp đôi theo truyền thống gặp nhiều thử thách. Sửu có phương pháp có thể thấy Mùi quá thất thường, trong khi Mùi thấy Sửu quá cứng nhắc."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Monkey",
+    "Score": 60,
+    "Rating": "Fair",
+    "DescriptionEn": "Ox and Monkey have a mixed relationship. The Monkey's playfulness can lighten the Ox's seriousness, but may also cause irritation.",
+    "DescriptionVi": "Sửu và Thân có mối quan hệ lẫn lộn. Sự vui tươi của Thân có thể làm nhẹ sự nghiêm túc của Sửu, nhưng cũng có thể gây khó chịu."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Rooster",
+    "Score": 88,
+    "Rating": "Excellent",
+    "DescriptionEn": "Ox and Rooster are an excellent traditional match. Both value hard work, order, and dedication, creating a harmonious home.",
+    "DescriptionVi": "Sửu và Dậu là cặp đôi truyền thống tuyệt vời. Cả hai đều coi trọng sự chăm chỉ, trật tự và cống hiến, tạo nên gia đình hài hòa."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Dog",
+    "Score": 62,
+    "Rating": "Fair",
+    "DescriptionEn": "Ox and Dog share honesty and loyalty. Their relationship is steady but may lack excitement and emotional depth.",
+    "DescriptionVi": "Sửu và Tuất cùng chia sẻ sự trung thực và trung thành. Mối quan hệ ổn định nhưng có thể thiếu sự hứng thú và chiều sâu cảm xúc."
+  },
+  {
+    "Animal1": "Ox",
+    "Animal2": "Pig",
+    "Score": 70,
+    "Rating": "Good",
+    "DescriptionEn": "Ox and Pig can build a comfortable life together. The Pig's warmth balances the Ox's practicality nicely.",
+    "DescriptionVi": "Sửu và Hợi có thể xây dựng cuộc sống thoải mái cùng nhau. Sự ấm áp của Hợi cân bằng tốt với tính thực tế của Sửu."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Tiger",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Two Tigers can be explosive. Both are competitive and dominant, which can lead to intense clashes or passionate connection.",
+    "DescriptionVi": "Hai người tuổi Dần có thể rất bùng nổ. Cả hai đều cạnh tranh và thống trị, có thể dẫn đến xung đột gay gắt hoặc kết nối đam mê."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Rabbit",
+    "Score": 70,
+    "Rating": "Good",
+    "DescriptionEn": "Tiger and Rabbit balance each other well. The Rabbit's calm nature soothes the Tiger's intensity.",
+    "DescriptionVi": "Dần và Mão cân bằng lẫn nhau tốt. Bản tính điềm tĩnh của Mão xoa dịu sự mãnh liệt của Dần."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Dragon",
+    "Score": 65,
+    "Rating": "Good",
+    "DescriptionEn": "Tiger and Dragon are both powerful and ambitious. They can achieve great things together if they avoid power struggles.",
+    "DescriptionVi": "Dần và Thìn đều mạnh mẽ và tham vọng. Họ có thể đạt được những điều tuyệt vời cùng nhau nếu tránh tranh giành quyền lực."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Snake",
+    "Score": 42,
+    "Rating": "Challenging",
+    "DescriptionEn": "Tiger and Snake have fundamentally different approaches. The Tiger's directness conflicts with the Snake's subtlety.",
+    "DescriptionVi": "Dần và Tỵ có cách tiếp cận khác biệt cơ bản. Sự thẳng thắn của Dần xung đột với sự tinh tế của Tỵ."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Horse",
+    "Score": 85,
+    "Rating": "Excellent",
+    "DescriptionEn": "Tiger and Horse are a dynamic, adventurous pair. Both love freedom and excitement, creating an energetic partnership.",
+    "DescriptionVi": "Dần và Ngọ là cặp đôi năng động, phiêu lưu. Cả hai đều yêu tự do và sự hứng thú, tạo nên mối quan hệ tràn đầy năng lượng."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Goat",
+    "Score": 50,
+    "Rating": "Fair",
+    "DescriptionEn": "Tiger and Goat have contrasting temperaments. The Tiger's boldness may overwhelm the gentle Goat.",
+    "DescriptionVi": "Dần và Mùi có tính khí tương phản. Sự táo bạo của Dần có thể lấn át Mùi dịu dàng."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Monkey",
+    "Score": 38,
+    "Rating": "Challenging",
+    "DescriptionEn": "Tiger and Monkey are traditionally opposing signs. The Tiger sees the Monkey as tricky, while the Monkey finds the Tiger too domineering.",
+    "DescriptionVi": "Dần và Thân là cung đối lập theo truyền thống. Dần thấy Thân quá xảo quyệt, trong khi Thân thấy Dần quá hống hách."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Rooster",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Tiger and Rooster have different communication styles. Both are outspoken, which can cause frequent disagreements.",
+    "DescriptionVi": "Dần và Dậu có phong cách giao tiếp khác nhau. Cả hai đều thẳng thắn, có thể gây ra bất đồng thường xuyên."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Dog",
+    "Score": 90,
+    "Rating": "Excellent",
+    "DescriptionEn": "Tiger and Dog are one of the best matches. The Dog's loyalty and the Tiger's courage create a deeply trusting and protective partnership.",
+    "DescriptionVi": "Dần và Tuất là một trong những cặp đôi tốt nhất. Lòng trung thành của Tuất và sự dũng cảm của Dần tạo nên mối quan hệ tin tưởng sâu sắc."
+  },
+  {
+    "Animal1": "Tiger",
+    "Animal2": "Pig",
+    "Score": 78,
+    "Rating": "Good",
+    "DescriptionEn": "Tiger and Pig complement each other nicely. The Pig's generosity and patience balance the Tiger's intensity.",
+    "DescriptionVi": "Dần và Hợi bổ sung cho nhau tốt. Sự hào phóng và kiên nhẫn của Hợi cân bằng sự mãnh liệt của Dần."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Rabbit",
+    "Score": 72,
+    "Rating": "Good",
+    "DescriptionEn": "Two Rabbits create a peaceful, harmonious environment. They understand each other's need for tranquility and beauty.",
+    "DescriptionVi": "Hai người tuổi Mão tạo ra môi trường hòa bình, hài hòa. Họ hiểu nhu cầu về sự yên tĩnh và cái đẹp của nhau."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Dragon",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Rabbit and Dragon have different energy levels. The Dragon's intensity may overwhelm the more reserved Rabbit.",
+    "DescriptionVi": "Mão và Thìn có mức năng lượng khác nhau. Sự mãnh liệt của Thìn có thể lấn át Mão kín đáo hơn."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Snake",
+    "Score": 68,
+    "Rating": "Good",
+    "DescriptionEn": "Rabbit and Snake share a love of beauty and refinement. They can form an elegant and cultured partnership.",
+    "DescriptionVi": "Mão và Tỵ cùng yêu thích cái đẹp và sự tinh tế. Họ có thể tạo nên mối quan hệ thanh lịch và có văn hóa."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Horse",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Rabbit and Horse have different paces of life. The Horse's restlessness may unsettle the comfort-loving Rabbit.",
+    "DescriptionVi": "Mão và Ngọ có nhịp sống khác nhau. Sự bồn chồn của Ngọ có thể làm xáo trộn Mão yêu sự thoải mái."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Goat",
+    "Score": 88,
+    "Rating": "Excellent",
+    "DescriptionEn": "Rabbit and Goat are a naturally harmonious pair. Both are gentle, artistic, and appreciate the finer things in life.",
+    "DescriptionVi": "Mão và Mùi là cặp đôi hài hòa tự nhiên. Cả hai đều dịu dàng, nghệ thuật và đánh giá cao những điều tốt đẹp trong cuộc sống."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Monkey",
+    "Score": 58,
+    "Rating": "Fair",
+    "DescriptionEn": "Rabbit and Monkey have a mixed dynamic. The Monkey's energy can be stimulating or exhausting for the quieter Rabbit.",
+    "DescriptionVi": "Mão và Thân có động lực lẫn lộn. Năng lượng của Thân có thể kích thích hoặc làm kiệt sức Mão yên tĩnh hơn."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Rooster",
+    "Score": 35,
+    "Rating": "Challenging",
+    "DescriptionEn": "Rabbit and Rooster are opposite signs with clashing personalities. The Rooster's bluntness hurts the sensitive Rabbit.",
+    "DescriptionVi": "Mão và Dậu là cung đối lập với tính cách xung đột. Sự thẳng thừng của Dậu làm tổn thương Mão nhạy cảm."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Dog",
+    "Score": 78,
+    "Rating": "Good",
+    "DescriptionEn": "Rabbit and Dog share warmth and kindness. The Dog's protectiveness makes the Rabbit feel secure and loved.",
+    "DescriptionVi": "Mão và Tuất cùng chia sẻ sự ấm áp và tử tế. Sự che chở của Tuất khiến Mão cảm thấy an toàn và được yêu thương."
+  },
+  {
+    "Animal1": "Rabbit",
+    "Animal2": "Pig",
+    "Score": 85,
+    "Rating": "Excellent",
+    "DescriptionEn": "Rabbit and Pig form a wonderful match. Both are peaceful, kind-hearted, and enjoy the comforts of home.",
+    "DescriptionVi": "Mão và Hợi tạo thành cặp đôi tuyệt vời. Cả hai đều hòa bình, tốt bụng và thích sự thoải mái của gia đình."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Dragon",
+    "Score": 68,
+    "Rating": "Good",
+    "DescriptionEn": "Two Dragons are a force of nature. They can achieve extraordinary things together but must manage their egos carefully.",
+    "DescriptionVi": "Hai người tuổi Thìn là sức mạnh của tự nhiên. Họ có thể đạt được những điều phi thường cùng nhau nhưng phải kiểm soát cái tôi cẩn thận."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Snake",
+    "Score": 80,
+    "Rating": "Good",
+    "DescriptionEn": "Dragon and Snake form a wise and powerful combination. The Snake's strategic mind complements the Dragon's boldness.",
+    "DescriptionVi": "Thìn và Tỵ tạo thành sự kết hợp khôn ngoan và mạnh mẽ. Tư duy chiến lược của Tỵ bổ sung cho sự táo bạo của Thìn."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Horse",
+    "Score": 65,
+    "Rating": "Good",
+    "DescriptionEn": "Dragon and Horse are both energetic and ambitious. They respect each other's independence but may compete for attention.",
+    "DescriptionVi": "Thìn và Ngọ đều tràn đầy năng lượng và tham vọng. Họ tôn trọng sự độc lập của nhau nhưng có thể cạnh tranh sự chú ý."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Goat",
+    "Score": 50,
+    "Rating": "Fair",
+    "DescriptionEn": "Dragon and Goat have very different temperaments. The Dragon's dominance may stifle the Goat's creativity.",
+    "DescriptionVi": "Thìn và Mùi có tính khí rất khác nhau. Sự thống trị của Thìn có thể bóp nghẹt sự sáng tạo của Mùi."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Monkey",
+    "Score": 90,
+    "Rating": "Excellent",
+    "DescriptionEn": "Dragon and Monkey are a brilliant match. Both are intelligent, ambitious, and energetic, forming a powerful alliance.",
+    "DescriptionVi": "Thìn và Thân là cặp đôi xuất sắc. Cả hai đều thông minh, tham vọng và tràn đầy năng lượng, tạo thành liên minh mạnh mẽ."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Rooster",
+    "Score": 82,
+    "Rating": "Excellent",
+    "DescriptionEn": "Dragon and Rooster complement each other beautifully. The Rooster's attention to detail supports the Dragon's grand vision.",
+    "DescriptionVi": "Thìn và Dậu bổ sung cho nhau tuyệt đẹp. Sự chú ý đến chi tiết của Dậu hỗ trợ tầm nhìn lớn của Thìn."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Dog",
+    "Score": 35,
+    "Rating": "Challenging",
+    "DescriptionEn": "Dragon and Dog are traditionally opposing signs. The Dragon's pride clashes with the Dog's sense of justice and equality.",
+    "DescriptionVi": "Thìn và Tuất là cung đối lập theo truyền thống. Sự kiêu hãnh của Thìn xung đột với ý thức công bằng và bình đẳng của Tuất."
+  },
+  {
+    "Animal1": "Dragon",
+    "Animal2": "Pig",
+    "Score": 72,
+    "Rating": "Good",
+    "DescriptionEn": "Dragon and Pig get along well. The Pig's sincerity and support help the Dragon's ambitious nature thrive.",
+    "DescriptionVi": "Thìn và Hợi hòa hợp tốt. Sự chân thành và hỗ trợ của Hợi giúp bản tính tham vọng của Thìn phát triển."
+  },
+  {
+    "Animal1": "Snake",
+    "Animal2": "Snake",
+    "Score": 60,
+    "Rating": "Fair",
+    "DescriptionEn": "Two Snakes can be deeply connected but may also be suspicious of each other. Trust is the key to their success.",
+    "DescriptionVi": "Hai người tuổi Tỵ có thể kết nối sâu sắc nhưng cũng có thể nghi ngờ lẫn nhau. Tin tưởng là chìa khóa thành công."
+  },
+  {
+    "Animal1": "Snake",
+    "Animal2": "Horse",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Snake and Horse have different approaches to life. The Snake's caution contrasts with the Horse's spontaneity.",
+    "DescriptionVi": "Tỵ và Ngọ có cách tiếp cận cuộc sống khác nhau. Sự thận trọng của Tỵ tương phản với sự tự phát của Ngọ."
+  },
+  {
+    "Animal1": "Snake",
+    "Animal2": "Goat",
+    "Score": 62,
+    "Rating": "Fair",
+    "DescriptionEn": "Snake and Goat share an appreciation for aesthetics. They can form a culturally rich bond if they communicate openly.",
+    "DescriptionVi": "Tỵ và Mùi cùng đánh giá cao thẩm mỹ. Họ có thể tạo mối liên kết văn hóa phong phú nếu giao tiếp cởi mở."
+  },
+  {
+    "Animal1": "Snake",
+    "Animal2": "Monkey",
+    "Score": 42,
+    "Rating": "Challenging",
+    "DescriptionEn": "Snake and Monkey are both cunning and may not fully trust each other. Competition between them can be intense.",
+    "DescriptionVi": "Tỵ và Thân đều khôn khéo và có thể không hoàn toàn tin tưởng lẫn nhau. Sự cạnh tranh giữa họ có thể rất gay gắt."
+  },
+  {
+    "Animal1": "Snake",
+    "Animal2": "Rooster",
+    "Score": 88,
+    "Rating": "Excellent",
+    "DescriptionEn": "Snake and Rooster are a highly compatible pair. Both are intelligent and goal-oriented, forming a sophisticated partnership.",
+    "DescriptionVi": "Tỵ và Dậu là cặp đôi rất tương hợp. Cả hai đều thông minh và hướng đến mục tiêu, tạo thành mối quan hệ tinh tế."
+  },
+  {
+    "Animal1": "Snake",
+    "Animal2": "Dog",
+    "Score": 62,
+    "Rating": "Fair",
+    "DescriptionEn": "Snake and Dog can build a respectful relationship. The Dog's honesty may sometimes be too direct for the private Snake.",
+    "DescriptionVi": "Tỵ và Tuất có thể xây dựng mối quan hệ tôn trọng. Sự trung thực của Tuất đôi khi có thể quá thẳng thắn với Tỵ kín đáo."
+  },
+  {
+    "Animal1": "Snake",
+    "Animal2": "Pig",
+    "Score": 38,
+    "Rating": "Challenging",
+    "DescriptionEn": "Snake and Pig are opposite signs with very different values. The Snake's secretiveness clashes with the Pig's openness.",
+    "DescriptionVi": "Tỵ và Hợi là cung đối lập với giá trị rất khác nhau. Sự bí mật của Tỵ xung đột với sự cởi mở của Hợi."
+  },
+  {
+    "Animal1": "Horse",
+    "Animal2": "Horse",
+    "Score": 68,
+    "Rating": "Good",
+    "DescriptionEn": "Two Horses share a love of freedom and adventure. They understand each other's need for independence.",
+    "DescriptionVi": "Hai người tuổi Ngọ cùng yêu tự do và phiêu lưu. Họ hiểu nhu cầu độc lập của nhau."
+  },
+  {
+    "Animal1": "Horse",
+    "Animal2": "Goat",
+    "Score": 80,
+    "Rating": "Good",
+    "DescriptionEn": "Horse and Goat are complementary partners. The Horse provides energy and protection while the Goat offers warmth and creativity.",
+    "DescriptionVi": "Ngọ và Mùi là đối tác bổ sung. Ngọ mang đến năng lượng và sự bảo vệ trong khi Mùi cung cấp sự ấm áp và sáng tạo."
+  },
+  {
+    "Animal1": "Horse",
+    "Animal2": "Monkey",
+    "Score": 52,
+    "Rating": "Fair",
+    "DescriptionEn": "Horse and Monkey are both active and social but may struggle with trust. The Monkey's trickiness can frustrate the straightforward Horse.",
+    "DescriptionVi": "Ngọ và Thân đều năng động và hòa đồng nhưng có thể gặp khó khăn về niềm tin. Sự xảo quyệt của Thân có thể làm Ngọ thẳng thắn thất vọng."
+  },
+  {
+    "Animal1": "Horse",
+    "Animal2": "Rooster",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Horse and Rooster have different priorities. The Horse values freedom while the Rooster values order and routine.",
+    "DescriptionVi": "Ngọ và Dậu có ưu tiên khác nhau. Ngọ coi trọng tự do trong khi Dậu coi trọng trật tự và thói quen."
+  },
+  {
+    "Animal1": "Horse",
+    "Animal2": "Dog",
+    "Score": 88,
+    "Rating": "Excellent",
+    "DescriptionEn": "Horse and Dog are one of the best zodiac matches. The Dog's loyalty and the Horse's energy create a trusting, adventurous partnership.",
+    "DescriptionVi": "Ngọ và Tuất là một trong những cặp đôi tốt nhất. Lòng trung thành của Tuất và năng lượng của Ngọ tạo nên mối quan hệ tin tưởng, phiêu lưu."
+  },
+  {
+    "Animal1": "Horse",
+    "Animal2": "Pig",
+    "Score": 65,
+    "Rating": "Good",
+    "DescriptionEn": "Horse and Pig can enjoy a pleasant relationship. The Pig's patience helps accommodate the Horse's restless spirit.",
+    "DescriptionVi": "Ngọ và Hợi có thể tận hưởng mối quan hệ dễ chịu. Sự kiên nhẫn của Hợi giúp phù hợp với tinh thần bồn chồn của Ngọ."
+  },
+  {
+    "Animal1": "Goat",
+    "Animal2": "Goat",
+    "Score": 68,
+    "Rating": "Good",
+    "DescriptionEn": "Two Goats create a gentle, creative environment. They share artistic sensibilities but may lack practical leadership.",
+    "DescriptionVi": "Hai người tuổi Mùi tạo ra môi trường dịu dàng, sáng tạo. Họ chia sẻ cảm nhận nghệ thuật nhưng có thể thiếu khả năng lãnh đạo thực tế."
+  },
+  {
+    "Animal1": "Goat",
+    "Animal2": "Monkey",
+    "Score": 58,
+    "Rating": "Fair",
+    "DescriptionEn": "Goat and Monkey can get along if the Monkey appreciates the Goat's gentle nature. The Monkey's energy may overwhelm the Goat.",
+    "DescriptionVi": "Mùi và Thân có thể hòa hợp nếu Thân đánh giá cao bản tính dịu dàng của Mùi. Năng lượng của Thân có thể lấn át Mùi."
+  },
+  {
+    "Animal1": "Goat",
+    "Animal2": "Rooster",
+    "Score": 48,
+    "Rating": "Challenging",
+    "DescriptionEn": "Goat and Rooster have different approaches to life. The Rooster's criticism can wound the sensitive Goat.",
+    "DescriptionVi": "Mùi và Dậu có cách tiếp cận cuộc sống khác nhau. Sự chỉ trích của Dậu có thể làm tổn thương Mùi nhạy cảm."
+  },
+  {
+    "Animal1": "Goat",
+    "Animal2": "Dog",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Goat and Dog can have a polite but distant relationship. The Dog's skepticism may clash with the Goat's idealism.",
+    "DescriptionVi": "Mùi và Tuất có thể có mối quan hệ lịch sự nhưng xa cách. Sự hoài nghi của Tuất có thể xung đột với lý tưởng của Mùi."
+  },
+  {
+    "Animal1": "Goat",
+    "Animal2": "Pig",
+    "Score": 85,
+    "Rating": "Excellent",
+    "DescriptionEn": "Goat and Pig are a wonderful match. Both are kind, generous, and appreciate beauty, creating a warm and loving home.",
+    "DescriptionVi": "Mùi và Hợi là cặp đôi tuyệt vời. Cả hai đều tốt bụng, hào phóng và đánh giá cao cái đẹp, tạo nên gia đình ấm áp và yêu thương."
+  },
+  {
+    "Animal1": "Monkey",
+    "Animal2": "Monkey",
+    "Score": 70,
+    "Rating": "Good",
+    "DescriptionEn": "Two Monkeys are a fun and clever pair. They entertain each other endlessly but may lack emotional depth.",
+    "DescriptionVi": "Hai người tuổi Thân là cặp đôi vui vẻ và thông minh. Họ giải trí cho nhau không ngừng nhưng có thể thiếu chiều sâu cảm xúc."
+  },
+  {
+    "Animal1": "Monkey",
+    "Animal2": "Rooster",
+    "Score": 58,
+    "Rating": "Fair",
+    "DescriptionEn": "Monkey and Rooster have a complex dynamic. The Rooster's orderliness contrasts with the Monkey's spontaneity.",
+    "DescriptionVi": "Thân và Dậu có động lực phức tạp. Sự ngăn nắp của Dậu tương phản với sự tự phát của Thân."
+  },
+  {
+    "Animal1": "Monkey",
+    "Animal2": "Dog",
+    "Score": 62,
+    "Rating": "Fair",
+    "DescriptionEn": "Monkey and Dog can respect each other but may not deeply connect. The Dog values sincerity while the Monkey values cleverness.",
+    "DescriptionVi": "Thân và Tuất có thể tôn trọng nhau nhưng có thể không kết nối sâu sắc. Tuất coi trọng sự chân thành trong khi Thân coi trọng sự thông minh."
+  },
+  {
+    "Animal1": "Monkey",
+    "Animal2": "Pig",
+    "Score": 65,
+    "Rating": "Good",
+    "DescriptionEn": "Monkey and Pig can build a friendly relationship. The Pig's generosity complements the Monkey's resourcefulness.",
+    "DescriptionVi": "Thân và Hợi có thể xây dựng mối quan hệ thân thiện. Sự hào phóng của Hợi bổ sung cho sự tháo vát của Thân."
+  },
+  {
+    "Animal1": "Rooster",
+    "Animal2": "Rooster",
+    "Score": 55,
+    "Rating": "Fair",
+    "DescriptionEn": "Two Roosters can be competitive and critical of each other. They need to practice tolerance and appreciation.",
+    "DescriptionVi": "Hai người tuổi Dậu có thể cạnh tranh và chỉ trích lẫn nhau. Họ cần thực hành sự khoan dung và đánh giá cao."
+  },
+  {
+    "Animal1": "Rooster",
+    "Animal2": "Dog",
+    "Score": 52,
+    "Rating": "Fair",
+    "DescriptionEn": "Rooster and Dog may have disagreements due to different worldviews. The Rooster's criticism irritates the moralistic Dog.",
+    "DescriptionVi": "Dậu và Tuất có thể bất đồng do quan điểm thế giới khác nhau. Sự chỉ trích của Dậu làm phiền Tuất đạo đức."
+  },
+  {
+    "Animal1": "Rooster",
+    "Animal2": "Pig",
+    "Score": 62,
+    "Rating": "Fair",
+    "DescriptionEn": "Rooster and Pig can complement each other. The Pig's patience helps tolerate the Rooster's perfectionism.",
+    "DescriptionVi": "Dậu và Hợi có thể bổ sung cho nhau. Sự kiên nhẫn của Hợi giúp chịu đựng chủ nghĩa hoàn hảo của Dậu."
+  },
+  {
+    "Animal1": "Dog",
+    "Animal2": "Dog",
+    "Score": 72,
+    "Rating": "Good",
+    "DescriptionEn": "Two Dogs form a loyal and honest partnership. They share a strong sense of justice and mutual respect.",
+    "DescriptionVi": "Hai người tuổi Tuất tạo nên mối quan hệ trung thành và trung thực. Họ chia sẻ ý thức mạnh mẽ về công bằng và tôn trọng lẫn nhau."
+  },
+  {
+    "Animal1": "Dog",
+    "Animal2": "Pig",
+    "Score": 78,
+    "Rating": "Good",
+    "DescriptionEn": "Dog and Pig are a gentle and supportive match. Both are kind and loyal, creating a stable and happy home.",
+    "DescriptionVi": "Tuất và Hợi là cặp đôi dịu dàng và hỗ trợ. Cả hai đều tốt bụng và trung thành, tạo nên gia đình ổn định và hạnh phúc."
+  },
+  {
+    "Animal1": "Pig",
+    "Animal2": "Pig",
+    "Score": 70,
+    "Rating": "Good",
+    "DescriptionEn": "Two Pigs create a warm, generous environment. They enjoy life's pleasures together but should watch for overindulgence.",
+    "DescriptionVi": "Hai người tuổi Hợi tạo ra môi trường ấm áp, hào phóng. Họ cùng tận hưởng niềm vui cuộc sống nhưng nên cẩn thận với sự phóng túng."
+  }
+]

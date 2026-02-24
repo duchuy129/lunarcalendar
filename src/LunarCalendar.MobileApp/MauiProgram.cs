@@ -50,6 +50,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.ISexagenaryService, LunarCalendar.Core.Services.SexagenaryService>();
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.IZodiacService, LunarCalendar.Core.Services.ZodiacService>();
 		builder.Services.AddSingleton<LunarCalendar.Core.Services.IZodiacDataRepository, LunarCalendar.Core.Services.ZodiacDataRepository>();
+		builder.Services.AddSingleton<LunarCalendar.Core.Services.IZodiacCompatibilityEngine, LunarCalendar.Core.Services.ZodiacCompatibilityEngine>();
 
 		// Register App Services (LogService already registered above)
 		builder.Services.AddSingleton<ILocalizationService, LocalizationService>();
@@ -66,8 +67,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<YearHolidaysViewModel>();
 		builder.Services.AddTransient<HolidayDetailViewModel>();
 		builder.Services.AddTransient<SettingsViewModel>();
-		// REMOVED: ZodiacInformationViewModel - using simple popup instead
-		// builder.Services.AddTransient<ZodiacInformationViewModel>();
+		builder.Services.AddTransient<ZodiacCompatibilityViewModel>();
+		builder.Services.AddTransient<ZodiacInformationViewModel>();
 
 		// Register Views
 		builder.Services.AddTransient<WelcomePage>();
@@ -75,8 +76,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<YearHolidaysPage>();
 		builder.Services.AddTransient<HolidayDetailPage>();
 		builder.Services.AddTransient<SettingsPage>();
-		// REMOVED: ZodiacInformationPage - using simple popup instead
-		// builder.Services.AddTransient<ZodiacInformationPage>();
+		builder.Services.AddTransient<ZodiacCompatibilityPage>();
+		builder.Services.AddTransient<ZodiacInformationPage>();
 
 		return builder.Build();
 	}

@@ -819,4 +819,91 @@ The current stem-branch represents today's position in this 60-day cycle.</value
   <data name="SexagenaryHour" xml:space="preserve">
     <value>Hour</value>
   </data>
+
+  <!-- My Zodiac Profile (Settings - T050) -->
+  <data name="MyZodiacProfile" xml:space="preserve">
+    <value>My Zodiac Profile</value>
+  </data>
+  <data name="MyZodiacProfileDesc" xml:space="preserve">
+    <value>Set your birth year to personalize zodiac insights</value>
+  </data>
+  <data name="BirthYear" xml:space="preserve">
+    <value>Birth Year</value>
+  </data>
+  <data name="BirthYearDesc" xml:space="preserve">
+    <value>Enter your birth year (e.g. 1990)</value>
+  </data>
+  <data name="YourZodiacSign" xml:space="preserve">
+    <value>Your Zodiac Sign</value>
+  </data>
+  <data name="NotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="InvalidBirthYear" xml:space="preserve">
+    <value>Please enter a valid birth year between 1900 and {0}.</value>
+  </data>
+
+  <!-- Zodiac Compatibility Page (T042) -->
+  <data name="ZodiacCompatibility" xml:space="preserve">
+    <value>Zodiac Compatibility</value>
+  </data>
+  <data name="ZodiacCompatibilityDesc" xml:space="preserve">
+    <value>Discover how two zodiac signs relate to each other</value>
+  </data>
+  <data name="SelectFirstAnimal" xml:space="preserve">
+    <value>First Animal</value>
+  </data>
+  <data name="SelectSecondAnimal" xml:space="preserve">
+    <value>Second Animal</value>
+  </data>
+  <data name="CompatibilityScore" xml:space="preserve">
+    <value>Compatibility Score</value>
+  </data>
+  <data name="CompatibilityRating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="CheckCompatibility" xml:space="preserve">
+    <value>Check Compatibility</value>
+  </data>
+  <data name="CompatibilityResultTitle" xml:space="preserve">
+    <value>Compatibility Result</value>
+  </data>
+  <data name="RatingExcellent" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="RatingGood" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="RatingFair" xml:space="preserve">
+    <value>Fair</value>
+  </data>
+  <data name="RatingChallenging" xml:space="preserve">
+    <value>Challenging</value>
+  </data>
+  <data name="ShareResult" xml:space="preserve">
+    <value>Share Result</value>
+  </data>
+
+  <!-- Zodiac Information Page (T040/T041) -->
+  <data name="ZodiacInformation" xml:space="preserve">
+    <value>Zodiac Animals</value>
+  </data>
+  <data name="ZodiacInformationDesc" xml:space="preserve">
+    <value>Learn about the 12 Chinese zodiac animals</value>
+  </data>
+  <data name="ZodiacLuckyNumbers" xml:space="preserve">
+    <value>Lucky Numbers</value>
+  </data>
+  <data name="ZodiacLuckyColors" xml:space="preserve">
+    <value>Lucky Colors</value>
+  </data>
+  <data name="ZodiacPersonality" xml:space="preserve">
+    <value>Personality</value>
+  </data>
+  <data name="ZodiacElement" xml:space="preserve">
+    <value>Element</value>
+  </data>
+  <data name="ViewCompatibility" xml:space="preserve">
+    <value>View Compatibility</value>
+  </data>
 </root>

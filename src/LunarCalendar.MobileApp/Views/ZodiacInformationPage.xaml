@@ -1,19 +1,186 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ext="clr-namespace:LunarCalendar.MobileApp.Extensions"
+             xmlns:converters="clr-namespace:LunarCalendar.MobileApp.Converters"
+             xmlns:viewmodels="clr-namespace:LunarCalendar.MobileApp.ViewModels"
              x:Class="LunarCalendar.MobileApp.Views.ZodiacInformationPage"
-             Title="Zodiac Information">
-    
-    <!-- CRITICAL: Completely empty XAML - no bindings, no ViewModel reference
-         iOS crashes during Shell navigation if ANY controls reference ViewModel
-         All UI created programmatically in OnAppearing after navigation completes -->
-    <Grid x:Name="RootContainer" Padding="0">
-        <ActivityIndicator x:Name="LoadingIndicator"
-                          IsVisible="True"
-                          IsRunning="True"
-                          Color="Blue"
-                          HorizontalOptions="Center"
-                          VerticalOptions="Center"/>
+             Title="{ext:Translate ZodiacInformation}"
+             Background="{DynamicResource BackgroundGradient}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Loading state -->
+        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           Color="{DynamicResource Primary}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"/>
+
+        <!-- Content: scrollable grid of all 12 animals -->
+        <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- Page header -->
+                <VerticalStackLayout Spacing="4" Margin="0,8,0,4">
+                    <Label Text="{ext:Translate ZodiacInformation}"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource Gray900}"/>
+                    <Label Text="{ext:Translate ZodiacInformationDesc}"
+                           FontSize="14"
+                           TextColor="{DynamicResource Gray600}"/>
+                </VerticalStackLayout>
+
+                <!-- Animal card list (CollectionView is safe; no CarouselView) -->
+                <CollectionView ItemsSource="{Binding ZodiacAnimals}"
+                                SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical"
+                                         Span="2"
+                                         HorizontalItemSpacing="12"
+                                         VerticalItemSpacing="12"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:ZodiacInfoDisplayItem">
+                            <Border Padding="12"
+                                    Background="{DynamicResource CardGradient}"
+                                    StrokeThickness="0">
+                                <Border.Shadow>
+                                    <Shadow Brush="Black"
+                                            Opacity="0.08"
+                                            Radius="8"
+                                            Offset="0,3"/>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14"/>
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectAnimalCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                                <!-- T071: per-animal accessibility — screen readers announce e.g. "🐴 Horse — tap for details" -->
+                                <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                                    <Label Text="{Binding Emoji}"
+                                           FontSize="40"
+                                           HorizontalOptions="Center"
+                                           SemanticProperties.Description="{Binding Name}"
+                                           SemanticProperties.Hint="Tap for details"/>
+                                    <Label Text="{Binding Name}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource Gray900}"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding ChineseName}"
+                                           FontSize="18"
+                                           TextColor="{DynamicResource Primary}"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Traits}"
+                                           FontSize="11"
+                                           TextColor="{DynamicResource Gray600}"
+                                           HorizontalOptions="Center"
+                                           HorizontalTextAlignment="Center"
+                                           MaxLines="2"
+                                           LineBreakMode="TailTruncation"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Detail panel (expands when an animal is selected) -->
+                <Border Padding="20"
+                        Background="{DynamicResource CardGradient}"
+                        StrokeThickness="0"
+                        IsVisible="{Binding HasSelectedAnimal}">
+                    <Border.Shadow>
+                        <Shadow Brush="Black"
+                                Opacity="0.1"
+                                Radius="14"
+                                Offset="0,5"/>
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="14"
+                                         BindingContext="{Binding SelectedAnimal}">
+                        <!-- Header row -->
+                        <HorizontalStackLayout Spacing="12">
+                            <Label Text="{Binding Emoji}"
+                                   FontSize="44"
+                                   VerticalOptions="Center"
+                                   SemanticProperties.Description="{Binding Name}"
+                                   SemanticProperties.Hint="Zodiac animal symbol"/>
+                            <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding Name}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource Gray900}"/>
+                                <Label Text="{Binding ChineseName}"
+                                       FontSize="22"
+                                       TextColor="{DynamicResource Primary}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" BackgroundColor="{DynamicResource Gray200}"/>
+
+                        <!-- Personality -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{ext:Translate ZodiacPersonality}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource Gray500}"/>
+                            <Label Text="{Binding Personality}"
+                                   FontSize="14"
+                                   TextColor="#374151"
+                                   LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+
+                        <BoxView HeightRequest="1" BackgroundColor="{DynamicResource Gray200}"/>
+
+                        <!-- Lucky details grid -->
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="10">
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="2">
+                                <Label Text="{ext:Translate ZodiacLuckyNumbers}"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource Gray500}"/>
+                                <Label Text="{Binding LuckyNumbersFormatted}"
+                                       FontSize="14"
+                                       TextColor="{DynamicResource Gray900}"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                                <Label Text="{ext:Translate ZodiacLuckyColors}"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource Gray500}"/>
+                                <Label Text="{Binding LuckyColorsFormatted}"
+                                       FontSize="14"
+                                       TextColor="{DynamicResource Gray900}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Recent years -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Recent Years"
+                                   FontSize="11"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource Gray500}"/>
+                            <Label Text="{Binding RecentYearsFormatted}"
+                                   FontSize="14"
+                                   TextColor="{DynamicResource Gray900}"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <BoxView HeightRequest="20" Color="Transparent"/>
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
-    
 </ContentPage>
+
