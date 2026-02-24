@@ -16,13 +16,16 @@ public partial class ZodiacInformationViewModel : BaseViewModel
     private ObservableCollection<ZodiacInfoDisplayItem> _zodiacAnimals = new();
 
     [ObservableProperty]
-    private ZodiacInfoDisplayItem? _selectedAnimal;
-
-    [ObservableProperty]
     private int _selectedIndex;
 
     [ObservableProperty]
     private bool _isDataLoaded = false;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasSelectedAnimal))]
+    private ZodiacInfoDisplayItem? _selectedAnimal;
+
+    public bool HasSelectedAnimal => SelectedAnimal != null;
 
     public ZodiacInformationViewModel(
         IZodiacDataRepository zodiacDataRepository,
@@ -91,6 +94,14 @@ public partial class ZodiacInformationViewModel : BaseViewModel
         {
             SelectedAnimal = ZodiacAnimals[value];
         }
+    }
+
+    [RelayCommand]
+    private void SelectAnimal(ZodiacInfoDisplayItem item)
+    {
+        SelectedAnimal = item;
+        var idx = ZodiacAnimals.IndexOf(item);
+        if (idx >= 0) SelectedIndex = idx;
     }
 
     [RelayCommand]

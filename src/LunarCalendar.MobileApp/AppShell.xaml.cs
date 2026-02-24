@@ -23,8 +23,8 @@ public class AppShell : Shell
 
 		// Register routes
 		Routing.RegisterRoute("holidaydetail", typeof(HolidayDetailPage));
-		// REMOVED: zodiacinfo route - using simple popup instead
-		// Routing.RegisterRoute("zodiacinfo", typeof(ZodiacInformationPage));
+		Routing.RegisterRoute("zodiaccompatibility", typeof(ZodiacCompatibilityPage));
+		Routing.RegisterRoute("zodiacinfo", typeof(ZodiacInformationPage));
 
 		// Subscribe to language change events
 		WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>

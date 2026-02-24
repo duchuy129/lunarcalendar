@@ -803,4 +803,88 @@
   <data name="SexagenaryHour" xml:space="preserve">
     <value>Giờ</value>
   </data>
+
+  <!-- My Zodiac Profile (Settings - T050) -->
+  <data name="MyZodiacProfile" xml:space="preserve">
+    <value>Hồ Sơ Cung Hoàng Đạo</value>
+  </data>
+  <data name="MyZodiacProfileDesc" xml:space="preserve">
+    <value>Nhập năm sinh để cá nhân hóa thông tin cung hoàng đạo</value>
+  </data>
+  <data name="BirthYear" xml:space="preserve">
+    <value>Năm Sinh</value>
+  </data>
+  <data name="BirthYearDesc" xml:space="preserve">
+    <value>Nhập năm sinh của bạn (vd: 1990)</value>
+  </data>
+  <data name="YourZodiacSign" xml:space="preserve">
+    <value>Con Giáp Của Bạn</value>
+  </data>
+  <data name="NotSet" xml:space="preserve">
+    <value>Chưa đặt</value>
+  </data>
+  <data name="InvalidBirthYear" xml:space="preserve">
+    <value>Vui lòng nhập năm sinh hợp lệ từ 1900 đến {0}.</value>
+  </data>
+
+  <!-- Zodiac Compatibility Page (T042) -->
+  <data name="ZodiacCompatibility" xml:space="preserve">
+    <value>Tương Hợp Cung Hoàng Đạo</value>
+  </data>
+  <data name="ZodiacCompatibilityDesc" xml:space="preserve">
+    <value>Khám phá sự tương hợp giữa hai con giáp</value>
+  </data>
+  <data name="SelectFirstAnimal" xml:space="preserve">
+    <value>Con Giáp Thứ Nhất</value>
+  </data>
+  <data name="SelectSecondAnimal" xml:space="preserve">
+    <value>Con Giáp Thứ Hai</value>
+  </data>
+  <data name="CompatibilityScore" xml:space="preserve">
+    <value>Điểm Tương Hợp</value>
+  </data>
+  <data name="CompatibilityRating" xml:space="preserve">
+    <value>Đánh Giá</value>
+  </data>
+  <data name="CheckCompatibility" xml:space="preserve">
+    <value>Kiểm Tra Tương Hợp</value>
+  </data>
+  <data name="CompatibilityResultTitle" xml:space="preserve">
+    <value>Kết Quả Tương Hợp</value>
+  </data>
+  <data name="RatingExcellent" xml:space="preserve">
+    <value>Xuất Sắc</value>
+  </data>
+  <data name="RatingGood" xml:space="preserve">
+    <value>Tốt</value>
+  </data>
+  <data name="RatingFair" xml:space="preserve">
+    <value>Trung Bình</value>
+  </data>
+  <data name="RatingChallenging" xml:space="preserve">
+    <value>Thử Thách</value>
+  </data>
+
+  <!-- Zodiac Information Page (T040/T041) -->
+  <data name="ZodiacInformation" xml:space="preserve">
+    <value>Con Giáp</value>
+  </data>
+  <data name="ZodiacInformationDesc" xml:space="preserve">
+    <value>Tìm hiểu về 12 con giáp</value>
+  </data>
+  <data name="ZodiacLuckyNumbers" xml:space="preserve">
+    <value>Số May Mắn</value>
+  </data>
+  <data name="ZodiacLuckyColors" xml:space="preserve">
+    <value>Màu May Mắn</value>
+  </data>
+  <data name="ZodiacPersonality" xml:space="preserve">
+    <value>Tính Cách</value>
+  </data>
+  <data name="ZodiacElement" xml:space="preserve">
+    <value>Ngũ Hành</value>
+  </data>
+  <data name="ViewCompatibility" xml:space="preserve">
+    <value>Xem Tương Hợp</value>
+  </data>
 </root>

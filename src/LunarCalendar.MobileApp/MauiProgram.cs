@@ -67,8 +67,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<YearHolidaysViewModel>();
 		builder.Services.AddTransient<HolidayDetailViewModel>();
 		builder.Services.AddTransient<SettingsViewModel>();
-		// REMOVED: ZodiacInformationViewModel - using simple popup instead
-		// builder.Services.AddTransient<ZodiacInformationViewModel>();
+		builder.Services.AddTransient<ZodiacCompatibilityViewModel>();
+		builder.Services.AddTransient<ZodiacInformationViewModel>();
 
 		// Register Views
 		builder.Services.AddTransient<WelcomePage>();
@@ -76,8 +76,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<YearHolidaysPage>();
 		builder.Services.AddTransient<HolidayDetailPage>();
 		builder.Services.AddTransient<SettingsPage>();
-		// REMOVED: ZodiacInformationPage - using simple popup instead
-		// builder.Services.AddTransient<ZodiacInformationPage>();
+		builder.Services.AddTransient<ZodiacCompatibilityPage>();
+		builder.Services.AddTransient<ZodiacInformationPage>();
 
 		return builder.Build();
 	}
