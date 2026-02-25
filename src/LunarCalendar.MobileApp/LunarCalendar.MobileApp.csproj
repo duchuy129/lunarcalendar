@@ -43,7 +43,7 @@
 		<!-- Disable Fast Deployment for Android to prevent emulator crashes -->
 		<EmbedAssembliesIntoApk Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</EmbedAssembliesIntoApk>
 
-		<!-- TEMPORARY: Disable iOS linker for Debug builds on device to isolate crash -->
+		<!-- Disable linker for Debug device builds — prevents stripping of DI/reflection types -->
 		<MtouchLink Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(Configuration)' == 'Debug' and '$(RuntimeIdentifier)' == 'ios-arm64'">None</MtouchLink>
 
 		<!-- iOS Simulator Code Signing - Default to simulator for development -->
