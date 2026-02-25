@@ -163,18 +163,25 @@
                                        FontSize="14"
                                        TextColor="{DynamicResource Gray900}"/>
                             </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="2">
+                                <Label Text="{ext:Translate ZodiacLuckyDirections}"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource Gray500}"/>
+                                <Label Text="{Binding LuckyDirectionsFormatted}"
+                                       FontSize="14"
+                                       TextColor="{DynamicResource Gray900}"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="2">
+                                <Label Text="{ext:Translate ZodiacRecentYears}"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource Gray500}"/>
+                                <Label Text="{Binding RecentYearsFormatted}"
+                                       FontSize="14"
+                                       TextColor="{DynamicResource Gray900}"/>
+                            </VerticalStackLayout>
                         </Grid>
-
-                        <!-- Recent years -->
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="Recent Years"
-                                   FontSize="11"
-                                   FontAttributes="Bold"
-                                   TextColor="{DynamicResource Gray500}"/>
-                            <Label Text="{Binding RecentYearsFormatted}"
-                                   FontSize="14"
-                                   TextColor="{DynamicResource Gray900}"/>
-                        </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
 

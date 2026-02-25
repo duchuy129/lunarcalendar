@@ -1121,5 +1121,168 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
                 return ResourceManager.GetString("CheckCompatibilityDesc", resourceCulture);
             }
         }
+
+        public static string ZodiacRecentYears {
+            get {
+                return ResourceManager.GetString("ZodiacRecentYears", resourceCulture);
+            }
+        }
+
+        public static string ZodiacLuckyDirections {
+            get {
+                return ResourceManager.GetString("ZodiacLuckyDirections", resourceCulture);
+            }
+        }
+
+        // Zodiac pages — missing Designer properties
+        public static string ZodiacCompatibility {
+            get {
+                return ResourceManager.GetString("ZodiacCompatibility", resourceCulture);
+            }
+        }
+
+        public static string ZodiacCompatibilityDesc {
+            get {
+                return ResourceManager.GetString("ZodiacCompatibilityDesc", resourceCulture);
+            }
+        }
+
+        public static string ZodiacInformation {
+            get {
+                return ResourceManager.GetString("ZodiacInformation", resourceCulture);
+            }
+        }
+
+        public static string ZodiacInformationDesc {
+            get {
+                return ResourceManager.GetString("ZodiacInformationDesc", resourceCulture);
+            }
+        }
+
+        public static string ZodiacPersonality {
+            get {
+                return ResourceManager.GetString("ZodiacPersonality", resourceCulture);
+            }
+        }
+
+        public static string ZodiacLuckyNumbers {
+            get {
+                return ResourceManager.GetString("ZodiacLuckyNumbers", resourceCulture);
+            }
+        }
+
+        public static string ZodiacLuckyColors {
+            get {
+                return ResourceManager.GetString("ZodiacLuckyColors", resourceCulture);
+            }
+        }
+
+        public static string ZodiacElement {
+            get {
+                return ResourceManager.GetString("ZodiacElement", resourceCulture);
+            }
+        }
+
+        public static string ViewCompatibility {
+            get {
+                return ResourceManager.GetString("ViewCompatibility", resourceCulture);
+            }
+        }
+
+        public static string SelectFirstAnimal {
+            get {
+                return ResourceManager.GetString("SelectFirstAnimal", resourceCulture);
+            }
+        }
+
+        public static string SelectSecondAnimal {
+            get {
+                return ResourceManager.GetString("SelectSecondAnimal", resourceCulture);
+            }
+        }
+
+        public static string CheckCompatibility {
+            get {
+                return ResourceManager.GetString("CheckCompatibility", resourceCulture);
+            }
+        }
+
+        public static string CompatibilityScore {
+            get {
+                return ResourceManager.GetString("CompatibilityScore", resourceCulture);
+            }
+        }
+
+        public static string CompatibilityRating {
+            get {
+                return ResourceManager.GetString("CompatibilityRating", resourceCulture);
+            }
+        }
+
+        public static string CompatibilityResultTitle {
+            get {
+                return ResourceManager.GetString("CompatibilityResultTitle", resourceCulture);
+            }
+        }
+
+        public static string RatingExcellent {
+            get {
+                return ResourceManager.GetString("RatingExcellent", resourceCulture);
+            }
+        }
+
+        public static string RatingGood {
+            get {
+                return ResourceManager.GetString("RatingGood", resourceCulture);
+            }
+        }
+
+        public static string RatingFair {
+            get {
+                return ResourceManager.GetString("RatingFair", resourceCulture);
+            }
+        }
+
+        public static string RatingChallenging {
+            get {
+                return ResourceManager.GetString("RatingChallenging", resourceCulture);
+            }
+        }
+
+        public static string MyZodiacProfile {
+            get {
+                return ResourceManager.GetString("MyZodiacProfile", resourceCulture);
+            }
+        }
+
+        public static string BirthYear {
+            get {
+                return ResourceManager.GetString("BirthYear", resourceCulture);
+            }
+        }
+
+        public static string BirthYearDesc {
+            get {
+                return ResourceManager.GetString("BirthYearDesc", resourceCulture);
+            }
+        }
+
+        public static string YourZodiacSign {
+            get {
+                return ResourceManager.GetString("YourZodiacSign", resourceCulture);
+            }
+        }
+
+        public static string NotSet {
+            get {
+                return ResourceManager.GetString("NotSet", resourceCulture);
+            }
+        }
+
+        public static string InvalidBirthYear {
+            get {
+                return ResourceManager.GetString("InvalidBirthYear", resourceCulture);
+            }
+        }
     }
 }

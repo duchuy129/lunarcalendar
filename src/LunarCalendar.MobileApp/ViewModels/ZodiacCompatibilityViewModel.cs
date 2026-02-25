@@ -1,8 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using LunarCalendar.Core.Models;
 using LunarCalendar.Core.Services;
 using LunarCalendar.MobileApp.Resources.Strings;
+using LunarCalendar.MobileApp.Services;
 using System.Globalization;
 
 namespace LunarCalendar.MobileApp.ViewModels;
@@ -11,8 +13,9 @@ public partial class ZodiacCompatibilityViewModel : BaseViewModel
 {
     private readonly IZodiacCompatibilityEngine _engine;
 
-    // Picker source - all 12 animals
-    public List<AnimalPickerItem> AllAnimals { get; } = Enum.GetValues<ZodiacAnimal>()
+    // Picker source - all 12 animals; rebuilt on language change
+    [ObservableProperty]
+    private List<AnimalPickerItem> _allAnimals = Enum.GetValues<ZodiacAnimal>()
         .Select(a => new AnimalPickerItem(a))
         .ToList();
 
@@ -56,10 +59,33 @@ public partial class ZodiacCompatibilityViewModel : BaseViewModel
     public ZodiacCompatibilityViewModel(IZodiacCompatibilityEngine engine)
     {
         _engine = engine;
-        Title = AppResources.ResourceManager.GetString("ZodiacCompatibility", CultureInfo.CurrentUICulture) ?? "Zodiac Compatibility";
+        Title = AppResources.ZodiacCompatibility;
         // Pre-select first two animals as defaults
         SelectedAnimal1 = AllAnimals[0]; // Rat
         SelectedAnimal2 = AllAnimals[3]; // Rabbit
+
+        // Rebuild picker items and re-localize result strings on language change
+        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
+        {
+            Title = AppResources.ZodiacCompatibility;
+
+            // Rebuild picker with new language; preserve selection by animal enum value
+            var prev1 = SelectedAnimal1?.Animal;
+            var prev2 = SelectedAnimal2?.Animal;
+            AllAnimals = Enum.GetValues<ZodiacAnimal>()
+                .Select(a => new AnimalPickerItem(a))
+                .ToList();
+            SelectedAnimal1 = prev1 != null ? AllAnimals.FirstOrDefault(a => a.Animal == prev1) : AllAnimals[0];
+            SelectedAnimal2 = prev2 != null ? AllAnimals.FirstOrDefault(a => a.Animal == prev2) : AllAnimals[3];
+
+            // Re-localize the displayed result if one is showing
+            if (HasResult)
+            {
+                ResultRatingLocalized = GetLocalizedRating(ResultRating);
+                var isVi = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi";
+                ResultAnimalPair = $"{SelectedAnimal1?.DisplayName} & {SelectedAnimal2?.DisplayName}";
+            }
+        });
     }
 
     [RelayCommand]
