@@ -34,9 +34,4 @@ public partial class SettingsPage : ContentPage
     {
         await _viewModel.ResetSettingsAsync();
     }
-
-    private async void OnZodiacCompatibilityClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("zodiaccompatibility");
-    }
 }

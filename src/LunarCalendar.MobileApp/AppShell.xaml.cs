@@ -12,6 +12,7 @@ public class AppShell : Shell
 {
 	private ShellContent? _calendarTab;
 	private ShellContent? _yearHolidaysTab;
+	private ShellContent? _zodiacTab;
 	private ShellContent? _settingsTab;
 
 	public AppShell()
@@ -42,6 +43,10 @@ public class AppShell : Shell
 		if (_yearHolidaysTab != null)
 		{
 			_yearHolidaysTab.Title = AppResources.YearHolidays;
+		}
+		if (_zodiacTab != null)
+		{
+			_zodiacTab.Title = AppResources.ZodiacTab;
 		}
 		if (_settingsTab != null)
 		{
@@ -92,6 +97,20 @@ public class AppShell : Shell
 			Size = 30
 		};
 
+		_zodiacTab = new ShellContent
+		{
+			Title = AppResources.ZodiacTab,
+			ContentTemplate = new DataTemplate(typeof(ZodiacProfilePage))
+		};
+
+		// Set icon using FontImageSource - color will be managed by Shell
+		_zodiacTab.Icon = new FontImageSource
+		{
+			Glyph = "🔯", // Zodiac/star emoji
+			FontFamily = "Arial",
+			Size = 30
+		};
+
 		_settingsTab = new ShellContent
 		{
 			Title = AppResources.Settings,
@@ -108,6 +127,7 @@ public class AppShell : Shell
 
 		tabBar.Items.Add(_calendarTab);
 		tabBar.Items.Add(_yearHolidaysTab);
+		tabBar.Items.Add(_zodiacTab);
 		tabBar.Items.Add(_settingsTab);
 
 		this.Items.Add(tabBar);

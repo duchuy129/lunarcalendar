@@ -10,9 +10,24 @@
   <assembly fullname="SQLitePCLRaw.batteries_v2">
     <type fullname="*" />
   </assembly>
+  <assembly fullname="SQLitePCLRaw.provider.e_sqlite3">
+    <type fullname="*" />
+  </assembly>
 
-  <!-- Preserve app data models -->
-  <assembly fullname="LunarCalendar.MobileApp">
-    <namespace fullname="LunarCalendar.MobileApp.Data.Models" preserve="all" />
+  <!-- Preserve entire app assembly — all namespaces used via DI, reflection,
+       ResourceManager, and CommunityToolkit.Mvvm source generators must survive trimming -->
+  <assembly fullname="LunarCalendar.MobileApp" preserve="all" />
+
+  <!-- Preserve Core library — models, services, and enums used via reflection/JSON -->
+  <assembly fullname="LunarCalendar.Core" preserve="all" />
+
+  <!-- Preserve CommunityToolkit.Mvvm — source-generated ObservableProperty/RelayCommand -->
+  <assembly fullname="CommunityToolkit.Mvvm">
+    <type fullname="*" />
+  </assembly>
+
+  <!-- Preserve .NET resource infrastructure used by ResourceManager -->
+  <assembly fullname="System.Resources.ResourceManager">
+    <type fullname="*" />
   </assembly>
 </linker>

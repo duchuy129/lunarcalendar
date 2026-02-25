@@ -94,16 +94,20 @@ echo ""
 echo "🔨 Building for iOS device..."
 echo "   Project: $PROJECT_PATH"
 echo "   Target: Physical Device (ios-arm64)"
-echo "   Configuration: Release"
+echo "   Configuration: Debug (Development profile — avoids App Store signing override)"
 echo "   Framework: net10.0-ios"
 echo "   Certificate: $CERT_NAME"
 echo "   Provisioning Profile: $PROVISIONING_PROFILE_NAME"
 echo ""
 
-# Build with explicit parameters for device - Release mode for device testing
+# Build with Debug config for device testing.
+# IMPORTANT: Must use Debug (not Release) because the csproj Release PropertyGroup
+# hard-codes CodesignKey="Apple Distribution" and CodesignProvision="Lunar Calendar App Store"
+# for App Store submissions — which overrides whatever the script passes and causes signing
+# failures. The Development provisioning profile (get-task-allow=true) requires Debug config.
 dotnet build "$PROJECT_PATH" \
     -f net10.0-ios \
-    -c Release \
+    -c Debug \
     -p:RuntimeIdentifier=ios-arm64 \
     -p:CodesignKey="$CERT_NAME" \
     -p:CodesignProvision="$PROVISIONING_PROFILE_NAME" \
@@ -133,15 +137,15 @@ echo -e "${GREEN}✅ Build successful!${NC}"
 echo ""
 
 # Find app bundle
-APP_BUNDLE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-ios/ios-arm64" -name "*.app" -type d 2>/dev/null | head -n 1)
+APP_BUNDLE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/ios-arm64" -name "*.app" -type d 2>/dev/null | head -n 1)
 
 if [ -z "$APP_BUNDLE" ]; then
     echo -e "${RED}❌ App bundle not found at expected location${NC}"
     echo ""
-    echo "Expected: $WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-ios/ios-arm64/*.app"
+    echo "Expected: $WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/ios-arm64/*.app"
     echo ""
     echo "Available builds:"
-    ls -la "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-ios/" 2>/dev/null || echo "None"
+    ls -la "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Debug/net10.0-ios/" 2>/dev/null || echo "None"
     exit 1
 fi
 

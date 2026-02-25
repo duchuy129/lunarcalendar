@@ -1,9 +1,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using LunarCalendar.Core.Models;
 using LunarCalendar.Core.Services;
+using LunarCalendar.MobileApp.Resources.Strings;
 using LunarCalendar.MobileApp.Services;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace LunarCalendar.MobileApp.ViewModels;
 
@@ -34,10 +37,21 @@ public partial class ZodiacInformationViewModel : BaseViewModel
         _zodiacDataRepository = zodiacDataRepository;
         _localizationService = localizationService;
 
-        Title = "Zodiac Animals";
-        
+        Title = AppResources.ZodiacTab;
+
         // CRITICAL: Initialize empty collection to prevent CarouselView crash
         ZodiacAnimals = new ObservableCollection<ZodiacInfoDisplayItem>();
+
+        // Update Title and refresh all display items on language change
+        WeakReferenceMessenger.Default.Register<LanguageChangedMessage>(this, (r, m) =>
+        {
+            Title = AppResources.ZodiacTab;
+            foreach (var item in ZodiacAnimals)
+                item.RefreshLocalization();
+            // Re-notify SelectedAnimal so detail panel re-reads its bindings
+            if (SelectedAnimal != null)
+                OnPropertyChanged(nameof(SelectedAnimal));
+        });
     }
 
     public async Task InitializeAsync(ZodiacAnimal? initialAnimal = null)
@@ -124,7 +138,8 @@ public partial class ZodiacInformationViewModel : BaseViewModel
 }
 
 /// <summary>
-/// Display wrapper for ZodiacInfo with localized and formatted properties
+/// Display wrapper for ZodiacInfo with localized and formatted properties.
+/// Fires PropertyChanged on all language-dependent properties when RefreshLocalization() is called.
 /// </summary>
 public class ZodiacInfoDisplayItem : ObservableObject
 {
@@ -137,33 +152,74 @@ public class ZodiacInfoDisplayItem : ObservableObject
         _localizationService = localizationService;
     }
 
+    /// <summary>
+    /// Called by ZodiacInformationViewModel when language changes.
+    /// Fires PropertyChanged for every localized property so bindings re-read them.
+    /// </summary>
+    public void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(Traits));
+        OnPropertyChanged(nameof(Personality));
+        OnPropertyChanged(nameof(Significance));
+        OnPropertyChanged(nameof(LuckyColorsFormatted));
+        OnPropertyChanged(nameof(LuckyDirectionsFormatted));
+    }
+
     public ZodiacAnimal Animal => _info.Animal;
     public string Emoji => ZodiacEmojiProvider.GetEmoji(_info.Animal);
-    
-    public string Name => _localizationService.CurrentLanguage == "vi" 
-        ? _info.NameVi 
+
+    public string Name => _localizationService.CurrentLanguage == "vi"
+        ? _info.NameVi
         : _info.NameEn;
-    
+
     public string ChineseName => _info.ChineseName ?? string.Empty;
-    
+
     public string Traits => _localizationService.CurrentLanguage == "vi"
         ? _info.TraitsVi
         : _info.TraitsEn;
-    
+
     public string Personality => _localizationService.CurrentLanguage == "vi"
         ? _info.PersonalityVi
         : _info.PersonalityEn;
-    
+
     public string Significance => _localizationService.CurrentLanguage == "vi"
         ? _info.SignificanceVi
         : _info.SignificanceEn;
 
-    public string LuckyNumbersFormatted => string.Join(", ", _info.LuckyNumbers ?? Array.Empty<int>());
-    public string LuckyColorsFormatted => string.Join(", ", _info.LuckyColors ?? Array.Empty<string>());
-    public string LuckyDirectionsFormatted => string.Join(", ", _info.LuckyDirections ?? Array.Empty<string>());
-    
-    public string BestCompatibilityFormatted => string.Join(", ", _info.BestCompatibility ?? Array.Empty<string>());
-    public string ChallengeCompatibilityFormatted => string.Join(", ", _info.ChallengeCompatibility ?? Array.Empty<string>());
-    
-    public string RecentYearsFormatted => string.Join(", ", _info.RecentYears ?? Array.Empty<int>());
+    public string LuckyNumbersFormatted =>
+        string.Join(", ", _info.LuckyNumbers ?? Array.Empty<int>());
+
+    public string LuckyColorsFormatted =>
+        string.Join(", ", (_info.LuckyColors ?? Array.Empty<string>())
+            .Select(c => TranslateColorOrDirection("LuckyColor_", c)));
+
+    public string LuckyDirectionsFormatted =>
+        string.Join(", ", (_info.LuckyDirections ?? Array.Empty<string>())
+            .Select(d => TranslateColorOrDirection("LuckyDir_", d)));
+
+    public string BestCompatibilityFormatted =>
+        string.Join(", ", _info.BestCompatibility ?? Array.Empty<string>());
+
+    public string ChallengeCompatibilityFormatted =>
+        string.Join(", ", _info.ChallengeCompatibility ?? Array.Empty<string>());
+
+    public string RecentYearsFormatted =>
+        string.Join(", ", _info.RecentYears ?? Array.Empty<int>());
+
+    /// <summary>
+    /// Looks up "LuckyColor_blue" or "LuckyDir_north" style keys in AppResources.
+    /// Falls back to capitalised raw value if key not found.
+    /// </summary>
+    private static string TranslateColorOrDirection(string prefix, string rawValue)
+    {
+        var key = prefix + rawValue.ToLowerInvariant().Replace(" ", "_");
+        var translated = AppResources.ResourceManager.GetString(key, CultureInfo.CurrentUICulture);
+        if (!string.IsNullOrEmpty(translated))
+            return translated;
+        // Fallback: capitalise first letter of the raw value
+        return rawValue.Length > 0
+            ? char.ToUpperInvariant(rawValue[0]) + rawValue[1..]
+            : rawValue;
+    }
 }

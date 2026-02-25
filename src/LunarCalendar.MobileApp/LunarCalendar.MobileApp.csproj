@@ -28,8 +28,8 @@
 		<ApplicationId>com.huynguyen.lunarcalendar</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>6</ApplicationVersion>
+		<ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
+		<ApplicationVersion>7</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<TargetPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">26.2</TargetPlatformVersion>
@@ -43,7 +43,7 @@
 		<!-- Disable Fast Deployment for Android to prevent emulator crashes -->
 		<EmbedAssembliesIntoApk Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</EmbedAssembliesIntoApk>
 
-		<!-- TEMPORARY: Disable iOS linker for Debug builds on device to isolate crash -->
+		<!-- Disable linker for Debug device builds — prevents stripping of DI/reflection types -->
 		<MtouchLink Condition="'$(TargetFramework)' == 'net10.0-ios' and '$(Configuration)' == 'Debug' and '$(RuntimeIdentifier)' == 'ios-arm64'">None</MtouchLink>
 
 		<!-- iOS Simulator Code Signing - Default to simulator for development -->
@@ -63,7 +63,10 @@
 
 	<!-- Release Configuration Optimizations -->
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<!-- Enable trimming but use conservative linking mode for stability -->
+		<!-- iOS SDK requires PublishTrimmed=true; trimming is controlled via MtouchLink=None
+		     (see iOS Release Settings below) which prevents stripping of app assemblies.
+		     CRASH FIX: SdkOnly was trimming DI-registered types, ResourceManager reflection
+		     calls, and CommunityToolkit.Mvvm source-generated code → abort() at startup. -->
 		<PublishTrimmed>true</PublishTrimmed>
 		<TrimMode>partial</TrimMode>
 
@@ -84,7 +87,10 @@
 
 		<!-- iOS Release Settings - CRITICAL: Enable hybrid AOT + interpreter mode -->
 		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</RunAOTCompilation>
-		<MtouchLink Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">SdkOnly</MtouchLink>
+		<!-- CRASH FIX: Use None linking to prevent trimmer from stripping DI/reflection types.
+		     SdkOnly was stripping ViewModels, Services, ResourceManager lookups, and
+		     CommunityToolkit.Mvvm source-generated types → abort() on main thread at startup. -->
+		<MtouchLink Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">None</MtouchLink>
 		<MtouchEnableSGenConc Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</MtouchEnableSGenConc>
 		<!-- Enable interpreter for dynamic/reflection code that can't be AOT compiled -->
 		<MtouchInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">-all</MtouchInterpreter>

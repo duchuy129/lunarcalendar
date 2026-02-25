@@ -890,4 +890,96 @@
   <data name="ViewCompatibility" xml:space="preserve">
     <value>Xem Tương Hợp</value>
   </data>
+
+  <!-- Zodiac Tab (Feature 003) -->
+  <data name="ZodiacTab" xml:space="preserve">
+    <value>Tử Vi</value>
+  </data>
+  <data name="ZodiacProfilePageTitle" xml:space="preserve">
+    <value>Hồ Sơ Tử Vi</value>
+  </data>
+  <data name="BrowseAnimals" xml:space="preserve">
+    <value>Xem Các Con Giáp</value>
+  </data>
+  <data name="BrowseAnimalsDesc" xml:space="preserve">
+    <value>Khám phá 12 con giáp trong tử vi Á Đông</value>
+  </data>
+  <data name="CheckCompatibilityDesc" xml:space="preserve">
+    <value>Xem mức độ tương hợp giữa các con giáp</value>
+  </data>
+
+  <!-- Zodiac detail labels (localization fix) -->
+  <data name="ZodiacRecentYears" xml:space="preserve">
+    <value>Năm Gần Đây</value>
+  </data>
+  <data name="ZodiacLuckyDirections" xml:space="preserve">
+    <value>Hướng May Mắn</value>
+  </data>
+
+  <!-- Lucky color translations -->
+  <data name="LuckyColor_blue" xml:space="preserve">
+    <value>Xanh Dương</value>
+  </data>
+  <data name="LuckyColor_gold" xml:space="preserve">
+    <value>Vàng Kim</value>
+  </data>
+  <data name="LuckyColor_green" xml:space="preserve">
+    <value>Xanh Lá</value>
+  </data>
+  <data name="LuckyColor_red" xml:space="preserve">
+    <value>Đỏ</value>
+  </data>
+  <data name="LuckyColor_white" xml:space="preserve">
+    <value>Trắng</value>
+  </data>
+  <data name="LuckyColor_yellow" xml:space="preserve">
+    <value>Vàng</value>
+  </data>
+  <data name="LuckyColor_pink" xml:space="preserve">
+    <value>Hồng</value>
+  </data>
+  <data name="LuckyColor_purple" xml:space="preserve">
+    <value>Tím</value>
+  </data>
+  <data name="LuckyColor_grey" xml:space="preserve">
+    <value>Xám</value>
+  </data>
+  <data name="LuckyColor_orange" xml:space="preserve">
+    <value>Cam</value>
+  </data>
+  <data name="LuckyColor_brown" xml:space="preserve">
+    <value>Nâu</value>
+  </data>
+  <data name="LuckyColor_silver" xml:space="preserve">
+    <value>Bạc</value>
+  </data>
+  <data name="LuckyColor_black" xml:space="preserve">
+    <value>Đen</value>
+  </data>
+
+  <!-- Lucky direction translations -->
+  <data name="LuckyDir_north" xml:space="preserve">
+    <value>Bắc</value>
+  </data>
+  <data name="LuckyDir_south" xml:space="preserve">
+    <value>Nam</value>
+  </data>
+  <data name="LuckyDir_east" xml:space="preserve">
+    <value>Đông</value>
+  </data>
+  <data name="LuckyDir_west" xml:space="preserve">
+    <value>Tây</value>
+  </data>
+  <data name="LuckyDir_northeast" xml:space="preserve">
+    <value>Đông Bắc</value>
+  </data>
+  <data name="LuckyDir_northwest" xml:space="preserve">
+    <value>Tây Bắc</value>
+  </data>
+  <data name="LuckyDir_southeast" xml:space="preserve">
+    <value>Đông Nam</value>
+  </data>
+  <data name="LuckyDir_southwest" xml:space="preserve">
+    <value>Tây Nam</value>
+  </data>
 </root>

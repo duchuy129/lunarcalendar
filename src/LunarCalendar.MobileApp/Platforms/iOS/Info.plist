@@ -51,5 +51,24 @@
 	<false/>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+
+	<!-- Privacy purpose strings required by App Store even when APIs are not directly used.
+	     These are referenced by MAUI framework internals or linked system libraries. -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app does not use your location.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app does not use your location.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app does not use Bluetooth.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app does not access your calendar.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This app does not access your contacts.</string>
+	<key>NSSiriUsageDescription</key>
+	<string>This app does not use Siri.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app does not access your music library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app does not use the microphone.</string>
 </dict>
 </plist>
