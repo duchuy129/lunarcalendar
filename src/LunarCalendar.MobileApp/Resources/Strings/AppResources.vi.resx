@@ -890,4 +890,21 @@
   <data name="ViewCompatibility" xml:space="preserve">
     <value>Xem Tương Hợp</value>
   </data>
+
+  <!-- Zodiac Tab (Feature 003) -->
+  <data name="ZodiacTab" xml:space="preserve">
+    <value>Tử Vi</value>
+  </data>
+  <data name="ZodiacProfilePageTitle" xml:space="preserve">
+    <value>Hồ Sơ Tử Vi</value>
+  </data>
+  <data name="BrowseAnimals" xml:space="preserve">
+    <value>Xem Các Con Giáp</value>
+  </data>
+  <data name="BrowseAnimalsDesc" xml:space="preserve">
+    <value>Khám phá 12 con giáp trong tử vi Á Đông</value>
+  </data>
+  <data name="CheckCompatibilityDesc" xml:space="preserve">
+    <value>Xem mức độ tương hợp giữa các con giáp</value>
+  </data>
 </root>

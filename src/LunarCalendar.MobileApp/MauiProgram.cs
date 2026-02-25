@@ -69,6 +69,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<SettingsViewModel>();
 		builder.Services.AddTransient<ZodiacCompatibilityViewModel>();
 		builder.Services.AddTransient<ZodiacInformationViewModel>();
+		builder.Services.AddTransient<ZodiacProfileViewModel>();
 
 		// Register Views
 		builder.Services.AddTransient<WelcomePage>();
@@ -78,6 +79,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<SettingsPage>();
 		builder.Services.AddTransient<ZodiacCompatibilityPage>();
 		builder.Services.AddTransient<ZodiacInformationPage>();
+		builder.Services.AddTransient<ZodiacProfilePage>();
 
 		return builder.Build();
 	}

@@ -906,4 +906,21 @@ The current stem-branch represents today's position in this 60-day cycle.</value
   <data name="ViewCompatibility" xml:space="preserve">
     <value>View Compatibility</value>
   </data>
+
+  <!-- Zodiac Tab (Feature 003) -->
+  <data name="ZodiacTab" xml:space="preserve">
+    <value>Zodiac</value>
+  </data>
+  <data name="ZodiacProfilePageTitle" xml:space="preserve">
+    <value>My Zodiac Profile</value>
+  </data>
+  <data name="BrowseAnimals" xml:space="preserve">
+    <value>Browse Animals</value>
+  </data>
+  <data name="BrowseAnimalsDesc" xml:space="preserve">
+    <value>Explore all 12 Chinese zodiac animals</value>
+  </data>
+  <data name="CheckCompatibilityDesc" xml:space="preserve">
+    <value>Find out how your sign relates to others</value>
+  </data>
 </root>

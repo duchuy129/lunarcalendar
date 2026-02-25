@@ -1084,5 +1084,42 @@ namespace LunarCalendar.MobileApp.Resources.Strings {
                 return ResourceManager.GetString("FailedToClearLogs", resourceCulture);
             }
         }
+
+        public static string ShareResult {
+            get {
+                return ResourceManager.GetString("ShareResult", resourceCulture);
+            }
+        }
+
+        // Zodiac Tab (Feature 003)
+        public static string ZodiacTab {
+            get {
+                return ResourceManager.GetString("ZodiacTab", resourceCulture);
+            }
+        }
+
+        public static string ZodiacProfilePageTitle {
+            get {
+                return ResourceManager.GetString("ZodiacProfilePageTitle", resourceCulture);
+            }
+        }
+
+        public static string BrowseAnimals {
+            get {
+                return ResourceManager.GetString("BrowseAnimals", resourceCulture);
+            }
+        }
+
+        public static string BrowseAnimalsDesc {
+            get {
+                return ResourceManager.GetString("BrowseAnimalsDesc", resourceCulture);
+            }
+        }
+
+        public static string CheckCompatibilityDesc {
+            get {
+                return ResourceManager.GetString("CheckCompatibilityDesc", resourceCulture);
+            }
+        }
     }
 }

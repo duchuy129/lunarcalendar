@@ -5,9 +5,6 @@ using LunarCalendar.MobileApp.Services;
 using LunarCalendar.MobileApp.Data;
 using LunarCalendar.MobileApp.Resources.Strings;
 using LunarCalendar.MobileApp.Models;
-using LunarCalendar.Core.Services;
-using LunarCalendar.Core.Models;
-using System.Globalization;
 using System.Windows.Input;
 
 namespace LunarCalendar.MobileApp.ViewModels;
@@ -18,14 +15,12 @@ public partial class SettingsViewModel : BaseViewModel
     private const string EnableHapticFeedbackKey = "EnableHapticFeedback";
     private const string ShowLunarDatesKey = "ShowLunarDates";
     private const string UpcomingHolidaysDaysKey = "UpcomingHolidaysDays";
-    private const string BirthYearKey = "ZodiacProfileBirthYear";
 
     private readonly IConnectivityService? _connectivityService;
     private readonly ISyncService? _syncService;
     private readonly LunarCalendarDatabase? _database;
     private readonly ILocalizationService? _localizationService;
     private readonly ILogService? _logService;
-    private readonly IZodiacService? _zodiacService;
 
     [ObservableProperty]
     private bool _showCulturalBackground;
@@ -63,22 +58,11 @@ public partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private LanguageOption? _selectedLanguage;
 
-    // --- My Zodiac Profile (T050) ---
-    [ObservableProperty]
-    private string _birthYearText = string.Empty;
-
-    [ObservableProperty]
-    private string _myZodiacDisplay = string.Empty;
-
-    [ObservableProperty]
-    private bool _hasZodiacProfile;
-    
     // Manual command properties
     public ICommand SyncDataCommand { get; }
     public ICommand ClearCacheCommand { get; }
     public ICommand AboutCommand { get; }
     public ICommand ResetSettingsCommand { get; }
-    public ICommand SaveZodiacProfileCommand { get; }
 
     public SettingsViewModel()
     {
@@ -88,13 +72,11 @@ public partial class SettingsViewModel : BaseViewModel
         ClearCacheCommand = new AsyncRelayCommand(ClearCacheAsync);
         AboutCommand = new AsyncRelayCommand(AboutAsync);
         ResetSettingsCommand = new AsyncRelayCommand(ResetSettingsAsync);
-        SaveZodiacProfileCommand = new AsyncRelayCommand(SaveZodiacProfileAsync);
         
         Title = AppResources.Settings;
         ConnectionStatusText = AppResources.Online; // Initialize with default
         LoadSettings();
         LoadAppInfo();
-        LoadZodiacProfile();
     }
 
     public SettingsViewModel(
@@ -102,8 +84,7 @@ public partial class SettingsViewModel : BaseViewModel
         ISyncService syncService,
         LunarCalendarDatabase database,
         ILocalizationService localizationService,
-        ILogService logService,
-        IZodiacService zodiacService)
+        ILogService logService)
     {
         
         _connectivityService = connectivityService;
@@ -111,7 +92,6 @@ public partial class SettingsViewModel : BaseViewModel
         _database = database;
         _localizationService = localizationService;
         _logService = logService;
-        _zodiacService = zodiacService;
 
 
         // Initialize commands manually
@@ -119,7 +99,6 @@ public partial class SettingsViewModel : BaseViewModel
         ClearCacheCommand = new AsyncRelayCommand(ClearCacheAsync);
         AboutCommand = new AsyncRelayCommand(AboutAsync);
         ResetSettingsCommand = new AsyncRelayCommand(ResetSettingsAsync);
-        SaveZodiacProfileCommand = new AsyncRelayCommand(SaveZodiacProfileAsync);
 
         Title = AppResources.Settings;
         LoadSettings();
@@ -127,7 +106,6 @@ public partial class SettingsViewModel : BaseViewModel
         LoadLanguageSettings();
         UpdateSyncStatus();
         UpdateConnectionStatus();
-        LoadZodiacProfile();
 
         // Monitor connectivity
         if (_connectivityService != null)
@@ -249,85 +227,6 @@ public partial class SettingsViewModel : BaseViewModel
         EnableHapticFeedback = Preferences.Get(EnableHapticFeedbackKey, true);
         ShowLunarDates = Preferences.Get(ShowLunarDatesKey, true);
         UpcomingHolidaysDays = Preferences.Get(UpcomingHolidaysDaysKey, 30);
-    }
-
-    private void LoadZodiacProfile()
-    {
-        var savedYear = Preferences.Get(BirthYearKey, 0);
-        if (savedYear > 0)
-        {
-            BirthYearText = savedYear.ToString();
-            UpdateZodiacDisplay(savedYear);
-        }
-        else
-        {
-            MyZodiacDisplay = AppResources.ResourceManager.GetString("NotSet", CultureInfo.CurrentUICulture) ?? "Not set";
-            HasZodiacProfile = false;
-        }
-    }
-
-    private void UpdateZodiacDisplay(int birthYear)
-    {
-        try
-        {
-            if (_zodiacService != null)
-            {
-                var elemental = _zodiacService.GetElementalAnimalForLunarYear(birthYear);
-                var elementName = AppResources.ResourceManager.GetString($"FiveElement_{elemental.Element}", CultureInfo.CurrentUICulture) ?? elemental.Element.ToString();
-                var animalName = GetLocalizedAnimalName(elemental.Animal);
-                var emoji = ZodiacEmojiProvider.GetEmoji(elemental.Animal);
-                MyZodiacDisplay = $"{emoji} {elementName} {animalName}";
-                HasZodiacProfile = true;
-            }
-            else
-            {
-                var animal = (ZodiacAnimal)((birthYear - 4) % 12);
-                MyZodiacDisplay = GetLocalizedAnimalName(animal);
-                HasZodiacProfile = true;
-            }
-        }
-        catch
-        {
-            MyZodiacDisplay = AppResources.ResourceManager.GetString("NotSet", CultureInfo.CurrentUICulture) ?? "Not set";
-            HasZodiacProfile = false;
-        }
-    }
-
-    private string GetLocalizedAnimalName(ZodiacAnimal animal)
-    {
-        var key = animal switch
-        {
-            ZodiacAnimal.Rat     => "EarthlyBranch_Zi",
-            ZodiacAnimal.Ox      => "EarthlyBranch_Chou",
-            ZodiacAnimal.Tiger   => "EarthlyBranch_Yin",
-            ZodiacAnimal.Rabbit  => "EarthlyBranch_Mao",
-            ZodiacAnimal.Dragon  => "EarthlyBranch_Chen",
-            ZodiacAnimal.Snake   => "EarthlyBranch_Si",
-            ZodiacAnimal.Horse   => "EarthlyBranch_Wu",
-            ZodiacAnimal.Goat    => "EarthlyBranch_Wei",
-            ZodiacAnimal.Monkey  => "EarthlyBranch_Shen",
-            ZodiacAnimal.Rooster => "EarthlyBranch_You",
-            ZodiacAnimal.Dog     => "EarthlyBranch_Xu",
-            ZodiacAnimal.Pig     => "EarthlyBranch_Hai",
-            _ => string.Empty
-        };
-        return string.IsNullOrEmpty(key) ? animal.ToString()
-            : AppResources.ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? animal.ToString();
-    }
-
-    private async Task SaveZodiacProfileAsync()
-    {
-        if (!int.TryParse(BirthYearText, out var year) || year < 1900 || year > DateTime.Now.Year)
-        {
-            var msg = AppResources.ResourceManager.GetString("InvalidBirthYear", CultureInfo.CurrentUICulture) ?? "Please enter a valid birth year between 1900 and {0}.";
-            await Application.Current!.MainPage!.DisplayAlert(
-                AppResources.ErrorTitle,
-                string.Format(msg, DateTime.Now.Year),
-                AppResources.OK);
-            return;
-        }
-        Preferences.Set(BirthYearKey, year);
-        UpdateZodiacDisplay(year);
     }
 
     private void SaveSetting(string key, bool value)
