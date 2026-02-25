@@ -80,10 +80,14 @@
 		<EnableLLVM Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</EnableLLVM>
 		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</RunAOTCompilation>
 		
-		<!-- Android 15+ Support: Enable 16 KB page alignment for native libraries -->
-		<!-- This ensures compatibility with devices using 16 KB memory pages -->
-		<AndroidStripILAfterAOT Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidStripILAfterAOT>
+		<!-- Android 15+ Support: Enable 16 KB page alignment for native libraries.
+		     Google Play requires this for devices with 16 KB memory page sizes (Android 15+).
+		     AndroidEnablePageAlignment sets the ELF load segment alignment to 16 KB so that
+		     native .so files can be mapped directly on both 4 KB and 16 KB page-size devices.
+		     Without this, the app may fail to install or crash on affected devices. -->
 		<AndroidEnablePageAlignment Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidEnablePageAlignment>
+		<!-- Ensure IL stripping runs after AOT so the final .so files respect alignment -->
+		<AndroidStripILAfterAOT Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidStripILAfterAOT>
 
 		<!-- iOS Release Settings - CRITICAL: Enable hybrid AOT + interpreter mode -->
 		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</RunAOTCompilation>
