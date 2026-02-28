@@ -116,7 +116,9 @@ if [ $? -eq 0 ]; then
   else
     echo "ℹ️  No symbols.zip found - this is expected if AndroidIncludeDebugSymbols"
     echo "   is not set or if there are no native libraries in the bundle."
-  fi  echo ""
+  fi
+
+  echo ""
   echo "📋 Next steps:"
   echo "1. Go to Google Play Console: https://play.google.com/console"
   echo "2. Select your app"
