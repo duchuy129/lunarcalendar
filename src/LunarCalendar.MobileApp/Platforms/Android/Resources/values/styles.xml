@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="MainTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
-        <!-- Use bottom navigation -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+        Use Theme.MaterialComponents (AppCompat-based) rather than android:style/Theme.Material
+        so that Material BottomSheetDialog / EdgeToEdgeUtils work without calling the deprecated
+        Window.setStatusBarColor / Window.setNavigationBarColor APIs.
+
+        Edge-to-edge is enforced by Android 15 (API 35) for apps targeting SDK 35.
+        We opt in explicitly here and let WindowCompat / ViewCompat handle insets in code,
+        which avoids the BottomSheetDialog.onCreate / EdgeToEdgeUtils deprecation warnings.
+    -->
+    <style name="MainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- No action bar -->
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        
-        <!-- Edge-to-edge display support for Android 15+ -->
-        <!-- Remove status bar and navigation bar colors to enable edge-to-edge -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- Edge-to-edge: let the app draw behind system bars.
+             Do NOT set statusBarColor / navigationBarColor here — those attributes are
+             deprecated in API 35 and trigger the Play Console warning.
+             Transparency / appearance is handled in MainActivity via WindowCompat. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- Android 15+: opt out of the forced edge-to-edge enforcement only if we
+             handle it ourselves (which we do in MainActivity). Setting this to false
+             means the system will NOT forcibly apply edge-to-edge on top of our setup. -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">false</item>
     </style>
 </resources>
