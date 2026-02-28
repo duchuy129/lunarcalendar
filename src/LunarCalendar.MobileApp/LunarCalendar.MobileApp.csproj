@@ -28,8 +28,8 @@
 		<ApplicationId>com.huynguyen.lunarcalendar</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
-		<ApplicationVersion>7</ApplicationVersion>
+		<ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
+		<ApplicationVersion>8</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<TargetPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">26.2</TargetPlatformVersion>
@@ -80,14 +80,22 @@
 		<EnableLLVM Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</EnableLLVM>
 		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">false</RunAOTCompilation>
 		
-		<!-- Android 15+ Support: Enable 16 KB page alignment for native libraries.
-		     Google Play requires this for devices with 16 KB memory page sizes (Android 15+).
-		     AndroidEnablePageAlignment sets the ELF load segment alignment to 16 KB so that
-		     native .so files can be mapped directly on both 4 KB and 16 KB page-size devices.
-		     Without this, the app may fail to install or crash on affected devices. -->
+		<!-- FIX: 16 KB memory page size support (Google Play requirement for Android 15+).
+		     AndroidEnablePageAlignment aligns ELF load segments to 16 KB so native .so files
+		     can be memory-mapped on both 4 KB and 16 KB page-size kernels.
+		     AndroidNativeLibraryAlignment ensures third-party and bundled .so files are
+		     also re-aligned during packaging. Both flags are required to satisfy the
+		     Google Play binary inspection check. -->
 		<AndroidEnablePageAlignment Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidEnablePageAlignment>
+		<AndroidNativeLibraryAlignment Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidNativeLibraryAlignment>
 		<!-- Ensure IL stripping runs after AOT so the final .so files respect alignment -->
 		<AndroidStripILAfterAOT Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidStripILAfterAOT>
+
+		<!-- FIX: Native debug symbols for Google Play (resolves "no debug symbols" warning).
+		     Setting AndroidIncludeDebugSymbols=true causes dotnet-android to produce a
+		     symbols.zip alongside the AAB. Upload this file in Play Console under
+		     "App Bundle Explorer → Downloads → Debug symbols". -->
+		<AndroidIncludeDebugSymbols Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">true</AndroidIncludeDebugSymbols>
 
 		<!-- iOS Release Settings - CRITICAL: Enable hybrid AOT + interpreter mode -->
 		<RunAOTCompilation Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</RunAOTCompilation>
@@ -161,6 +169,11 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<!-- Override transitive SQLite native library to version with 16 KB page alignment.
+		     sqlite-net-pcl 1.9.172 pulls in SQLitePCLRaw.lib.e_sqlite3.android 2.1.2 which
+		     does NOT support 16 KB memory pages (Google Play error for Android 15+ devices).
+		     Version 2.1.11+ ships libe_sqlite3.so compiled with -Wl,-z,max-page-size=16384. -->
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android" Version="2.1.11" />
 	</ItemGroup>
 
 	<ItemGroup>

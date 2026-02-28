@@ -89,7 +89,7 @@ if [ $? -eq 0 ]; then
   echo ""
   echo "📦 AAB location:"
   find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-android" -name "*-Signed.aab" -exec ls -lh {} \; 2>/dev/null
-
+  
   # Verify signature
   AAB_FILE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-android" -name "*-Signed.aab" 2>/dev/null | head -1)
   if [ -n "$AAB_FILE" ]; then
@@ -102,7 +102,21 @@ if [ $? -eq 0 ]; then
     fi
   fi
 
+  # Find and report native debug symbols zip
   echo ""
+  SYMBOLS_FILE=$(find "$WORKSPACE_ROOT/src/LunarCalendar.MobileApp/bin/Release/net10.0-android" -name "*.symbols.zip" 2>/dev/null | head -1)
+  if [ -n "$SYMBOLS_FILE" ]; then
+    echo "🔣 Native debug symbols:"
+    ls -lh "$SYMBOLS_FILE"
+    echo ""
+    echo "   ↑ Upload this .symbols.zip to Google Play Console to resolve the"
+    echo "     'no debug symbols' warning:"
+    echo "     Play Console → App → Release → App Bundle Explorer"
+    echo "     → Downloads tab → Upload debug symbols"
+  else
+    echo "ℹ️  No symbols.zip found - this is expected if AndroidIncludeDebugSymbols"
+    echo "   is not set or if there are no native libraries in the bundle."
+  fi  echo ""
   echo "📋 Next steps:"
   echo "1. Go to Google Play Console: https://play.google.com/console"
   echo "2. Select your app"

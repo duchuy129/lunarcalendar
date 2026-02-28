@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.huynguyen.lunarcalendar">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true"></application>
+	<!-- android:extractNativeLibs="false" is REQUIRED for 16 KB page alignment.
+	     It tells the OS to memory-map .so files directly from the APK/AAB rather than
+	     extracting them to disk, which is what enables 16 KB page-size support on
+	     Android 15+ devices. Without this attribute the alignment is bypassed at runtime. -->
+	<application
+		android:allowBackup="true"
+		android:icon="@mipmap/appicon"
+		android:roundIcon="@mipmap/appicon_round"
+		android:supportsRtl="true"
+		android:extractNativeLibs="false">
+	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>
